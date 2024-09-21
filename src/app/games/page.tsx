@@ -37,14 +37,14 @@ export default function GamesPage() {
 
 	return (
 		<Container asSection>
-			<h1 className='text-3xl mt-4 mb-2'>Games</h1>
-			<div className='grid grid-cols-2 gap-4'>
+			<h1 className='text-3xl mt-4 mb-4'>Games</h1>
+			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly gap-6 md:gap-4'>
 				{
 					games.map(game => (
 						<GameCard
 							key={game.id}
-							name={game.name}
-							background_image={game.background_image}
+							title={game.name}
+							imageUrl={game.background_image}
 						/>
 					))
 				}

@@ -1,9 +1,37 @@
+'use client'
 
-export function GameCard({ name, background_image }: { name: string, background_image: string }) {
+import Image from 'next/image'
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from './ui/button'
+
+interface GameCardProps {
+	title: string
+	imageUrl: string
+}
+
+export function GameCard({ title, imageUrl }: GameCardProps) {
 	return (
-		<article className='bg-slate-600/20 rounded border border-gray-400/50'>
-			<h2 className='text-lg font-bold py-1 px-3'>{name}</h2>
-			<img className='h-fit rounded-b object-cover' src={background_image} alt={name} />
-		</article>
+		<Card
+			className="relative overflow-hidden group h-[400px] transition-all duration-300 ease-in-out transform hover:scale-105"
+		>
+			<Image
+				src={imageUrl}
+				alt={title}
+				layout="fill"
+				objectFit="cover"
+				className="transition-opacity duration-300 ease-in-out group-hover:opacity-80"
+			/>
+			<CardContent className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black to-transparent">
+				<h2 className="text-2xl font-bold text-white mb-2 text-pretty text-center">{title}</h2>
+				<Button
+					variant='secondary'
+					className={`w-full text-sm overflow-hidden transition-all duration-300 ease-in-out 
+						max-h-0 opacity-0 group-hover:max-h-[200px] group-hover:opacity-100 group-hover:mt-1`}
+					onClick={() => alert(`Game "${title}" added (nah, not really, TBI)`)}
+				>
+					Add to my games
+				</Button>
+			</CardContent>
+		</Card>
 	)
 }

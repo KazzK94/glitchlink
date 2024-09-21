@@ -19,6 +19,7 @@ export default function LoginPage() {
 				</label>
 				<Button className='bg-blue-700 hover:bg-blue-700/75'>Login</Button>
 			</form>
+			<p className='text-xl text-red-400'>DISCLAIMER: Login is not implemented yet.</p>
 
 			<Link href='/register' className="text-cyan-400 pt-3 text-center">
 				Don&apos;t have an account yet? Register here!

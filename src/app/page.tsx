@@ -3,6 +3,7 @@ import { Container } from '@/components/Container'
 import { Footer } from '@/components/Footer'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import Link from 'next/link'
 
 export default function LandingPage() {
 
@@ -12,9 +13,11 @@ export default function LandingPage() {
 				<Container className="py-20 md:py-28 text-center px-4" asSection>
 					<h1 className="text-4xl lg:text-5xl font-bold mb-6">Connect with Gamers Worldwide</h1>
 					<p className="text-lg lg:text-xl mb-8 md:mb-12">Join GlitchLink, the ultimate social network for gamers. Find your squad, share your achievements, and level up your gaming experience!</p>
-					<Button className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-8 py-6 rounded-full text-xl font-semibold hover:from-cyan-600 hover:to-purple-600 active:contrast-150 transition-all">
-						Join the Community
-					</Button>
+					<Link href="/register">
+						<Button className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-8 py-6 rounded-full text-xl font-semibold hover:from-cyan-600 hover:to-purple-600 active:contrast-150 transition-all">
+							Join the Community
+						</Button>
+					</Link>
 				</Container>
 
 				<div className='bg-gray-800'>
