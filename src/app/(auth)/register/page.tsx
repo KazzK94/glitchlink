@@ -47,6 +47,7 @@ export default function RegisterPage() {
 				</label>
 				<Button className='bg-blue-800 hover:bg-blue-800/80'>Register</Button>
 			</form>
+			<p className='text-lg text-red-500'>DISCLAIMER: Do NOT create an account with real data. This website is NOT in a production state, it is only published for testing purposes. Passwords are exposed and login is not even functioning yet, but the register does create an account which YOU CANNOT DELETE at the moment. That said, feel free to create a mock user if you please.</p>
 		</Container>
 	)
 }
