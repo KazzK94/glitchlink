@@ -12,7 +12,7 @@ interface GameCardProps {
 export function GameCard({ title, imageUrl }: GameCardProps) {
 	return (
 		<Card
-			className="relative overflow-hidden group h-[400px] transition-all duration-300 ease-in-out transform hover:scale-105"
+			className="relative overflow-hidden group h-[300px] md:h-[400px] transition-all duration-300 ease-in-out transform hover:scale-105"
 		>
 			<Image
 				src={imageUrl.replace('media/', 'media/crop/600/400/')}
