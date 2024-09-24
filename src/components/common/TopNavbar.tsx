@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button"
 import { useState } from 'react'
 import { Menu, User } from 'lucide-react'
-import { Logo } from './Logo'
-import { Container } from './Container'
+import { Logo } from '@/components/common/Logo'
+import { Container } from '@/components/Container'
 import Link from 'next/link'
 
 export function TopNavbar() {

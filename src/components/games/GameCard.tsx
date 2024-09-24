@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { Card, CardContent } from "@/components/ui/card"
-import { Button } from './ui/button'
+import { Button } from '@/components/ui/button'
 
 interface GameCardProps {
 	title: string
@@ -12,7 +12,7 @@ interface GameCardProps {
 export function GameCard({ title, imageUrl }: GameCardProps) {
 	return (
 		<Card
-			className="relative overflow-hidden group h-[300px] md:h-[400px] transition-all duration-300 ease-in-out transform hover:scale-105"
+			className="relative overflow-hidden group h-[260px] md:h-[320px] transition-all duration-300 ease-in-out transform hover:scale-105"
 		>
 			<Image
 				src={imageUrl.replace('media/', 'media/crop/600/400/')}

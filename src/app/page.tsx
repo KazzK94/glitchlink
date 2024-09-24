@@ -1,8 +1,7 @@
 
 import { Container } from '@/components/Container'
-import { Footer } from '@/components/Footer'
+import { Footer } from '@/components/common/Footer'
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import Link from 'next/link'
 
 export default function LandingPage() {
@@ -12,10 +11,13 @@ export default function LandingPage() {
 			<main>
 				<Container className="py-20 md:py-28 text-center px-4" asSection>
 					<h1 className="text-4xl lg:text-5xl font-bold mb-6">Connect with Gamers Worldwide</h1>
-					<p className="text-lg lg:text-xl mb-8 md:mb-12">Join GlitchLink, the ultimate social network for gamers. Find your squad, share your achievements, and level up your gaming experience!</p>
+					<p className="text-lg lg:text-xl text-pretty max-w-4xl mx-auto mb-8 md:mb-12">
+						Welcome to GlitchLink, the ultimate social network for gamers.
+						Encounter fellow gamers, share your passion with posts and level up your gaming experience!
+					</p>
 					<Link href="/register">
 						<Button className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-8 py-6 rounded-full text-xl font-semibold hover:from-cyan-600 hover:to-purple-600 active:contrast-150 transition-all">
-							Join the Community
+							Join GlitchLink now!
 						</Button>
 					</Link>
 				</Container>
@@ -40,24 +42,26 @@ export default function LandingPage() {
 				</div>
 
 				<Container id="about" className="container mx-auto py-20 px-4" asSection>
-					<h2 className="text-4xl font-bold mb-8 text-center">About GlitchLink</h2>
-					<p className="text-xl text-center text-pretty max-w-3xl mx-auto">
-						GlitchLink is more than just a social network - it&apos;s a vibrant community of passionate gamers.
-						We are dedicated to creating a space where gamers can connect, share, and grow together.
-						Whether you&apos;re a casual player or a pro, GlitchLink is your home.
+					<h2 className="text-4xl font-bold mb-8 text-center">Why GlitchLink?</h2>
+					<p className="text-xl text-center text-pretty max-w-4xl mx-auto">
+						In GlitchLink we are working to create a safe space for gamers to connect, share, and grow together.
+						Whether you&apos;re a casual player or a pro, GlitchLink was made for you.
 					</p>
 				</Container>
 
 				<div className="bg-gray-800">
 					<Container id="contact" className="py-20" asSection>
 						<div className="container mx-auto px-4">
-							<h2 className="text-4xl font-bold mb-8 text-center">Stay Connected</h2>
-							<form className="max-w-md mx-auto">
-								<Input type="email" placeholder="Enter your email" className="mb-4 w-full" />
-								<Button className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 text-white py-2 rounded-md text-lg font-semibold hover:from-cyan-600 hover:to-purple-600 transition-all">
-									Subscribe to Updates
-								</Button>
-							</form>
+							<h2 className="text-4xl font-bold mb-8 text-center">Give us Feedback!</h2>
+							<p className='text-xl text-center text-pretty'>
+								If you have any suggestion or criticism about GlitchLink, please feel free to contact us on
+								<span>
+									&nbsp;
+									<a className='text-blue-300' href="mailto:glitchlink.social@gmail.com">glitchlink.social@gmail.com</a>
+									&nbsp;
+								</span>
+								and we will try to reply as soon as possible.
+							</p>
 						</div>
 					</Container>
 				</div>
