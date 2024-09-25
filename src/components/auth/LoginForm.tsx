@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import bcrypt from 'bcryptjs'
 
 import { loginSchema, type LoginSchema } from '@/schemas/loginSchema'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -25,12 +24,8 @@ export function LoginForm() {
 		form.clearErrors() // Clear previous errors before submitting.
 		// ✅ This will be type-safe and validated.
 		const user = await getUserByUsername(values.username)
-		if (!user || !bcrypt.compareSync(values.password, user.password)) {
-			form.setError('username', { type: 'manual', message: 'Username or password are incorrect.' })
-			form.setError('password', { type: 'manual', message: 'Username or password are incorrect.' })
-			return
-		}
-		alert('Credentials are correct!!! (but Login is not implemented yet)')
+		if (!user) { form.setError('username', { message: 'User not found' }); return }
+		alert('That user is correct!! (the password... i dont know, we dont have a working Login yet 😅)')
 	}
 
 	return (
@@ -43,7 +38,7 @@ export function LoginForm() {
 						<FormItem>
 							<FormLabel>Username</FormLabel>
 							<FormControl>
-								<Input {...field} autoComplete='off'/>
+								<Input {...field} autoComplete='off' />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -56,7 +51,7 @@ export function LoginForm() {
 						<FormItem>
 							<FormLabel>Password</FormLabel>
 							<FormControl>
-								<Input {...field} type="password"/>
+								<Input {...field} type="password" />
 							</FormControl>
 							<FormMessage />
 						</FormItem>

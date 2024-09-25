@@ -7,7 +7,7 @@ import { registerSchema, type RegisterSchema } from '@/schemas/registerSchema'
 import { Form, FormControl, FormField, FormDescription, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-import { createUser, getOneUser, getUserByUsername } from '@/services/users'
+import { createUser, getUser, getUserByUsername } from '@/services/users'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
@@ -34,7 +34,7 @@ export function RegisterForm() {
 	// 2. Define a submit handler.
 	async function onSubmit(values: RegisterSchema) {
 		// TODO: Last Check!! Make sure username and email do not exist in the database.
-		const existingUser = await getOneUser({
+		const existingUser = await getUser({
 			where: {
 				OR: [
 					{ username: { equals: values.username, mode: 'insensitive' } },
@@ -54,7 +54,9 @@ export function RegisterForm() {
 
 		// ✅ At this point, the values will be type-safe and validated.
 		try {
-			await createUser(values)
+			const newUser = await createUser(values)
+			console.log({newUser})
+			alert('User Created: ' + JSON.stringify(newUser))
 			router.push('/login')
 		} catch (error) {
 			console.error('Failed to register user:', error)

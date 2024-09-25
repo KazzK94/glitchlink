@@ -1,6 +1,5 @@
 
 import z from 'zod'
-import bcryptjs from 'bcryptjs'
 
 export const registerSchema = z.object({
 	username: z.string()
@@ -23,12 +22,6 @@ export const registerSchema = z.object({
 		})
 	}
 	return null
-}).transform(data => {
-	const hashedPassword = bcryptjs.hashSync(data.password, 10)
-	return {
-		...data,
-		password: hashedPassword
-	}
 })
 
 export type RegisterSchema = z.infer<typeof registerSchema>
