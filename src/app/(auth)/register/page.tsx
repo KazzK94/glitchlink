@@ -1,53 +1,17 @@
 import { Container } from '@/components/Container'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { createUser } from '@/actions/users'
-import { redirect } from 'next/navigation'
+import Link from 'next/link'
+import { RegisterForm } from '@/components/auth/RegisterForm'
 
 export default function RegisterPage() {
 
-	async function handleSubmitAction(formData: FormData) {
-		'use server'
-		if(formData.get('username') === '' || formData.get('password') === '' || formData.get('name') === '' || formData.get('email') === '') return
-		if(formData.get('password') !== formData.get('confirmPassword')) return
-		const newUser = await createUser(formData)
-		if (newUser) {
-			// Redirect to login page
-			redirect('/login')
-		}
-	}
-
 	return (
-		<Container className='mt-4 max-w-96 flex flex-col gap-1'>
-			<h1 className="text-2xl mb-2">Create an account</h1>
-			<form className="flex flex-col gap-4" action={handleSubmitAction}>
-				<label>
-					<span className='block mb-1'>Username</span>
-					<Input name='username' type="text" placeholder='Username' />
-				</label>
-				<label>
-					<span className='block mb-1'>Password</span>
-					<Input name='password' type="password" placeholder='Password' />
-				</label>
-				<label>
-					<span className='block mb-1'>Confirm Password</span>
-					<Input name='confirmPassword' type="password" placeholder='Confirm Password' />
-				</label>
-				<label>
-					<span className='block mb-1'>Display Name</span>
-					<Input name='name' type="text" placeholder='The name everyone will see as your name' />
-				</label>
-				<label>
-					<span className='block mb-1'>Email</span>
-					<Input name='email' type="email" placeholder='Email' />
-				</label>
-				<label>
-					<span className='block mb-1'>Color</span>
-					<Input name='color' type="color" defaultValue='#ffffff' />
-				</label>
-				<Button className='bg-blue-800 hover:bg-blue-800/80'>Register</Button>
-			</form>
-			<p className='text-lg text-red-500'>DISCLAIMER: Do NOT create an account with real data. This website is NOT in a production state, it is only published for testing purposes. Passwords are exposed and login is not even functioning yet, but the register does create an account which YOU CANNOT DELETE at the moment. That said, feel free to create a mock user if you please.</p>
+		<Container asSection className='mt-6 mb-8 max-w-96 flex flex-col gap-1'>
+			<p className='text-lg text-red-400 text-center my-4'>DISCLAIMER: Do NOT create an account with real data. This website is only published for testing purposes, so there are not too many security measures yet. Also, you CANNOT DELETE an account yet. That said, feel free to create a mock user if you want.</p>
+			<h1 className="text-2xl mb-2 text-center">Create an account</h1>
+			<RegisterForm />
+			<Link href='/login' className="text-cyan-400 mt-4 text-center w-fit mx-auto">
+				You already own an account? Log in here!
+			</Link>
 		</Container>
 	)
 }

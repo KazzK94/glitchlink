@@ -1,9 +1,9 @@
 import { Container } from '@/components/Container'
-import { getUser } from '@/services/users'
+import { getUserById } from '@/services/users'
 
 export default async function UserDetailPage({ params }: { params: { id: string } }) {
 
-	const user = await getUser(params.id)
+	const user = await getUserById(params.id)
 
 	if (!user) return <p>User Not Found</p>
 
