@@ -43,11 +43,11 @@ export function RegisterForm() {
 			}
 		})
 
-		if (existingUser?.username === values.username) {
+		if (existingUser?.username.toLowerCase() === values.username.toLowerCase()) {
 			form.setError('username', { type: 'manual', message: 'Username is already taken.' })
 			return
 		}
-		if (existingUser?.email === values.email) {
+		if (existingUser?.email.toLowerCase() === values.email.toLowerCase()) {
 			form.setError('email', { type: 'manual', message: 'Email is already taken.' })
 			return
 		}
