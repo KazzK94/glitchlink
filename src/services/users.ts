@@ -26,24 +26,24 @@ export async function createUser({ username, password, name, email, color }: Omi
 
 export async function getUsers({ where }: { where: Prisma.UserWhereInput | null } = { where: null }) {
 	return where
-		? await prisma.user.findMany({ where })
-		: await prisma.user.findMany()
+		? await prisma.user.findMany({ where, select: { id: true, username: true, name: true, email: true, color: true } })
+		: await prisma.user.findMany({ select: { id: true, username: true, name: true, email: true, color: true } })
 }
 
 export async function getUser({ where }: { where: Prisma.UserWhereInput }) {
-	return await prisma.user.findFirst({ where })
+	return await prisma.user.findFirst({ where, select: { id: true, username: true, name: true, email: true, color: true } })
 }
 
 export async function getUserById(id: string) {
 	return await prisma.user.findUnique({
-		where: { id }
+		where: { id },
+		select: { id: true, username: true, name: true, email: true, color: true }
 	})
 }
 
 export async function getUserByUsername(username: string) {
 	return await prisma.user.findUnique({
-		where: {
-			usernameLowercase: username.toLowerCase()
-		}
+		where: { usernameLowercase: username.toLowerCase() },
+		select: { id: true, username: true, name: true, email: true, color: true }
 	})
 }
