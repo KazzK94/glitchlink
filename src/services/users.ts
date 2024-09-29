@@ -26,24 +26,37 @@ export async function createUser({ username, password, name, email, color }: Omi
 
 export async function getUsers({ where }: { where: Prisma.UserWhereInput | null } = { where: null }) {
 	return where
-		? await prisma.user.findMany({ where, select: { id: true, username: true, name: true, email: true, color: true } })
-		: await prisma.user.findMany({ select: { id: true, username: true, name: true, email: true, color: true } })
+		? await prisma.user.findMany({ where, select: { id: true, username: true, name: true, color: true } })
+		: await prisma.user.findMany({ select: { id: true, username: true, name: true, color: true } })
 }
 
 export async function getUser({ where }: { where: Prisma.UserWhereInput }) {
-	return await prisma.user.findFirst({ where, select: { id: true, username: true, name: true, email: true, color: true } })
+	return await prisma.user.findFirst({ where, select: { id: true, username: true, name: true, color: true } })
 }
 
 export async function getUserById(id: string) {
 	return await prisma.user.findUnique({
 		where: { id },
-		select: { id: true, username: true, name: true, email: true, color: true }
+		select: { id: true, username: true, name: true, color: true }
 	})
 }
 
 export async function getUserByUsername(username: string) {
 	return await prisma.user.findUnique({
 		where: { usernameLowercase: username.toLowerCase() },
-		select: { id: true, username: true, name: true, email: true, color: true }
+		select: { id: true, username: true, name: true, color: true }
 	})
+}
+
+export async function attemptLogin(username: string, password: string) {
+	const user = await prisma.user.findUnique({ where: { usernameLowercase: username.toLowerCase() } })
+	if (!user) return null
+	if (!bcrypt.compareSync(password, user.password)) return null
+	return {
+		id: user.id,
+		username: user.username,
+		name: user.name,
+		email: user.email,
+		color: user.color
+	}
 }

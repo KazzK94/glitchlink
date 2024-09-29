@@ -7,7 +7,6 @@ import { loginSchema, type LoginSchema } from '@/schemas/loginSchema'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { getUserByUsername } from '@/services/users'
 
 export function LoginForm() {
 	// 1. Define your form.
@@ -23,9 +22,17 @@ export function LoginForm() {
 	async function onSubmit(values: LoginSchema) {
 		form.clearErrors() // Clear previous errors before submitting.
 		// ✅ This will be type-safe and validated.
-		const user = await getUserByUsername(values.username)
-		if (!user) { form.setError('username', { message: 'User not found' }); return }
-		alert('That user is correct!! (the password... i dont know, we dont have a working Login yet 😅)')
+		const response = await fetch('/api/login', {
+			method: 'POST',
+			body: JSON.stringify(values)
+		})
+		if (response.status === 403) {
+			form.setError('username', { message: 'Incorrect user or password' })
+			form.setError('password', { message: 'Incorrect user or password' })
+			return
+		}
+		const { user } = await response.json()
+		alert(`Welcome back, ${user.name}!`)
 	}
 
 	return (

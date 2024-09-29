@@ -1,16 +1,18 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-
 import { registerSchema, type RegisterSchema } from '@/schemas/registerSchema'
+import { getUser, getUserByUsername } from '@/services/users'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/navigation'
+
+import { cn } from '@/lib/utils'
+
 import { Form, FormControl, FormField, FormDescription, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-import { createUser, getUser, getUserByUsername } from '@/services/users'
-import { useState } from 'react'
-import { cn } from '@/lib/utils'
-import { useRouter } from 'next/navigation'
 
 
 export function RegisterForm() {
@@ -36,10 +38,7 @@ export function RegisterForm() {
 		// TODO: Last Check!! Make sure username and email do not exist in the database.
 		const existingUser = await getUser({
 			where: {
-				OR: [
-					{ username: { equals: values.username, mode: 'insensitive' } },
-					{ email: { equals: values.email, mode: 'insensitive' } }
-				]
+				usernameLowercase: values.username.toLowerCase()
 			}
 		})
 
@@ -47,16 +46,21 @@ export function RegisterForm() {
 			form.setError('username', { type: 'manual', message: 'Username is already taken.' })
 			return
 		}
-		if (existingUser?.email.toLowerCase() === values.email.toLowerCase()) {
-			form.setError('email', { type: 'manual', message: 'Email is already taken.' })
-			return
-		}
 
 		// ✅ At this point, the values will be type-safe and validated.
 		try {
-			const newUser = await createUser(values)
-			console.log({newUser})
+			const response = await fetch('/api/register', {
+				method: 'POST',
+				body: JSON.stringify(values)
+			})
+			if (!response.ok) {
+				const { message } = await response.json()
+				alert('Error trying to register: ' + message)
+				return
+			}
+			const newUser = await response.json()
 			alert('User Created: ' + JSON.stringify(newUser))
+			alert('Redirecting to login page...')
 			router.push('/login')
 		} catch (error) {
 			console.error('Failed to register user:', error)
