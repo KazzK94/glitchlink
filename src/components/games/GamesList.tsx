@@ -22,9 +22,9 @@ export function GamesList() {
 			const response = await fetch('/api/games')
 			const { games: newGames } = await response.json()
 			setGames(newGames)
+			setLoading(false)
 		}
 		fetchGames()
-		setLoading(false)
 	}, [])
 
 	// On consequent queries, execute this:
