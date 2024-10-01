@@ -38,18 +38,23 @@ export function RegisterForm() {
 		// TODO: Last Check!! Make sure username and email do not exist in the database.
 		const existingUser = await getUser({
 			where: {
-				usernameLowercase: values.username.toLowerCase()
+				usernameLowercase: values.username.toLowerCase(),
+				email: values.email
 			}
 		})
 
-		if (existingUser?.username.toLowerCase() === values.username.toLowerCase()) {
-			form.setError('username', { type: 'manual', message: 'Username is already taken.' })
+		if(existingUser) {
+			if (existingUser.username.toLowerCase() === values.username.toLowerCase()) {
+				form.setError('username', { type: 'manual', message: 'Username is already taken.' })
+			} else {
+				form.setError('email', { type: 'manual', message: 'Email is already taken.' })
+			}
 			return
 		}
 
 		// ✅ At this point, the values will be type-safe and validated.
 		try {
-			const response = await fetch('/api/register', {
+			const response = await fetch('/api/users/register', {
 				method: 'POST',
 				body: JSON.stringify(values)
 			})

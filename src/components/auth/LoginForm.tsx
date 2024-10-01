@@ -2,13 +2,25 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useRouter, useSearchParams } from 'next/navigation'
+
+import { signIn } from 'next-auth/react'
 
 import { loginSchema, type LoginSchema } from '@/schemas/loginSchema'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { useState } from 'react'
 
 export function LoginForm() {
+
+	const router = useRouter()
+	const [error, setError] = useState<string | null>(null)
+	const searchParams = useSearchParams()
+
+	// Extract the callbackUrl from the query parameters
+	const callbackUrl = searchParams.get('callbackUrl') || '/'
+
 	// 1. Define your form.
 	const form = useForm<LoginSchema>({
 		resolver: zodResolver(loginSchema),
@@ -20,19 +32,24 @@ export function LoginForm() {
 
 	// 2. Define a submit handler.
 	async function onSubmit(values: LoginSchema) {
-		form.clearErrors() // Clear previous errors before submitting.
-		// ✅ This will be type-safe and validated.
-		const response = await fetch('/api/login', {
-			method: 'POST',
-			body: JSON.stringify(values)
-		})
-		if (response.status === 403) {
-			form.setError('username', { message: 'Incorrect user or password' })
-			form.setError('password', { message: 'Incorrect user or password' })
-			return
+		setError(null)
+		try {
+			// Sign In with NextAuth
+			const response = await signIn('credentials', {
+				redirect: false,
+				username: values.username,
+				password: values.password
+			})
+			if (!response?.ok) {
+				setError('Incorrect username or password')
+				return
+			}
+			// Redirect on successful login
+			router.push(callbackUrl)
+		} catch (error) {
+			console.error({ mal: true, error })
+			setError('An unknown error occurred. Please try again later.')
 		}
-		const { user } = await response.json()
-		alert(`Welcome back, ${user.name}!`)
 	}
 
 	return (
@@ -47,7 +64,6 @@ export function LoginForm() {
 							<FormControl>
 								<Input {...field} autoComplete='off' />
 							</FormControl>
-							<FormMessage />
 						</FormItem>
 					)}
 				/>
@@ -60,10 +76,12 @@ export function LoginForm() {
 							<FormControl>
 								<Input {...field} type="password" />
 							</FormControl>
-							<FormMessage />
 						</FormItem>
 					)}
 				/>
+
+				{error && <p className='bg-red-600/90 text-white rounded p-2'>{error}</p>}
+
 				<Button type="submit" variant='secondary' className='w-full'>Log in</Button>
 			</form>
 		</Form>

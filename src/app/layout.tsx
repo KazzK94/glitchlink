@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
-import { TopNavbar } from '@/components/common/TopNavbar'
+import { TopNavbar } from '@/components/navbar/TopNavbar'
 
 export const metadata: Metadata = {
 	title: "GlitchLink - The Social Network for Gamers",
