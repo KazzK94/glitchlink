@@ -4,7 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 
 import { attemptLogin } from '@/services/users'
 
-export const authOptions = {
+const handler = NextAuth({
 	providers: [
 		CredentialsProvider({
 			credentials: {
@@ -27,8 +27,6 @@ export const authOptions = {
 	pages: {
 		signIn: '/login'
 	}
-}
-
-const handler = NextAuth(authOptions)
+})
 
 export { handler as GET, handler as POST }
