@@ -14,7 +14,7 @@ export function GameCard({ title, imageUrl }: GameCardProps) {
 
 	return (
 		<Card
-			className="relative overflow-hidden group h-[260px] md:h-[320px] transition-all duration-300 ease-in-out transform hover:scale-105"
+			className="relative overflow-hidden group h-[260px] md:h-[320px] transition-all duration-200 ease-in-out transform hover:scale-105"
 		>
 			<img
 				src={croppedImageUrl}
