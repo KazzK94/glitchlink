@@ -1,7 +1,7 @@
 
 import Link from 'next/link'
 import { Button } from '../ui/button'
-import { User, LogIn } from 'lucide-react'
+import { UserIcon, LogInIcon } from 'lucide-react'
 
 import { useSession } from 'next-auth/react'
 
@@ -16,14 +16,14 @@ export function UserButton() {
 				isUserLogged ? (
 					<Link href="/profile">
 						<Button variant="ghost" size="icon" className="rounded-full">
-							<User className="h-6 w-6" />
+							<UserIcon className="h-6 w-6" />
 							<span className="sr-only">My Profile</span>
 						</Button>
 					</Link>
 				) : (
 					<Link href="/login">
 						<Button variant="ghost" size="icon" className="rounded-full">
-							<LogIn className="h-6 w-6" />
+							<LogInIcon className="h-6 w-6" />
 							<span className="sr-only">Log In</span>
 						</Button>
 					</Link>

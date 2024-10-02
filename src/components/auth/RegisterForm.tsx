@@ -35,7 +35,6 @@ export function RegisterForm() {
 
 	// 2. Define a submit handler.
 	async function onSubmit(values: RegisterSchema) {
-		// TODO: Last Check!! Make sure username and email do not exist in the database.
 		const existingUser = await getUser({
 			where: {
 				usernameLowercase: values.username.toLowerCase(),

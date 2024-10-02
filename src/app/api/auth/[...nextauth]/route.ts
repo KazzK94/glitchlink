@@ -15,17 +15,50 @@ const handler = NextAuth({
 				try {
 					// Attempt to login with provided credentials
 					const user = await attemptLogin(credentials!.username, credentials!.password)
-					// Return user (will be null if credentials are invalid)
+
+					if (!user) throw new Error('Incorrect username or password.')
+
+					// Return user object if login is successful
 					return user
 				} catch (error) {
 					// Return null if any error happens
-					throw new Error('Invalid credentials')
+					throw new Error('Incorrect username or password.')
 				}
 			}
 		})
 	],
 	pages: {
 		signIn: '/login'
+	},
+	callbacks: {
+		async jwt({ token, user }) {
+			// when user logs in, the user object is passed to the jwt callback
+			// (the next times, user will be undefined but token will be updated)
+			if (user) {
+				token = {
+					...token,
+					...user
+				}
+			}
+			return token
+		},
+		async session({ session, token }) {
+
+			// Return default session if no user is logged in
+			if(!session.user) return session
+
+			if (token) {
+				session.user = {
+					...session.user,
+					id: token.id,
+					name: token.name,
+					username: token.username,
+					email: token.email,
+					color: token.color
+				}
+			}
+			return session
+		}
 	}
 })
 

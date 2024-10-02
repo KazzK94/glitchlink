@@ -18,7 +18,6 @@ export function GamesList() {
 	// On initial render:
 	useEffect(() => {
 		async function fetchGames() {
-			// TODO: Add try-catch block
 			const response = await fetch('/api/games')
 			const { games: newGames } = await response.json()
 			setGames(newGames)
@@ -30,7 +29,6 @@ export function GamesList() {
 	// On consequent queries, execute this:
 	async function fetchMoreGames() {
 		setLoading(true)
-		// TODO: Add try-catch block
 		// Get the next page of games
 		const response = await fetch('/api/games?page=' + (page + 1))
 		const { games: newGames } = await response.json()
