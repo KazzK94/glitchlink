@@ -1,6 +1,8 @@
 
 import z from 'zod'
 
+const invalidUsernames = ["admin", "administrator", "mod", "moderator", "login", "register"]
+
 export const registerSchema = z.object({
 	username: z.string()
 		.min(3, { message: "Username must be at least 3 characters long." })
@@ -14,6 +16,30 @@ export const registerSchema = z.object({
 		// Regex: color must be a valid hex color (#09f or #0492f7).
 		.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, { message: "Invalid color." })
 }).superRefine((data, ctx) => {
+	// Prevent users from being all spaces or too short by abusing spaces
+	if(data.username.trim().length !== data.username.length) {
+		ctx.addIssue({
+			code: z.ZodIssueCode.custom,
+			message: "Username cannot start or end with spaces.",
+			path: ["username"]
+		})
+	}
+	// Force first character to be a letter
+	if (!data.username[0].match(/[a-zA-Z]/)) {
+		ctx.addIssue({
+			code: z.ZodIssueCode.custom,
+			message: "Username must start with a letter.",
+			path: ["username"]
+		})
+	}
+	// Prevent usernames that lead to impersonation or conflicts with routes
+	if (invalidUsernames.includes(data.username.toLowerCase())) {
+		ctx.addIssue({
+			code: z.ZodIssueCode.custom,
+			message: "Invalid username.",
+			path: ["username"]
+		})
+	}
 	if (data.password !== data.confirmPassword) {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
@@ -22,6 +48,11 @@ export const registerSchema = z.object({
 		})
 	}
 	return null
-})
+}).transform(data => ({
+	...data,
+	username: data.username.trim(),
+	name: data.name.trim(),
+	email: data.email.trim()
+}))
 
 export type RegisterSchema = z.infer<typeof registerSchema>
