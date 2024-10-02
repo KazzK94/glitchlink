@@ -46,6 +46,8 @@ export function LoginForm() {
 			}
 			// Redirect on successful login
 			router.push(callbackUrl)
+			// And refresh, so all Server Components get updated with the new session
+			router.refresh()
 		} catch (error) {
 			console.error({ mal: true, error })
 			setError('An unknown error occurred. Please try again later.')

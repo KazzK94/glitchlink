@@ -3,12 +3,12 @@ import Link from 'next/link'
 import { Button } from '../ui/button'
 import { UserIcon, LogInIcon } from 'lucide-react'
 
-import { useSession } from 'next-auth/react'
+import { getServerSession } from "next-auth/next"
 
-export function UserButton() {
+export async function UserButton() {
 
-	const session = useSession()
-	const isUserLogged = session.data?.user || null
+	const session = await getServerSession()
+	const isUserLogged = !!session?.user
 
 	return (
 		<>
