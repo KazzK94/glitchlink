@@ -19,7 +19,7 @@ export default function GameSearchBar({ className, onSearch }: GameSearchBarProp
 	return (
 		<form action={handleSubmit} className={`flex gap-1 w-full mt-6 mb-6 justify-center ${className}`}>
 			<Input
-				className='border border-gray-300 bg-slate-500/10 p-2 rounded-lg w-96'
+				className='text-lg md:text-base border border-gray-300 bg-slate-500/10 p-3 rounded-lg w-96'
 				type='text'
 				placeholder='Search for games...'
 				name='search'
@@ -27,7 +27,7 @@ export default function GameSearchBar({ className, onSearch }: GameSearchBarProp
 			/>
 			<Button
 				type='submit'
-				className='ml-2'
+				className='ml-2 text-lg md:text-base'
 				variant='secondary'
 			>
 				Search
