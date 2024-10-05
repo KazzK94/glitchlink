@@ -67,7 +67,7 @@ export function LoginForm() {
 						<FormItem>
 							<FormLabel>Username</FormLabel>
 							<FormControl>
-								<Input {...field} autoComplete='off' />
+								<Input {...field} />
 							</FormControl>
 						</FormItem>
 					)}
