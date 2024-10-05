@@ -6,39 +6,55 @@ import { Button } from '@/components/ui/button'
 import { type Game } from '@/types'
 
 import { useEffect, useState } from 'react'
-
-
+import GameSearchBar from './GameSearchBar'
 
 export function GamesList() {
 
 	const [games, setGames] = useState<Game[]>([])
 	const [page, setPage] = useState(1)
 	const [loading, setLoading] = useState(true)
+	const [search, setSearch] = useState('')
 
-	// On initial render:
+	// On initial render, get first games (no search)
 	useEffect(() => {
 		async function fetchGames() {
 			const response = await fetch('/api/games')
 			const { games: newGames } = await response.json()
-			setGames(newGames)
+			setGames(newGames.map(getRelevantGameInfo))
 			setLoading(false)
 		}
 		fetchGames()
 	}, [])
 
-	// On consequent queries, execute this:
+	// First query or new search:
+	async function fetchGamesWithSearch(search: string) {
+		setSearch(search)
+		setGames([])
+		setLoading(true)
+		setPage(1)
+		const searchUri = search ? `&search=${encodeURIComponent(search)}` : ''
+		const response = await fetch('/api/games?page=1' + searchUri)
+		const { games: newGames } = await response.json()
+		setGames(newGames.map(getRelevantGameInfo))
+		setLoading(false)
+	}
+
+	// On consequent queries (both with or without search):
 	async function fetchMoreGames() {
 		setLoading(true)
 		// Get the next page of games
-		const response = await fetch('/api/games?page=' + (page + 1))
+		const searchUri = search ? `&search=${encodeURIComponent(search)}` : ''
+		const response = await fetch('/api/games?page=' + (page + 1) + searchUri)
 		const { games: newGames } = await response.json()
 		setPage((prevPage) => prevPage + 1)
-		setGames((prev) => [...prev, ...newGames])
+		setGames((prev) => [...prev, ...newGames.map(getRelevantGameInfo)])
 		setLoading(false)
 	}
 
 	return (
 		<>
+			<GameSearchBar onSearch={(newSearch) => fetchGamesWithSearch(newSearch)} />
+
 			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly mb-8 gap-4'>
 				{
 					games.map(game => (
@@ -51,20 +67,13 @@ export function GamesList() {
 				}
 			</div>
 
+			{/* Text: "Loading Games..." */}
 			{loading && <p className='text-xl text-center mt-4'>Loading {games.length !== 0 && 'more'} games...</p>}
 
-			{
-				!loading && games.length !== 0 && (
-					<>
-						<Button className='text-lg flex mx-auto mt-5 p-5' variant='secondary' onClick={() => {
-							fetchMoreGames()
-						}}>
-							See more games
-						</Button>
-					</>
-				)
-			}
+			{/* Button: "Show more games" */}
+			{!loading && games.length !== 0 && <ButtonShowMoreGames onClick={fetchMoreGames} />}
 
+			{/* Text (credit for Rawg): "Data obtained from RAWG.io's API" */}
 			{
 				games.length !== 0 && (
 					<p className='italic text-center mt-12 mb-8'>
@@ -76,4 +85,20 @@ export function GamesList() {
 
 		</>
 	)
+}
+
+function ButtonShowMoreGames({ onClick }: { onClick: () => void }) {
+	return (
+		<Button onClick={onClick} className='text-lg flex mx-auto mt-5 p-5' variant='secondary'>
+			Show more games
+		</Button>
+	)
+}
+
+function getRelevantGameInfo(game: Game) {
+	return {
+		id: game.id,
+		name: game.name,
+		background_image: game.background_image || '/images/game_placeholder.png'
+	}
 }

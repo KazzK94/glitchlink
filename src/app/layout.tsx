@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import { TopNavbar } from '@/components/navbar/TopNavbar'
+import { Providers } from '@/components/Providers'
 
 export const metadata: Metadata = {
 	title: "GlitchLink - The Social Network for Gamers",
@@ -18,8 +19,10 @@ export default function RootLayout({
 				<link rel="icon" href="/icon.png" sizes="any" />
 			</head>
 			<body className='bg-gray-900 text-white'>
-				<TopNavbar />
-				{children}
+				<Providers>
+					<TopNavbar />
+					{children}
+				</Providers>
 			</body>
 		</html>
 	)
