@@ -17,8 +17,9 @@ import { Button } from '../ui/button'
 
 export function RegisterForm() {
 
-	const [usernameAvailability, setUsernameAvailability] = useState<'available' | 'unavailable' | 'unknown'>('unknown')
 	const router = useRouter()
+	const [usernameAvailability, setUsernameAvailability] = useState<'available' | 'unavailable' | 'unknown'>('unknown')
+	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	// 1. Define your form.
 	const form = useForm<RegisterSchema>({
@@ -35,6 +36,7 @@ export function RegisterForm() {
 
 	// 2. Define a submit handler.
 	async function onSubmit(values: RegisterSchema) {
+		setIsLoading(true)
 		const existingUser = await getUser({
 			where: {
 				usernameLowercase: values.username.toLowerCase(),
@@ -48,6 +50,7 @@ export function RegisterForm() {
 			} else {
 				form.setError('email', { type: 'manual', message: 'Email is already taken.' })
 			}
+			setIsLoading(false)
 			return
 		}
 
@@ -67,7 +70,9 @@ export function RegisterForm() {
 			alert('Redirecting to login page...')
 			router.push('/login')
 		} catch (error) {
+			setIsLoading(false)
 			console.error('Failed to register user:', error)
+			alert('Unknown error. Check the console for more info. ')
 		}
 	}
 
@@ -211,7 +216,7 @@ export function RegisterForm() {
 					)}
 				/>
 
-				<Button type="submit" variant='secondary' className='w-full'>Register</Button>
+				<Button type="submit" disabled={isLoading} variant='secondary' className='w-full'>Register</Button>
 			</form>
 		</Form>
 	)

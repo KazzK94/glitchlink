@@ -15,8 +15,9 @@ import { useState } from 'react'
 export function LoginForm() {
 
 	const router = useRouter()
-	const [error, setError] = useState<string | null>(null)
 	const searchParams = useSearchParams()
+	const [error, setError] = useState<string | null>(null)
+	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	// Extract the callbackUrl from the query parameters
 	const callbackUrl = searchParams.get('callbackUrl') || '/'
@@ -33,6 +34,7 @@ export function LoginForm() {
 	// 2. Define a submit handler.
 	async function onSubmit(values: LoginSchema) {
 		setError(null)
+		setIsLoading(true)
 		try {
 			// Sign In with NextAuth
 			const response = await signIn('credentials', {
@@ -42,12 +44,13 @@ export function LoginForm() {
 			})
 			if (!response?.ok) {
 				setError('Incorrect username or password')
+				setIsLoading(false)
 				return
 			}
 			// Redirect on successful login
 			router.push(callbackUrl)
 			// And refresh, so all Server Components get updated with the new session
-			router.refresh()
+			router.refresh() // <-- This is important for stuff like user icon (in the navbar)
 		} catch (error) {
 			console.error({ mal: true, error })
 			setError('An unknown error occurred. Please try again later.')
@@ -84,7 +87,7 @@ export function LoginForm() {
 
 				{error && <p className='bg-red-600/90 text-white rounded p-2'>{error}</p>}
 
-				<Button type="submit" variant='secondary' className='w-full'>Log in</Button>
+				<Button type="submit" disabled={isLoading} variant='secondary' className='w-full'>Log in</Button>
 			</form>
 		</Form>
 	)
