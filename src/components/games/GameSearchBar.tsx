@@ -19,7 +19,7 @@ export default function GameSearchBar({ className, onSearch }: GameSearchBarProp
 	return (
 		<form action={handleSubmit} className={`flex gap-1 w-full mt-6 mb-6 justify-center ${className}`}>
 			<Input
-				className='text-lg md:text-base border border-gray-300 bg-slate-500/10 p-3 rounded-lg w-96'
+				className='text-lg md:text-base border border-gray-300 bg-slate-500/10 p-3 rounded-lg'
 				type='text'
 				placeholder='Search for games...'
 				name='search'
