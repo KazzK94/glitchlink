@@ -49,4 +49,5 @@ As for now, Games are retrieved from an external API. However, we want to also h
 We will implement this relation first, and then we will make it so when a user clicks on the button, the system checks if the game is stored in our database. If it isn't, it stores it. After that, the User and the Game will be linked using Prisma (relation many-to-many).
 
 ## Profile (a little more decent)
-The profile will now show the user's Name, as well as the games they added to their profile.
+The profile will now show the user's Name (with the profile's stored color), as well as the games they added to their profile.
+It will also have an option to edit the User's information, such as the username, name and color.
