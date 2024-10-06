@@ -51,3 +51,7 @@ We will implement this relation first, and then we will make it so when a user c
 ## Profile (a little more decent)
 The profile will now show the user's Name (with the profile's stored color), as well as the games they added to their profile.
 It will also have an option to edit the User's information, such as the username, name and color.
+
+## Users Privileges and Status
+We will add a privilege level to users in the database (user, mod, admin...).
+We will also add a status to user accounts (pending, active, banned, disabled...).
