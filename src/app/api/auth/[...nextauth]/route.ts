@@ -1,10 +1,10 @@
 
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 
 import { attemptLogin } from '@/services/users'
 
-const handler = NextAuth({
+export const authOptions = {
 	providers: [
 		CredentialsProvider({
 			credentials: {
@@ -43,9 +43,8 @@ const handler = NextAuth({
 			return token
 		},
 		async session({ session, token }) {
-
 			// Return default session if no user is logged in
-			if(!session.user) return session
+			if (!session.user) return session
 
 			if (token) {
 				session.user = {
@@ -60,6 +59,8 @@ const handler = NextAuth({
 			return session
 		}
 	}
-})
+} as NextAuthOptions
+
+const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }
