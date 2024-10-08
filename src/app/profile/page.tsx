@@ -11,6 +11,7 @@ import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/services/nextAuthConfig'
 import { LogoutButton } from '@/components/LogoutButton'
 import { BookUserIcon, EditIcon, Gamepad2Icon, LogOutIcon, MessageSquareIcon, SettingsIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export default async function ProfilePage() {
 
@@ -42,7 +43,7 @@ export default async function ProfilePage() {
 					</TabsTrigger>
 				</TabsList>
 				<TabsContent value='games'>
-					<MyVideoGamesList />
+					<MyVideoGames />
 				</TabsContent>
 				<TabsContent value='posts'>
 					<MyPosts />
@@ -85,19 +86,25 @@ function ProfileHeading({ user }: { user: User }) {
 	)
 }
 
-function MyVideoGamesList() {
+function MyVideoGames() {
 	return (
 		<div className='px-3 py-1'>
-			<h2 className='text-xl mb-1 text-green-400'>My Video Games</h2>
+			<h2 className='text-2xl mb-1 text-green-400'>My Video Games</h2>
 			<p>No games added yet...</p>
-		</div>
+
+			<Link href='/games' className='inline-block mt-4'>
+				<Button variant='secondary' className='text-lg' >
+					Find your games
+				</Button>
+			</Link>
+		</div >
 	)
 }
 
 function MyPosts() {
 	return (
 		<div className='px-3 py-1'>
-			<h2 className='text-xl mb-1 text-cyan-400'>My Posts</h2>
+			<h2 className='text-2xl mb-1 text-cyan-400'>My Posts</h2>
 			<p>No posts created yet...</p>
 		</div>
 	)
@@ -106,7 +113,7 @@ function MyPosts() {
 function FriendsList() {
 	return (
 		<div className='px-3 py-1'>
-			<h2 className='text-xl mb-1 text-amber-400'>Friends List</h2>
+			<h2 className='text-2xl mb-1 text-amber-400'>Friends List</h2>
 
 			<p>YOU HAVE NO FRIENDS LOL!!</p>
 

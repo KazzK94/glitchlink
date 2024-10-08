@@ -58,12 +58,12 @@ export function ModalOpener({
 			<DialogTrigger asChild={!isDialogTriggerString} className={`${dialogTriggerClassName}`}>
 				{children || dialogTrigger}
 			</DialogTrigger>
-			<DialogContent className='bg-gray-300/85 backdrop-blur-sm border-0 shadow-sm shadow-slate-400/60 w-fit mx-3 my-2 rounded'>
+			<DialogContent className='bg-gray-100 backdrop-blur-sm border-0 shadow-sm shadow-slate-400/60 w-fit mx-3 my-2 rounded'>
 				<DialogHeader className='text-black flex flex-col gap-1 mb-2 pr-4'>
 					{modalTitle &&
 						<DialogTitle className='text-xl leading-none'>{modalTitle}</DialogTitle>
 					}
-					<DialogDescription className='text-black/90'>
+					<DialogDescription className='text-black/90 text-pretty'>
 						{modalContent}
 					</DialogDescription>
 				</DialogHeader>
