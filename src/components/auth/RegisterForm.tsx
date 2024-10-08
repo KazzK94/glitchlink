@@ -66,8 +66,7 @@ export function RegisterForm() {
 				return
 			}
 			const newUser = await response.json()
-			alert('User Created: ' + JSON.stringify(newUser))
-			alert('Redirecting to login page...')
+			alert(`User Created: ${newUser.username}. \nNow redirecting to login page...`)
 			router.push('/login')
 		} catch (error) {
 			setIsLoading(false)

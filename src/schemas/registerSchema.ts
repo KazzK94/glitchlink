@@ -1,7 +1,7 @@
 
 import z from 'zod'
 
-const invalidUsernames = ["admin", "administrator", "mod", "moderator", "login", "register"]
+const invalidUsernames = ["admin", "administrator", "mod", "moderator", "login", "register", "games"]
 
 export const registerSchema = z.object({
 	username: z.string()

@@ -8,5 +8,6 @@ export async function GET() {
 		return Response.json({ ok: false })
 	}
 
+	// TODO: Retrieve user from database
 	return Response.json({ ok: true, user: session.user })
 }

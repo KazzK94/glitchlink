@@ -2,7 +2,6 @@
 
 import { ModalOpener } from '@/components/common/Modal'
 import { Button } from '../ui/button'
-import { getGameByIdFromExternalApi } from '@/services/gamesExternalApi'
 import { useState } from 'react'
 
 export function AddGameToCollectionButton({ id, title, className }: { id: number, title: string, className?: string }) {
@@ -13,15 +12,25 @@ export function AddGameToCollectionButton({ id, title, className }: { id: number
 
 	const handleSubmit = async () => {
 		if (isGameAdded) return
-		
+
 		// Here you could make a request to your API to add the game to the user's collection
 		// For now, we're just showing an alert
-		const gameData = await getGameByIdFromExternalApi(id)
+		const gameData = await fetch('/api/external/games/' + id).then(res => res.json())
 
 		if (!gameData) return alert('Error adding game to collection. If this error persists please contact an administrator.')
 
 		const parsedGameData = parseGameData(gameData)
-		console.log({ parsedGameData })
+
+		// make a request to  API to add the game to the user's collection
+		const insertedGame = await fetch('/api/users/games', {
+			method: 'POST',
+			body: JSON.stringify(parsedGameData),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(res => res.json())
+
+		console.log({ insertedGame })
 
 		setIsGameAdded(true)
 	}
@@ -63,12 +72,11 @@ function parseGameData(gameData: {
 }) {
 	return {
 		externalId: gameData.id,
-		name: gameData.name,
+		title: gameData.name,
 		image: gameData.background_image,
-		releaseDate: gameData.released,
 		genres: gameData.genres.map((genre: { name: string }) => genre.name),
 		platforms: gameData.parent_platforms.map((platform: { platform: { name: string } }) => platform.platform.name),
-		summary: gameData.description_raw.split('\n\n')[0],
+		description: gameData.description_raw.split('\n\n')[0],
 		developers: gameData.developers.map((developer: { name: string }) => developer.name)
 	}
 }

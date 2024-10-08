@@ -7,5 +7,5 @@ export async function GET(request: NextRequest, { params }: { params: { username
 	const username = params.username
 	const user = await getUserByUsername(username)
 
-	return Response.json({ user })
+	return Response.json(user)
 }

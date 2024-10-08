@@ -18,8 +18,8 @@ export function GamesList() {
 	// On initial render, get first games (no search)
 	useEffect(() => {
 		async function fetchGames() {
-			const response = await fetch('/api/games')
-			const { games: newGames } = await response.json()
+			const response = await fetch('/api/external/games')
+			const newGames = await response.json()
 			setGames(newGames.map(getRelevantGameInfo))
 			setLoading(false)
 		}
@@ -33,8 +33,8 @@ export function GamesList() {
 		setLoading(true)
 		setPage(1)
 		const searchUri = search ? `&search=${encodeURIComponent(search)}` : ''
-		const response = await fetch('/api/games?page=1' + searchUri)
-		const { games: newGames } = await response.json()
+		const response = await fetch('/api/external/games?page=1' + searchUri)
+		const newGames = await response.json()
 		setGames(newGames.map(getRelevantGameInfo))
 		setLoading(false)
 	}
@@ -44,8 +44,8 @@ export function GamesList() {
 		setLoading(true)
 		// Get the next page of games
 		const searchUri = search ? `&search=${encodeURIComponent(search)}` : ''
-		const response = await fetch('/api/games?page=' + (page + 1) + searchUri)
-		const { games: newGames } = await response.json()
+		const response = await fetch('/api/external/games?page=' + (page + 1) + searchUri)
+		const newGames = await response.json()
 		setPage((prevPage) => prevPage + 1)
 		setGames((prev) => [...prev, ...newGames.map(getRelevantGameInfo)])
 		setLoading(false)

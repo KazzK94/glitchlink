@@ -9,8 +9,8 @@ generator client {
 }
 
 datasource db {
-    provider  = "postgresql"
-    url       = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
     //directUrl = env("DIRECT_URL")
 }
 
@@ -28,13 +28,13 @@ model User {
 
 model VideoGame {
     id          String   @id @default(uuid())
-	externalId  Int
+    externalId  Int      @unique
     title       String
-	image       String
+    image       String
     description String
-	genres      String[]
-	platforms   String[]
-	developers  String[]
+    genres      String[]
+    platforms   String[]
+    developers  String[]
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 }

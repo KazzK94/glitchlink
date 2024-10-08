@@ -17,14 +17,12 @@ export async function POST(request: NextRequest) {
 	const user = await createUser({ username, password, name, email, color })
 
 	return Response.json({
-		user: {
-			id: user.id,
-			username: user.username,
-			name: user.name,
-			email: user.email,
-			color: user.color,
-			createdAt: user.createdAt
-		}
+		id: user.id,
+		username: user.username,
+		name: user.name,
+		email: user.email,
+		color: user.color,
+		createdAt: user.createdAt
 	})
 
 }

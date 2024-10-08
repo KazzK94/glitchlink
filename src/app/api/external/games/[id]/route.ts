@@ -6,5 +6,5 @@ export async function GET(_request: NextRequest, { params }: { params: { id: num
 	// Get the game id from the url params
 	const gameId = params.id
 	const game = await getGameByIdFromExternalApi(gameId)
-	return Response.json({ game })
+	return Response.json(game)
 }

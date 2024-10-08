@@ -9,5 +9,5 @@ export async function GET(request: NextRequest) {
 
 	// Search for games (no search = all games) + paging
 	const games = await getGamesFromExternalApi({ search, page })
-	return Response.json({ games })
+	return Response.json(games)
 }
