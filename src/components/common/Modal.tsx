@@ -58,7 +58,7 @@ export function ModalOpener({
 			<DialogTrigger asChild={!isDialogTriggerString} className={`${dialogTriggerClassName}`}>
 				{children || dialogTrigger}
 			</DialogTrigger>
-			<DialogContent className='bg-gray-100 backdrop-blur-sm border-0 shadow-sm shadow-slate-400/60 w-fit mx-3 my-2 rounded'>
+			<DialogContent className='px-5 pt-5 pb-4 mx-4 my-2 w-fit bg-gray-100 border-0 shadow-slate-400/20 rounded-lg'>
 				<DialogHeader className='text-black flex flex-col gap-1 mb-2 pr-4'>
 					{modalTitle &&
 						<DialogTitle className='text-xl leading-none'>{modalTitle}</DialogTitle>
@@ -70,7 +70,7 @@ export function ModalOpener({
 				<DialogFooter>
 					<div className='flex justify-end gap-2'>
 						{(onCancel || showCancelButton) && (
-							<Button variant='ghost' className='text-red-700 hover:text-red-600 hover:bg-inherit' onClick={handleCancel}>
+							<Button variant='ghost' className='text-black/90 hover:text-black/80 hover:bg-inherit' onClick={handleCancel}>
 								{cancelText || 'Cancel'}
 							</Button>
 						)}

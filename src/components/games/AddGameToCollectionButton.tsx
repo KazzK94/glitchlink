@@ -12,24 +12,17 @@ export function AddGameToCollectionButton({ id, title, className }: { id: number
 	const [isGameAdded, setIsGameAdded] = useState(false)
 
 	const handleSubmit = async () => {
+		if (isGameAdded) return
+		
 		// Here you could make a request to your API to add the game to the user's collection
 		// For now, we're just showing an alert
 		const gameData = await getGameByIdFromExternalApi(id)
 
 		if (!gameData) return alert('Error adding game to collection. If this error persists please contact an administrator.')
 
-		const parsedGameData = {
-			externalId: gameData.id,
-			name: gameData.name,
-			image: gameData.background_image,
-			releaseDate: gameData.released,
-			genres: gameData.genres.map((genre: { name: string }) => genre.name),
-			platforms: gameData.platforms.map((platform: { platform: { name: string } }) => platform.platform.name),
-			summary: gameData.description_raw.split('\n\n')[0],
-			developers: gameData.developers.map((developer: { name: string }) => developer.name)
-		}
+		const parsedGameData = parseGameData(gameData)
+		console.log({ parsedGameData })
 
-		console.log(parsedGameData)
 		setIsGameAdded(true)
 	}
 
@@ -57,4 +50,25 @@ export function AddGameToCollectionButton({ id, title, className }: { id: number
 			</Button>
 		</ModalOpener>
 	)
+}
+
+function parseGameData(gameData: {
+	id: number, name: string,
+	background_image: string,
+	released: string,
+	genres: { name: string }[],
+	parent_platforms: { platform: { name: string } }[],
+	description_raw: string,
+	developers: { name: string }[]
+}) {
+	return {
+		externalId: gameData.id,
+		name: gameData.name,
+		image: gameData.background_image,
+		releaseDate: gameData.released,
+		genres: gameData.genres.map((genre: { name: string }) => genre.name),
+		platforms: gameData.parent_platforms.map((platform: { platform: { name: string } }) => platform.platform.name),
+		summary: gameData.description_raw.split('\n\n')[0],
+		developers: gameData.developers.map((developer: { name: string }) => developer.name)
+	}
 }

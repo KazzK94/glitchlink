@@ -93,7 +93,7 @@ function MyVideoGames() {
 			<p>No games added yet...</p>
 
 			<Link href='/games' className='inline-block mt-4'>
-				<Button variant='secondary' className='text-lg' >
+				<Button className='text-lg bg-green-700/90 hover:bg-green-600/80' >
 					Find your games
 				</Button>
 			</Link>
