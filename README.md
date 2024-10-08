@@ -15,7 +15,7 @@ We handle authentication with next-auth, keeping the user's information in a pos
 
 ## Data (Database)
 Our database is a postgresql database. Connections to the database are made using Prisma.
-We use Supabase as a database provider.
+We use Neon as a database provider.
 
 ## Deployment
 The production version of the site is deployed in Vercel.

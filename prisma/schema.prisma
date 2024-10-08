@@ -11,7 +11,7 @@ generator client {
 datasource db {
     provider  = "postgresql"
     url       = env("DATABASE_URL")
-    directUrl = env("DIRECT_URL")
+    //directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -24,4 +24,17 @@ model User {
     color             String
     createdAt         DateTime @default(now())
     updatedAt         DateTime @updatedAt
+}
+
+model VideoGame {
+    id          String   @id @default(uuid())
+	externalId  Int
+    title       String
+	image       String
+    description String
+	genres      String[]
+	platforms   String[]
+	developers  String[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }
