@@ -1,5 +1,5 @@
 
-import { getGameByIdFromApi } from '@/services/gamesApi'
+import { getGameByIdFromApi } from '@/services/games'
 import { type NextRequest } from 'next/server'
 
 export async function GET(_request: NextRequest, { params }: { params: { id: number } }) {

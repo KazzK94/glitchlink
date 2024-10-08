@@ -1,15 +1,16 @@
 'use client'
 
 import { Card, CardContent } from "@/components/ui/card"
-import { Button } from '@/components/ui/button'
 import { useSession } from 'next-auth/react'
+import { AddGameToCollectionButton } from './AddGameToCollectionButton'
 
 interface GameCardProps {
+	id: number
 	title: string
 	imageUrl: string
 }
 
-export function GameCard({ title, imageUrl }: GameCardProps) {
+export function GameCard({ id, title, imageUrl }: GameCardProps) {
 
 	const croppedImageUrl = imageUrl.replace('media/', 'media/crop/600/400/')
 
@@ -32,24 +33,10 @@ export function GameCard({ title, imageUrl }: GameCardProps) {
 				<h2 className="text-2xl font-bold text-white text-pretty text-center mb-1">{title}</h2>
 
 				{
-					userIsLogged && <ButtonAddGameToCollection title={title} />
+					userIsLogged && <AddGameToCollectionButton id={id} title={title} />
 				}
 
 			</CardContent>
 		</Card>
-	)
-}
-
-function ButtonAddGameToCollection({ title }: { title: string }) {
-	return (
-		<Button
-			variant='secondary'
-			className={`w-full text-sm overflow-hidden invisible h-0 p-0
-						transition-all duration-300 ease-in-out 
-						group-hover:h-9 group-hover:visible group-hover:p-2 group-hover:mt-1`}
-			onClick={() => alert(`Game "${title}" added (nah, not really, TBI)`)}
-		>
-			Add to my games
-		</Button>
 	)
 }
