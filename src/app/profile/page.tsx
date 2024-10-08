@@ -27,18 +27,18 @@ export default async function ProfilePage() {
 			<ProfileHeading user={user} />
 
 			<Tabs defaultValue='games' className='mt-6'>
-				<TabsList className='grid grid-cols-3 bg-white/5'>
-					<TabsTrigger value='games' className='flex gap-1 items-center'>
-						<Gamepad2Icon size={20} />
-						<span className='hidden sm:inline'>My Video Games</span>
+				<TabsList className='p-1 h-12 grid grid-cols-3 gap-0.5 bg-white/5'>
+					<TabsTrigger value='games' className='flex gap-1 items-center h-full'>
+						<Gamepad2Icon size={24} />
+						<span className='hidden sm:inline md:text-lg md:ml-1'>My Video Games</span>
 					</TabsTrigger>
-					<TabsTrigger value='posts' className='flex gap-1 items-center'>
-						<MessageSquareIcon size={18} />
-						<span className='hidden sm:inline'>My Posts</span>
+					<TabsTrigger value='posts' className='flex gap-1 items-center h-full'>
+						<MessageSquareIcon size={24} />
+						<span className='hidden sm:inline md:text-lg md:ml-1'>My Posts</span>
 					</TabsTrigger>
-					<TabsTrigger value='friends' className='flex gap-1 items-center'>
-						<BookUserIcon size={20} />
-						<span className='hidden sm:inline'>Friends List</span>
+					<TabsTrigger value='friends' className='flex gap-1 items-center h-full'>
+						<BookUserIcon size={24} />
+						<span className='hidden sm:inline md:text-lg md:ml-1'>Friends List</span>
 					</TabsTrigger>
 				</TabsList>
 				<TabsContent value='games'>
