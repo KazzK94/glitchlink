@@ -2,7 +2,7 @@
 
 import { ModalOpener } from '@/components/common/Modal'
 import { Button } from '../ui/button'
-import { getGameByExternalId } from '@/services/games'
+import { getGameByIdFromExternalApi } from '@/services/gamesExternalApi'
 import { useState } from 'react'
 
 export function AddGameToCollectionButton({ id, title, className }: { id: number, title: string, className?: string }) {
@@ -14,7 +14,7 @@ export function AddGameToCollectionButton({ id, title, className }: { id: number
 	const handleSubmit = async () => {
 		// Here you could make a request to your API to add the game to the user's collection
 		// For now, we're just showing an alert
-		const gameData = await getGameByExternalId(id)
+		const gameData = await getGameByIdFromExternalApi(id)
 
 		if (!gameData) return alert('Error adding game to collection. If this error persists please contact an administrator.')
 
