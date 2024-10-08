@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 // AUTH
 import { type User } from 'next-auth'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from '../api/auth/[...nextauth]/route'
+import { authOptions } from '@/services/nextAuthConfig'
 import { LogoutButton } from '@/components/LogoutButton'
 import { BookUserIcon, EditIcon, Gamepad2Icon, LogOutIcon, MessageSquareIcon, SettingsIcon } from 'lucide-react'
 
