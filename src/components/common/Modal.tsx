@@ -60,8 +60,10 @@ export function ModalOpener({
 			</DialogTrigger>
 			<DialogContent className='bg-gray-300/85 backdrop-blur-sm border-0 shadow-sm shadow-slate-400/60 w-fit mx-3 my-2 rounded'>
 				<DialogHeader className='text-black flex flex-col gap-1 mb-2 pr-4'>
-					{modalTitle && <DialogTitle className='text-xl leading-none'>{modalTitle}</DialogTitle>}
-					<DialogDescription className='text-black/80'>
+					{modalTitle &&
+						<DialogTitle className='text-xl leading-none'>{modalTitle}</DialogTitle>
+					}
+					<DialogDescription className='text-black/90'>
 						{modalContent}
 					</DialogDescription>
 				</DialogHeader>
