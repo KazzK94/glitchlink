@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
 		{ externalId, title, description, image, genres, developers, platforms }
 	)
 
-	addVideoGameToUser({ videoGameId: game.id, userId: user.id })
+	await addVideoGameToUser({ videoGameId: game.id, userId: user.id })
 
 	return Response.json(game)
 }
