@@ -5,12 +5,13 @@ import { useSession } from 'next-auth/react'
 import { AddGameToCollectionButton } from './AddGameToCollectionButton'
 
 interface GameCardProps {
-	id: number
+	externalId: number
 	title: string
 	imageUrl: string
+	isOwned?: boolean
 }
 
-export function GameCard({ id, title, imageUrl }: GameCardProps) {
+export function GameCard({ externalId, title, imageUrl, isOwned = false }: GameCardProps) {
 
 	const croppedImageUrl = imageUrl.replace('media/', 'media/crop/600/400/')
 
@@ -33,7 +34,7 @@ export function GameCard({ id, title, imageUrl }: GameCardProps) {
 				<h2 className="text-2xl font-bold text-white text-pretty text-center mb-1">{title}</h2>
 
 				{
-					userIsLogged && <AddGameToCollectionButton id={id} title={title} />
+					userIsLogged && !isOwned && <AddGameToCollectionButton externalId={externalId} title={title} />
 				}
 
 			</CardContent>

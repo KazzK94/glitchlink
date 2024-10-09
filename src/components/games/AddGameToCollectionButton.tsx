@@ -4,9 +4,9 @@ import { ModalOpener } from '@/components/common/Modal'
 import { Button } from '../ui/button'
 import { useState } from 'react'
 
-export function AddGameToCollectionButton({ id, title, className }: { id: number, title: string, className?: string }) {
+export function AddGameToCollectionButton({ externalId, title, className }: { externalId: number, title: string, className?: string }) {
 
-	// id is the ID of the game in the rawg.io API
+	// externalId is the ID of the game in the rawg.io API
 
 	const [isGameAdded, setIsGameAdded] = useState(false)
 
@@ -15,7 +15,7 @@ export function AddGameToCollectionButton({ id, title, className }: { id: number
 
 		// Here you could make a request to your API to add the game to the user's collection
 		// For now, we're just showing an alert
-		const gameData = await fetch('/api/external/games/' + id).then(res => res.json())
+		const gameData = await fetch('/api/external/games/' + externalId).then(res => res.json())
 
 		if (!gameData) return alert('Error adding game to collection. If this error persists please contact an administrator.')
 
@@ -62,7 +62,8 @@ export function AddGameToCollectionButton({ id, title, className }: { id: number
 }
 
 function parseGameData(gameData: {
-	id: number, name: string,
+	id: number, 
+	name: string,
 	background_image: string,
 	released: string,
 	genres: { name: string }[],
@@ -70,6 +71,7 @@ function parseGameData(gameData: {
 	description_raw: string,
 	developers: { name: string }[]
 }) {
+	console.log({ gameData })
 	return {
 		externalId: gameData.id,
 		title: gameData.name,

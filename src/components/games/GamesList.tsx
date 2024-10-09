@@ -60,7 +60,7 @@ export function GamesList() {
 					games.map(game => (
 						<GameCard
 							key={game.id}
-							id={game.id}
+							externalId={game.id}
 							title={game.name}
 							imageUrl={game.background_image}
 						/>

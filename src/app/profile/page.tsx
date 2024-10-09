@@ -14,6 +14,10 @@ import { BookUserIcon, EditIcon, Gamepad2Icon, LogOutIcon, MessageSquareIcon, Se
 import { Button } from '@/components/ui/button'
 import { getVideoGamesByUser } from '@/services/games'
 import { VideoGame } from '@prisma/client'
+import { GameCard } from '@/components/games/GameCard'
+
+// NextJS force dynamic
+export const dynamic = 'force-dynamic'
 
 export default async function ProfilePage() {
 
@@ -102,24 +106,28 @@ async function MyVideoGames() {
 
 	return (
 		<div className='px-3 py-1'>
-			<h2 className='text-2xl mb-1 text-green-200'>My Video Games</h2>
+			<h2 className='text-2xl mb-3 text-green-200'>My Video Games</h2>
 
 			{
 				videoGames.length === 0 && <p>No games added yet...</p>
 			}
 
-			<ul>
+			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly mb-8 gap-4'>
 				{
 					videoGames.map((game: VideoGame) => (
-						<li key={game.id}>
-							<h1 className='text-green-400'>{game.title}</h1>
-						</li>
+						<GameCard
+							key={game.id}
+							externalId={game.externalId}
+							title={game.title}
+							imageUrl={game.image}
+							isOwned
+						/>
 					))
 				}
-			</ul>
-			<Link href='/games' className='inline-block mt-4'>
+			</div>
+			<Link href='/games' className='inline-block mb-4 ml-2'>
 				<Button className='text-lg bg-green-700/90 hover:bg-green-600/80' >
-					Find your games
+					Find{videoGames.length > 0 ? ' more ':' '}games
 				</Button>
 			</Link>
 		</div >
