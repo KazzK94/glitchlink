@@ -12,16 +12,19 @@ import { authOptions } from '@/services/nextAuthConfig'
 import { LogoutButton } from '@/components/LogoutButton'
 import { BookUserIcon, EditIcon, Gamepad2Icon, LogOutIcon, MessageSquareIcon, SettingsIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { getVideoGamesByUser } from '@/services/games'
+import { VideoGame } from '@prisma/client'
 
 export default async function ProfilePage() {
 
 	const session = await getServerSession(authOptions)
 
-	if (!session) {
+	if (!session || !session.user) {
 		redirect('/login')
 	}
 
 	const { user } = session
+
 
 	return (
 		<Container asSection className='mt-4 relative'>
@@ -86,12 +89,34 @@ function ProfileHeading({ user }: { user: User }) {
 	)
 }
 
-function MyVideoGames() {
+async function MyVideoGames() {
+	const session = await getServerSession(authOptions)
+
+	if (!session || !session.user) {
+		redirect('/login')
+	}
+
+	const { user } = session
+
+	const { videoGames } = await getVideoGamesByUser(user.id) || { videoGames: [] }
+
 	return (
 		<div className='px-3 py-1'>
-			<h2 className='text-2xl mb-1 text-green-400'>My Video Games</h2>
-			<p>No games added yet...</p>
+			<h2 className='text-2xl mb-1 text-green-200'>My Video Games</h2>
 
+			{
+				videoGames.length === 0 && <p>No games added yet...</p>
+			}
+
+			<ul>
+				{
+					videoGames.map((game: VideoGame) => (
+						<li key={game.id}>
+							<h1 className='text-green-400'>{game.title}</h1>
+						</li>
+					))
+				}
+			</ul>
 			<Link href='/games' className='inline-block mt-4'>
 				<Button className='text-lg bg-green-700/90 hover:bg-green-600/80' >
 					Find your games

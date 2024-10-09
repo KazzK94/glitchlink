@@ -35,3 +35,21 @@ export async function getVideoGameById(id: string) {
 		where: { id }
 	})
 }
+
+export async function addVideoGameToUser({ videoGameId, userId }: { videoGameId: string, userId: string }) {
+	return await prisma.user.update({
+		where: { id: userId },
+		data: {
+			videoGames: {
+				connect: { id: videoGameId }
+			}
+		}
+	})
+}
+
+export async function getVideoGamesByUser(userId: string) {
+	return await prisma.user.findUnique({
+		where: { id: userId },
+		select: { videoGames: true }
+	})
+}

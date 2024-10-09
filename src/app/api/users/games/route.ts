@@ -1,25 +1,42 @@
 
-import { createOrGetVideoGame } from '@/services/games'
+import { createOrGetVideoGame, getVideoGamesByUser } from '@/services/games'
 import { type VideoGame } from '@prisma/client'
 import { type NextRequest } from 'next/server'
+import { addVideoGameToUser } from '../../../../services/games'
+
+import { getServerSession, User } from 'next-auth'
+import { authOptions } from '@/services/nextAuthConfig'
 
 // Get all the logged user's games
-export function GET() {
-	const games: VideoGame[] = []
-	return Response.json(games)
+export async function GET() {
+	const session = await getServerSession(authOptions)
+	if (!session) {
+		return Response.json({ ok: false, message: 'No user logged in.' })
+	}
+
+	const user: User = session.user
+
+	const { videoGames } = (await getVideoGamesByUser(user.id)) || { videoGames: [] }
+	return Response.json(videoGames)
 }
 
 // Add a game to the user's collection (if game is not already in the database, add it)
 export async function POST(request: NextRequest) {
 
+	const session = await getServerSession(authOptions)
+	if (!session) {
+		return Response.json({ ok: false, message: 'No user logged in.' })
+	}
+	const user: User = session.user
+
 	const body = await request.json()
 	const { externalId, title, description, image, genres, developers, platforms } = body
 
-	const game = await createOrGetVideoGame(
+	const game: VideoGame = await createOrGetVideoGame(
 		{ externalId, title, description, image, genres, developers, platforms }
 	)
 
-	// TODO: Add the game to the user's collection (need to create the relation first)
+	addVideoGameToUser({ videoGameId: game.id, userId: user.id })
 
 	return Response.json(game)
 }
