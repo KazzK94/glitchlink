@@ -14,7 +14,7 @@ export async function UserMenu() {
 			{
 				isUserLogged ? (
 					<>
-						<UserButton url="#/notifications" text="Notifications">
+						<UserButton url="#" text="Notifications">
 							<BellIcon className="size-7 pt-1" />
 						</UserButton>
 						<UserButton url="/profile" text="My Profile">

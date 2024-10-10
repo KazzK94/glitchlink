@@ -71,7 +71,7 @@ function ProfileHeading({ user }: { user: User }) {
 
 			{/* Buttons */}
 			<div className='float-right flex items-center gap-3'>
-				<Link href='#/profile/update' className='flex items-center gap-2 border-2 rounded-lg p-3 text-slate-300 border-slate-300'>
+				<Link href='#' className='flex items-center gap-2 border-2 rounded-lg p-3 text-slate-300 border-slate-300'>
 					<EditIcon size={20} />
 				</Link>
 				<LogoutButton className='flex items-center gap-2 border-2 rounded-lg p-3 text-red-400 border-red-400'>
