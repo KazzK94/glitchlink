@@ -26,14 +26,14 @@ export default function NavbarLinksResponsive() {
 
 	return (
 		<div ref={rootRef} className='flex items-center gap-12'>
-			<div className="flex items-center gap-4">
+			<div className="flex items-center gap-3">
 				<button
 					className="lg:hidden text-white"
 					onClick={() => setIsMenuOpen(!isMenuOpen)}
 				>
 					<Menu size={32} />
 				</button>
-				<Link href='/' className="flex items-center space-x-2">
+				<Link href='/' className="flex items-center gap-x-2">
 					<Logo />
 					<span className="text-2xl font-bold">GlitchLink</span>
 				</Link>

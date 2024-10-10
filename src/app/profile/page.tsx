@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { type User } from 'next-auth'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/services/nextAuthConfig'
-import { LogoutButton } from '@/components/LogoutButton'
+import { LogoutButton } from '@/components/auth/LogoutButton'
 import { BookUserIcon, EditIcon, Gamepad2Icon, LogOutIcon, MessageSquareIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { getVideoGamesByUser } from '@/services/games'

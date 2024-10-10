@@ -10,7 +10,7 @@ export async function UserMenu() {
 	const isUserLogged = !!session?.user
 
 	return (
-		<div className='flex gap-2'>
+		<div className='flex gap-2 items-center'>
 			{
 				isUserLogged ? (
 					<>
