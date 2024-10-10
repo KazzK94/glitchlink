@@ -26,7 +26,7 @@ function NewPostForm() {
 		<div className="bg-gray-800 px-6 py-5 rounded-lg">
 			<h2 className="text-xl font-semibold mb-4">What&apos;s on your mind?</h2>
 			<textarea
-				className="w-full bg-gray-700 text-white rounded-md p-3 mb-3"
+				className="w-full min-h-20 max-h-[50vh] bg-gray-700 text-white rounded-md p-3 mb-3"
 				rows={3}
 				placeholder="Share your thoughts..."
 			></textarea>
