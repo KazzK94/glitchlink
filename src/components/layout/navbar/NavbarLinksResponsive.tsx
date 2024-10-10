@@ -33,9 +33,9 @@ export default function NavbarLinksResponsive() {
 				>
 					<Menu size={32} />
 				</button>
-				<Link href='/' className="flex items-center gap-x-2">
+				<Link href='/' className="flex items-center gap-1.5">
 					<Logo />
-					<span className="text-2xl font-bold">GlitchLink</span>
+					<span className="text-2xl font-bold pt-1 sm:pt-0">GlitchLink</span>
 				</Link>
 			</div>
 			<nav className={`lg:flex ${isMenuOpen ? 'block' : 'hidden'} absolute lg:relative top-full left-0 w-full lg:w-auto bg-gray-800 lg:bg-transparent z-50`}>
