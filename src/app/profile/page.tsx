@@ -80,10 +80,10 @@ function ProfileHeading({ user }: { user: User }) {
 			</div>
 
 			{/* Content */}
-			<h1 className='text-4xl font-bold' style={{ color: user.color }}>
+			<h1 className='text-3xl font-bold' style={{ color: user.color }}>
 				{user?.name}
 			</h1>
-			<h2 className='italic opacity-80 text-md mt-0.5 ml-1'>
+			<h2 className='italic opacity-80 text-base mt-0.5 ml-1'>
 				@{user?.username}
 			</h2>
 		</div>
@@ -103,8 +103,6 @@ async function MyVideoGames() {
 
 	return (
 		<div className='px-3 py-1'>
-			<h2 className='text-2xl mb-3 text-green-200'>My Video Games</h2>
-
 			{
 				videoGames.length === 0 && <p>No games added yet...</p>
 			}
@@ -125,7 +123,7 @@ async function MyVideoGames() {
 			</div>
 			<Link href='/games' className='inline-block mb-4 ml-2'>
 				<Button className='text-lg bg-green-700/90 hover:bg-green-600/80' >
-					Find{videoGames.length > 0 ? ' more ':' '}games
+					Find{videoGames.length > 0 ? ' more ' : ' '}games
 				</Button>
 			</Link>
 		</div >
@@ -135,7 +133,6 @@ async function MyVideoGames() {
 function MyPosts() {
 	return (
 		<div className='px-3 py-1'>
-			<h2 className='text-2xl mb-1 text-cyan-400'>My Posts</h2>
 			<p>No posts created yet...</p>
 		</div>
 	)
@@ -144,15 +141,11 @@ function MyPosts() {
 function FriendsList() {
 	return (
 		<div className='px-3 py-1'>
-			<h2 className='text-2xl mb-1 text-amber-400'>Friends List</h2>
-
 			<p>YOU HAVE NO FRIENDS LOL!!</p>
-
 			<p>But instead you can see the full list of users ehehehe (this is visible in dev only)</p>
 			<Link href='/users' className='text-lg p-3 text-amber-200 hover:text-amber-400 mt-4 border border-slate-400 rounded block w-fit'>
 				See the list of all Users
 			</Link>
-
 		</div>
 	)
 }
