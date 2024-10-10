@@ -10,7 +10,7 @@ import { type User } from 'next-auth'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/services/nextAuthConfig'
 import { LogoutButton } from '@/components/LogoutButton'
-import { BookUserIcon, EditIcon, Gamepad2Icon, LogOutIcon, MessageSquareIcon, SettingsIcon } from 'lucide-react'
+import { BookUserIcon, EditIcon, Gamepad2Icon, LogOutIcon, MessageSquareIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { getVideoGamesByUser } from '@/services/games'
 import { VideoGame } from '@prisma/client'
@@ -38,15 +38,15 @@ export default async function ProfilePage() {
 				<TabsList className='p-1 h-12 grid grid-cols-3 gap-0.5 bg-white/5'>
 					<TabsTrigger value='games' className='flex gap-1 items-center h-full'>
 						<Gamepad2Icon size={24} />
-						<span className='hidden sm:inline md:text-lg md:ml-1'>My Video Games</span>
+						<span className='hidden sm:inline md:text-base md:ml-1'>My Video Games</span>
 					</TabsTrigger>
 					<TabsTrigger value='posts' className='flex gap-1 items-center h-full'>
 						<MessageSquareIcon size={24} />
-						<span className='hidden sm:inline md:text-lg md:ml-1'>My Posts</span>
+						<span className='hidden sm:inline md:text-base md:ml-1'>My Posts</span>
 					</TabsTrigger>
 					<TabsTrigger value='friends' className='flex gap-1 items-center h-full'>
 						<BookUserIcon size={24} />
-						<span className='hidden sm:inline md:text-lg md:ml-1'>Friends List</span>
+						<span className='hidden sm:inline md:text-base md:ml-1'>Friends List</span>
 					</TabsTrigger>
 				</TabsList>
 				<TabsContent value='games'>
@@ -73,9 +73,6 @@ function ProfileHeading({ user }: { user: User }) {
 			<div className='float-right flex items-center gap-3'>
 				<Link href='#/profile/update' className='flex items-center gap-2 border-2 rounded-lg p-3 text-slate-300 border-slate-300'>
 					<EditIcon size={20} />
-				</Link>
-				<Link href='#/profile/settings' className='flex items-center gap-2 border-2 rounded-lg p-3 text-slate-300 border-slate-300'>
-					<SettingsIcon size={20} />
 				</Link>
 				<LogoutButton className='flex items-center gap-2 border-2 rounded-lg p-3 text-red-400 border-red-400'>
 					<LogOutIcon size={20} />
@@ -120,6 +117,7 @@ async function MyVideoGames() {
 							externalId={game.externalId}
 							title={game.title}
 							imageUrl={game.image}
+							userIsLogged={true}
 							isOwned
 						/>
 					))

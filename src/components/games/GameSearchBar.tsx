@@ -1,37 +1,52 @@
 'use client'
 
-import { Button } from '../ui/button'
-import { Input } from '../ui/input'
+import { useRef, useState } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
+import { Search, X } from 'lucide-react'
 
 interface GameSearchBarProps {
 	className?: string
 	onSearch: (search: string) => void
 }
 
+export function GameSearchBar({ className, onSearch }: GameSearchBarProps) {
 
-export default function GameSearchBar({ className, onSearch }: GameSearchBarProps) {
+	const [isEmpty, setIsEmpty] = useState(true)
+	const inputRef = useRef<HTMLInputElement>(null)
 
-	function handleSubmit(formData: FormData) {
-		const newSearch = formData.get('search') as string
-		onSearch(newSearch)
+	const debouncedSearch = useDebouncedCallback((value) => {
+		onSearch(value)
+	}, 800)
+
+	function clearSearch() {
+		if (inputRef.current) {
+			inputRef.current.value = ''
+			setIsEmpty(true)
+		}
 	}
 
 	return (
-		<form action={handleSubmit} className={`flex gap-1 w-full mt-6 mb-6 justify-center ${className}`}>
-			<Input
-				className='text-lg md:text-base border border-gray-300 bg-slate-500/10 p-3 rounded-lg'
+		<div className='my-4 relative'>
+			<input
+				className={`w-full border border-gray-300 bg-slate-500/10 px-3 py-2 rounded-lg ${className}`}
 				type='text'
 				placeholder='Search for games...'
 				name='search'
 				autoComplete='off'
+				ref={inputRef}
+				onChange={(e) => debouncedSearch(e.target.value)}
 			/>
-			<Button
-				type='submit'
-				className='ml-2 text-lg md:text-base'
-				variant='secondary'
+			<div
+				className="absolute right-3 top-1/2 transform -translate-y-1/2"
 			>
-				Search
-			</Button>
-		</form>
+				{!isEmpty ? (
+					<button onClick={clearSearch} className='flex items-center'>
+						<X className="h-5 w-5 text-gray-400" />
+					</button>
+				) : (
+					<Search className="h-5 w-5 text-gray-400" />
+				)}
+			</div>
+		</div>
 	)
 }

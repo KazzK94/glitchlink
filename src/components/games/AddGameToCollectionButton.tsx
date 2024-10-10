@@ -22,15 +22,13 @@ export function AddGameToCollectionButton({ externalId, title, className }: { ex
 		const parsedGameData = parseGameData(gameData)
 
 		// make a request to  API to add the game to the user's collection
-		const insertedGame = await fetch('/api/users/games', {
+		await fetch('/api/users/games', {
 			method: 'POST',
 			body: JSON.stringify(parsedGameData),
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		}).then(res => res.json())
-
-		console.log({ insertedGame })
+		})
 
 		setIsGameAdded(true)
 	}
@@ -71,11 +69,10 @@ function parseGameData(gameData: {
 	description_raw: string,
 	developers: { name: string }[]
 }) {
-	console.log({ gameData })
 	return {
 		externalId: gameData.id,
 		title: gameData.name,
-		image: gameData.background_image,
+		image: gameData.background_image || '/images/game_placeholder.png',
 		genres: gameData.genres.map((genre: { name: string }) => genre.name),
 		platforms: gameData.parent_platforms.map((platform: { platform: { name: string } }) => platform.platform.name),
 		description: gameData.description_raw.split('\n\n')[0],

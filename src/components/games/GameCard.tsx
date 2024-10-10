@@ -1,7 +1,6 @@
 'use client'
 
 import { Card, CardContent } from "@/components/ui/card"
-import { useSession } from 'next-auth/react'
 import { AddGameToCollectionButton } from './AddGameToCollectionButton'
 
 interface GameCardProps {
@@ -9,15 +8,12 @@ interface GameCardProps {
 	title: string
 	imageUrl: string
 	isOwned?: boolean
+	userIsLogged: boolean
 }
 
-export function GameCard({ externalId, title, imageUrl, isOwned = false }: GameCardProps) {
+export function GameCard({ externalId, title, imageUrl, isOwned = false, userIsLogged }: GameCardProps) {
 
 	const croppedImageUrl = imageUrl.replace('media/', 'media/crop/600/400/')
-
-	// TODO: Figure out a better way to check if user is logged in (we're running useSession() on every card...)
-	const session = useSession()
-	const userIsLogged = !!(session?.data)
 
 	return (
 		<Card

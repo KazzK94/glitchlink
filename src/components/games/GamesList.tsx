@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button'
 
 import { type Game } from '@/types'
 
+import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import GameSearchBar from './GameSearchBar'
+import { GameSearchBar } from './GameSearchBar'
 
 export function GamesList() {
 
@@ -14,6 +15,11 @@ export function GamesList() {
 	const [page, setPage] = useState(1)
 	const [loading, setLoading] = useState(true)
 	const [search, setSearch] = useState('')
+
+
+	// TODO: Figure out a better way to check if user is logged in (we're running useSession() on every card...)
+	const session = useSession()
+	const userIsLogged = !!(session?.data)
 
 	// On initial render, get first games (no search)
 	useEffect(() => {
@@ -55,18 +61,23 @@ export function GamesList() {
 		<>
 			<GameSearchBar onSearch={(newSearch) => fetchGamesWithSearch(newSearch)} />
 
-			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly mb-8 gap-4'>
-				{
-					games.map(game => (
-						<GameCard
-							key={game.id}
-							externalId={game.id}
-							title={game.name}
-							imageUrl={game.background_image}
-						/>
-					))
-				}
-			</div>
+			{
+				games.length > 0 && (
+					<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly mb-8 gap-4'>
+						{
+							games.map(game => (
+								<GameCard
+									key={game.id}
+									externalId={game.id}
+									title={game.name}
+									imageUrl={game.background_image}
+									userIsLogged={userIsLogged}
+								/>
+							))
+						}
+					</div>
+				)
+			}
 
 			{/* Text: "Loading Games..." */}
 			{loading && <p className='text-xl text-center mt-4'>Loading {games.length !== 0 && 'more'} games...</p>}
@@ -83,6 +94,12 @@ export function GamesList() {
 					</p>
 				)
 			}
+
+			{games.length === 0 && !loading && (
+				<p className='mt-6 text-center text-muted italic'>
+					No games were found with that criteria. Try with a different search.
+				</p>
+			)}
 
 		</>
 	)
