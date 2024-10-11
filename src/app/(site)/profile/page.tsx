@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button'
 import { getVideoGamesByUser } from '@/services/games'
 import { VideoGame } from '@prisma/client'
 import { GameCard } from '@/components/games/GameCard'
+import prisma from '@/lib/db'
 
 // NextJS force dynamic
 export const dynamic = 'force-dynamic'
@@ -27,7 +28,15 @@ export default async function ProfilePage() {
 		redirect('/login')
 	}
 
-	const { user } = session
+	const user = await prisma.user.findUnique({
+		where: {
+			id: session.user.id
+		}
+	})
+
+	if(!user) {
+		redirect('/login')
+	}
 
 
 	return (
