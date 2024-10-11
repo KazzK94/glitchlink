@@ -27,7 +27,7 @@ export function GameCard({ externalId, title, imageUrl, isOwned = false, userIsL
 			<CardContent className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black to-transparent">
 				{/* TODO: Make it be maximum 2 lines (add ellipsis on overflow instead of 3rd line) */}
 				{/* Can be tested searching for "Devil May Cry" */}
-				<h2 className="text-2xl font-bold text-white text-pretty text-center mb-1">{title}</h2>
+				<h2 className="text-2xl font-bold text-white text-pretty text-center mb-1 select-none">{title}</h2>
 
 				{
 					userIsLogged && !isOwned && <AddGameToCollectionButton externalId={externalId} title={title} />
