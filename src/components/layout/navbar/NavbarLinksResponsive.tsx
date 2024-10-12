@@ -7,9 +7,14 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
 export default function NavbarLinksResponsive() {
-	const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const rootRef = useRef<HTMLDivElement>(null)
+
+	const links = [
+		{ href: '/', label: 'Home' },
+		{ href: '/games', label: 'Games' }
+	]
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -39,10 +44,11 @@ export default function NavbarLinksResponsive() {
 				</Link>
 			</div>
 			<nav className={`lg:flex ${isMenuOpen ? 'block' : 'hidden'} absolute lg:relative top-full left-0 w-full lg:w-auto bg-gray-800 lg:bg-transparent z-50`}>
-				<ul className="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:gap-x-6 p-4 lg:p-0">
-					<li><Link href="/" className="text-lg hover:text-cyan-400 transition-colors" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
-					<li><Link href="/games" className="text-lg hover:text-cyan-400 transition-colors" onClick={() => setIsMenuOpen(false)}>Games</Link></li>
-				</ul>
+				<div className="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:gap-x-6 p-4 lg:p-0">
+					{links.map(link => (
+						<Link key={link.href} href={link.href} className="text-lg hover:text-cyan-400 transition-colors" onClick={() => setIsMenuOpen(false)}>{link.label}</Link>
+					))}
+				</div>
 			</nav>
 		</div>
 	)
