@@ -16,10 +16,12 @@ export async function UsersList() {
 	const users = await getUsers({ where: whereClause })
 
 	return (
-		<ul className='text-xl text-neutral-300 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'>
+		<ul className='text-xl text-neutral-300 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
 			{users.map(user => (
 				<li key={user.id}>
-					<UserCard user={user} className='bg-gray-700/5 shadow-sm shadow-gray-400 hover:shadow-gray-200 p-3' />
+					<UserCard user={user}
+						className='bg-gray-700/10 hover:bg-gray-700/15 shadow-sm shadow-gray-400 hover:shadow-gray-200 p-3'
+					/>
 				</li>
 			))}
 		</ul>
