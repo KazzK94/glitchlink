@@ -1,7 +1,8 @@
 
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/services/nextAuthConfig'
-import prisma from '@/lib/db'
+
+import { getUserById } from '@/services/users'
 
 export async function GET() {
 	const session = await getServerSession(authOptions)
@@ -9,19 +10,7 @@ export async function GET() {
 		return Response.json({ ok: false }, { status: 403 })
 	}
 
-	const user = await prisma.user.findUnique({
-		where: {
-			id: session.user.id,
-		},
-		select: {
-			id: true,
-			username: true,
-			email: true,
-			color: true,
-			createdAt: true,
-			updatedAt: true
-		}
-	})
+	const user = await getUserById({ id: session.user.id, isSelf: true })
 
 	if (!user) {
 		return Response.json({ ok: false }, { status: 403 })

@@ -37,7 +37,7 @@ export async function getUser({ where }: { where: Prisma.UserWhereInput }) {
 export async function getUserById({ id, isSelf = false }: { id: string, isSelf?: boolean }) {
 	return await prisma.user.findUnique({
 		where: { id },
-		select: { id: true, username: true, name: true, color: true, videoGames: true, email: isSelf }
+		select: { id: true, username: true, name: true, color: true, videoGames: true, email: isSelf, createdAt: true, updatedAt: isSelf }
 	})
 }
 
