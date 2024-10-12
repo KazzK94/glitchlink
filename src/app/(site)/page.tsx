@@ -8,7 +8,7 @@ import { Landing } from '@/components/home/Landing'
 export default async function HomePage() {
 
 	const session = await getServerSession(authOptions)
-	const userIsLogged = !!(session?.user)
+	const userIsLogged = Boolean(session?.user)
 
 	return (
 		<div className="min-h-screen">

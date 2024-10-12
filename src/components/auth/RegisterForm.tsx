@@ -44,7 +44,7 @@ export function RegisterForm() {
 			}
 		})
 
-		if(existingUser) {
+		if (existingUser) {
 			if (existingUser.username.toLowerCase() === values.username.toLowerCase()) {
 				form.setError('username', { type: 'manual', message: 'Username is already taken.' })
 			} else {
@@ -88,8 +88,8 @@ export function RegisterForm() {
 			form.setError('username', { type: 'manual', message: 'Username must be at least 3 characters long.' })
 			return
 		}
-		const usernameTaken = Boolean(await getUserByUsername(username))
-		if (usernameTaken) {
+		const isUsernameTaken = Boolean(await getUserByUsername({ username }))
+		if (isUsernameTaken) {
 			setUsernameAvailability('unavailable')
 			form.setError('username', { type: 'manual', message: 'Username is already taken.' })
 			return false

@@ -19,7 +19,7 @@ export function GamesList() {
 
 	// TODO: Figure out a better way to check if user is logged in (we're running useSession() on every card...)
 	const session = useSession()
-	const userIsLogged = !!(session?.data)
+	const userIsLogged = Boolean(session?.data)
 
 	// On initial render, get first games (no search)
 	useEffect(() => {

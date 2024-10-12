@@ -7,7 +7,7 @@ import { getServerSession } from "next-auth/next"
 export async function UserMenu() {
 
 	const session = await getServerSession()
-	const isUserLogged = !!session?.user
+	const isUserLogged = Boolean(session?.user)
 
 	return (
 		<div className='flex gap-0.5 md:gap-2 items-center'>
