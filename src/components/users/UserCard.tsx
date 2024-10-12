@@ -1,5 +1,4 @@
 
-
 import { UserPublicInfo } from '@/types'
 
 import Link from 'next/link'
