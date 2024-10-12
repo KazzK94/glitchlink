@@ -1,7 +1,8 @@
 
 import { Container } from '@/components/Container'
 import { Button } from "@/components/ui/button"
-import { Gamepad2Icon, ThumbsUpIcon, MessageSquareIcon, Share2Icon, UserRoundPlusIcon } from 'lucide-react'
+import { Gamepad2Icon, ThumbsUpIcon, MessageSquareIcon, Share2Icon } from 'lucide-react'
+import { UserCard } from '../users/UserCard'
 
 export function Home() {
 	return (
@@ -114,17 +115,20 @@ function SuggestedFriends() {
 		{
 			id: crypto.randomUUID(),
 			name: 'Pixel Queen',
-			username: 'pixelqueen99'
+			username: 'pixelqueen99',
+			color: '#ff66ff'
 		},
 		{
 			id: crypto.randomUUID(),
 			name: 'The Greatest Gamer',
-			username: 'gamergod192'
+			username: 'gamergod192',
+			color: '#ffcc44'
 		},
 		{
 			id: crypto.randomUUID(),
 			name: 'Ray of Death',
-			username: 'killitwithfire777'
+			username: 'killitwithfire777',
+			color: '#ff7777'
 		}
 	]
 
@@ -133,16 +137,7 @@ function SuggestedFriends() {
 			<h2 className="text-xl font-semibold mb-4">Suggested Friends</h2>
 			<ul className="flex flex-col gap-4">
 				{suggestedFriends.map((friend) => (
-					<li key={friend.id} className="flex items-center justify-between hover:bg-gray-700/20 rounded-lg p-2">
-						<div className="flex items-center">
-							<div className="size-10 bg-gray-700 rounded-full mr-3" />
-							<div className='flex flex-col'>
-								<span>{friend.name}</span>
-								<span className='italic text-gray-400 text-sm'>@{friend.username}</span>
-							</div>
-						</div>
-						<Button variant="ghost"><UserRoundPlusIcon /></Button>
-					</li>
+					<UserCard key={friend.id} user={friend} className='hover:bg-gray-700/15' />
 				))}
 			</ul>
 		</div>

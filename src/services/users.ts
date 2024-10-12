@@ -34,17 +34,17 @@ export async function getUser({ where }: { where: Prisma.UserWhereInput }) {
 	return await prisma.user.findFirst({ where, select: { id: true, username: true, name: true, color: true } })
 }
 
-export async function getUserById(id: string) {
+export async function getUserById({ id, isSelf = false }: { id: string, isSelf?: boolean }) {
 	return await prisma.user.findUnique({
 		where: { id },
-		select: { id: true, username: true, name: true, color: true }
+		select: { id: true, username: true, name: true, color: true, videoGames: true, email: isSelf }
 	})
 }
 
-export async function getUserByUsername(username: string) {
+export async function getUserByUsername({ username, isSelf = false }: { username: string, isSelf?: boolean }) {
 	return await prisma.user.findUnique({
 		where: { usernameLowercase: username.toLowerCase() },
-		select: { id: true, username: true, name: true, color: true }
+		select: { id: true, username: true, name: true, color: true, videoGames: true, email: isSelf }
 	})
 }
 

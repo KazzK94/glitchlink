@@ -90,7 +90,7 @@ export function GamesList() {
 				games.length !== 0 && (
 					<p className='italic text-center mt-12 mb-8'>
 						Data obtained from&nbsp;
-						<a className='text-cyan-600' href='https://rawg.io'>RAWG.io&apos;s API</a>.
+						<a className='text-cyan-600' href='https://rawg.io' target='_blank'>RAWG.io&apos;s API</a>.
 					</p>
 				)
 			}

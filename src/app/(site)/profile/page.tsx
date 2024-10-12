@@ -1,23 +1,24 @@
 
-import { Container } from '@/components/Container'
-import Link from 'next/link'
+import { type VideoGame } from '@prisma/client'
+import { getUserById } from '@/services/users'
+import { getVideoGamesByUser } from '@/services/games'
 import { redirect } from 'next/navigation'
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Link from 'next/link'
 
 // AUTH
 import { type User } from 'next-auth'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/services/nextAuthConfig'
 import { LogoutButton } from '@/components/auth/LogoutButton'
-import { BookUserIcon, EditIcon, Gamepad2Icon, LogOutIcon, MessageSquareIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { getVideoGamesByUser } from '@/services/games'
-import { VideoGame } from '@prisma/client'
-import { GameCard } from '@/components/games/GameCard'
-import prisma from '@/lib/db'
 
-// NextJS force dynamic
+// ICONS AND UI
+import { BookUserIcon, EditIcon, Gamepad2Icon, LogOutIcon, MessageSquareIcon } from 'lucide-react'
+import { Container } from '@/components/Container'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from '@/components/ui/button'
+import { GameCard } from '@/components/games/GameCard'
+
+// NextJS force dynamic (TODO: Check this, it's not working... it's being cached)
 export const dynamic = 'force-dynamic'
 
 export default async function ProfilePage() {
@@ -28,13 +29,9 @@ export default async function ProfilePage() {
 		redirect('/login')
 	}
 
-	const user = await prisma.user.findUnique({
-		where: {
-			id: session.user.id
-		}
-	})
+	const user = await getUserById({ id: session.user.id, isSelf: true })
 
-	if(!user) {
+	if (!user) {
 		redirect('/login')
 	}
 
@@ -59,7 +56,7 @@ export default async function ProfilePage() {
 					</TabsTrigger>
 				</TabsList>
 				<TabsContent value='games'>
-					<MyVideoGames />
+					<MyVideoGames user={user} />
 				</TabsContent>
 				<TabsContent value='posts'>
 					<MyPosts />
@@ -89,24 +86,17 @@ function ProfileHeading({ user }: { user: User }) {
 			</div>
 
 			{/* Content */}
-			<h1 className='text-3xl font-bold' style={{ color: user.color }}>
-				{user?.name}
+			<h1 className='text-3xl font-semibold' style={{ color: user.color }}>
+				{user.name}
 			</h1>
-			<h2 className='italic opacity-80 text-base mt-0.5 ml-1'>
-				@{user?.username}
-			</h2>
+			<p className='italic opacity-80 text-base mt-0.5 ml-1'>
+				@{user.username}
+			</p>
 		</div>
 	)
 }
 
-async function MyVideoGames() {
-	const session = await getServerSession(authOptions)
-
-	if (!session || !session.user) {
-		redirect('/login')
-	}
-
-	const { user } = session
+async function MyVideoGames({ user }: { user: User }) {
 
 	const { videoGames } = await getVideoGamesByUser(user.id) || { videoGames: [] }
 
