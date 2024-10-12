@@ -1,23 +1,22 @@
+
 import { Container } from '@/components/Container'
 import { Button } from "@/components/ui/button"
 import { Gamepad2Icon, ThumbsUpIcon, MessageSquareIcon, Share2Icon, UserRoundPlusIcon } from 'lucide-react'
 
 export function Home() {
 	return (
-		<div className="min-h-screen bg-gray-900 text-white">
-			<Container className="py-8">
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-					<div className="md:col-span-2 space-y-8">
-						<NewPostForm />
-						<PostsList />
-					</div>
-					<div className="space-y-8">
-						<TrendingGames />
-						<SuggestedFriends />
-					</div>
+		<Container className="py-4">
+			<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+				<div className="lg:col-span-2 space-y-6">
+					<NewPostForm />
+					<PostsList />
 				</div>
-			</Container>
-		</div>
+				<div className="space-y-6 md:space-y-0 lg:space-y-8 md:grid grid-cols-2 gap-8 lg:block">
+					<TrendingGames />
+					<SuggestedFriends />
+				</div>
+			</div>
+		</Container>
 	)
 }
 

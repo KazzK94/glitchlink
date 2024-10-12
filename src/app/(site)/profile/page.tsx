@@ -150,10 +150,10 @@ function MyPosts() {
 function FriendsList() {
 	return (
 		<div className='px-3 py-1'>
-			<p>YOU HAVE NO FRIENDS LOL!!</p>
-			<p>But instead you can see the full list of users ehehehe (this is visible in dev only)</p>
+			<p>YOU HAVE NO FRIENDS YET, LOL!!</p>
+			<p>But don&apos;t worry, you can still make some!</p>
 			<Link href='/users' className='text-lg p-3 text-amber-200 hover:text-amber-400 mt-4 border border-slate-400 rounded block w-fit'>
-				See the list of all Users
+				Find new friends now!
 			</Link>
 		</div>
 	)

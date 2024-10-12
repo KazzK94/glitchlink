@@ -10,12 +10,12 @@ export async function UserMenu() {
 	const isUserLogged = !!session?.user
 
 	return (
-		<div className='flex gap-2 items-center'>
+		<div className='flex gap-0.5 md:gap-2 items-center'>
 			{
 				isUserLogged ? (
 					<>
 						<UserButton url="#" text="Notifications">
-							<BellIcon className="size-7 pt-1" />
+							<BellIcon className="size-6 md:size-7 pt-1" />
 						</UserButton>
 						<UserButton url="/profile" text="My Profile">
 							<UserIcon className="size-7" />
