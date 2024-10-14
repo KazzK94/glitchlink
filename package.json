@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "postinstall": "prisma generate",
-    "lint": "next lint"
+    "lint": "next lint",
+	"tsc": "tsc --noEmit",
+	"check": "tsc --noEmit && next lint"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
