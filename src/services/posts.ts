@@ -23,7 +23,6 @@ export async function getPosts() {
 	})
 }
 
-
 export async function getPostById(id: string) {
 	return await prisma.post.findUnique({
 		where: { id }
@@ -34,5 +33,11 @@ export async function getPostsByUser(userId: string) {
 	return await prisma.user.findUnique({
 		where: { id: userId },
 		select: { posts: true }
+	})
+}
+
+export async function deletePost(id: string) {
+	return await prisma.post.delete({
+		where: { id }
 	})
 }
