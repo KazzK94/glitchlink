@@ -4,16 +4,10 @@ import prisma from '@/lib/db'
 
 import { getServerSession } from 'next-auth'
 import { authOptions } from './nextAuthConfig'
+import { getUserFromSession } from './utils'
 
 export async function createPost({ content }: { content: string }) {
-
-	// Get the session
-	const session = await getServerSession(authOptions)
-	if (!session) {
-		throw new Error('You must be signed in to create a post')
-	}
-	const { user } = session
-
+	const user = await getUserFromSession()
 	try {
 		return await prisma.post.create({
 			data: {
@@ -27,6 +21,21 @@ export async function createPost({ content }: { content: string }) {
 	}
 }
 
+export async function addCommentToPost({ postId, content }: { postId: string, content: string }) {
+	const user = await getUserFromSession()
+	try {
+		return await prisma.comment.create({
+			data: {
+				content,
+				authorId: user.id,
+				postId
+			}
+		})
+	} catch (error) {
+		console.error('Failed to create the comment:', error)
+		throw error
+	}
+}
 
 export async function getOwnedPosts(userId: string = '') {
 	if (!userId) {
@@ -42,16 +51,24 @@ export async function getOwnedPosts(userId: string = '') {
 	// Find user and get its posts
 	return await prisma.user.findUnique({
 		where: { id: userId },
-		select: { posts: {
-			include: { author: true },
-			orderBy: { createdAt: 'desc' } // Newest first
-		} }
+		select: {
+			posts: {
+				include: { author: true },
+				orderBy: { createdAt: 'desc' } // Newest first
+			}
+		}
 	})
 }
 
 export async function getPosts() {
 	return await prisma.post.findMany({
-		include: { author: true },
+		include: {
+			author: true,
+			comments: {
+				include: { author: true },
+				orderBy: { createdAt: 'desc' }
+			}
+		},
 		orderBy: { createdAt: 'desc' } // Newest first
 	})
 }

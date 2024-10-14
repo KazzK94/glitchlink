@@ -1,7 +1,7 @@
 
 export function DashboardTable({ children }: { children: React.ReactNode }) {
 	return (
-		<div className='rounded-lg overflow-x-auto'>
+		<div className='rounded-md overflow-x-auto'>
 			<table className="w-full">
 				{children}
 			</table>
@@ -11,7 +11,7 @@ export function DashboardTable({ children }: { children: React.ReactNode }) {
 
 export function DashboardTableHeaders({ children }: { children: React.ReactNode }) {
 	return (
-		<thead className="bg-gray-50">
+		<thead className="bg-gray-200">
 			<tr>
 				{children}
 			</tr>
@@ -29,7 +29,7 @@ export function DashboardTableHeader({ children }: { children: React.ReactNode }
 
 export function DashboardTableBody({ children }: { children: React.ReactNode }) {
 	return (
-		<tbody className="bg-white divide-y divide-gray-200 text-black">
+		<tbody className="bg-gray-300 divide-y divide-gray-400 text-black">
 			{children}
 		</tbody>
 	)

@@ -1,26 +1,25 @@
 'use client'
 
-import type { User, Post } from '@prisma/client'
+import type { User, Post, Comment } from '@prisma/client'
 import { MessageSquareIcon, Share2Icon, ThumbsUpIcon, EllipsisVerticalIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import { PostComment } from './PostComment'
+
+import { Button } from '@/components/ui/button'
+import { PostComment } from './comments/Comment'
+import { PostCommentCreateForm } from './comments/CommentCreateForm'
 
 interface PostProps {
 	post: Post & {
 		author: User
+	} & {
+		comments: (Comment & {
+			author: User
+		})[]
 	}
 	loggedUserId: string
 }
 
 export function Post({ post, loggedUserId }: PostProps) {
-
-	// TODO: Delete this as soon as the backend is ready
-	const comments = [
-		getMockComment(),
-		getMockComment(),
-		getMockComment()
-	]
 
 	// TODO: 
 	// Logged User ID will be used:
@@ -54,7 +53,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 				<div className="flex gap-x-4 flex-grow justify-evenly">
 					<Button variant="ghost"><ThumbsUpIcon size={20} /></Button>
 					{/* TODO: Replace (in next line) comments.length with post.comments.length */}
-					<ToggleCommentsButton onClick={toggleComments} commentsCount={comments.length} />
+					<ToggleCommentsButton onClick={toggleComments} commentsCount={post.comments.length} />
 					<Button variant="ghost"><Share2Icon size={20} /></Button>
 				</div>
 				<div className='hidden sm:block'>
@@ -63,16 +62,16 @@ export function Post({ post, loggedUserId }: PostProps) {
 			</div>
 
 			{showComments && (
-				<>
-					<div className='mx-1 px-1 mt-2 pt-2 border-t border-gray-600 flex flex-col gap-2'>
+				<div className='mx-1 px-1 mt-2 pt-2 border-t border-gray-600'>
+					<PostCommentCreateForm postId={post.id} className='mb-4' />
+					<div className='flex flex-col gap-2'>
 						{
-							// TODO: Replace this with the actual comments in the post
-							comments.map((comment, index) => (
+							post.comments.map((comment, index) => (
 								<PostComment key={index} comment={comment} />
 							))
 						}
 					</div>
-				</>
+				</div>
 			)}
 		</article>
 	)

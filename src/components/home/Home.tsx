@@ -5,7 +5,7 @@ import { Gamepad2Icon } from 'lucide-react'
 import { Container } from '@/components/Container'
 import { UserCard } from '@/components/users/UserCard'
 import { PostsList } from '@/components/posts/PostsList'
-import { CreatePostForm } from '@/components/posts/CreatePostForm'
+import { PostCreateForm } from '@/components/posts/PostCreateForm'
 
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/services/nextAuthConfig'
@@ -22,7 +22,7 @@ export async function Home() {
 		<Container className="my-4 md:my-6">
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 				<div className="lg:col-span-2 space-y-6">
-					<CreatePostForm />
+					<PostCreateForm />
 					<PostsList loggedUserId={user.id} />
 				</div>
 				<div className="space-y-6 md:space-y-0 lg:space-y-8 md:grid grid-cols-2 gap-8 lg:block">

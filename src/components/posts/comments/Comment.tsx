@@ -1,7 +1,14 @@
+import type { User, Comment } from '@prisma/client'
 import { EllipsisVerticalIcon } from 'lucide-react'
 
-export function PostComment({ comment }: { comment: { author: { name: string, username: string }, content: string } }) {
 
+interface CommentProps {
+	comment: Comment & {
+		author: User
+	}
+}
+
+export function PostComment({ comment }: CommentProps) {
 
 	return (
 		<div className='bg-gray-700/40 p-3 rounded-lg'>
