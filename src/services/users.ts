@@ -44,7 +44,7 @@ export async function getUserById({ id, isSelf = false }: { id: string, isSelf?:
 export async function getUserByUsername({ username, isSelf = false }: { username: string, isSelf?: boolean }) {
 	return await prisma.user.findUnique({
 		where: { usernameLowercase: username.toLowerCase() },
-		select: { id: true, username: true, name: true, color: true, videoGames: true, email: isSelf }
+		select: { id: true, username: true, name: true, color: true, email: isSelf, videoGames: { orderBy: { title: 'asc' } } }
 	})
 }
 
