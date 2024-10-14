@@ -22,6 +22,7 @@ model User {
     videoGames         VideoGame[]
     posts              Post[]
     likedPosts         Post[]       @relation("PostLikes")
+    comments           Comment[]
 }
 
 model SocialLink {
@@ -56,11 +57,23 @@ model VideoGame {
 }
 
 model Post {
+    id        String    @id @default(uuid())
+    content   String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    author    User      @relation(fields: [authorId], references: [id])
+    authorId  String
+    likes     User[]    @relation("PostLikes")
+    comments  Comment[]
+}
+
+model Comment {
     id        String   @id @default(uuid())
     content   String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     author    User     @relation(fields: [authorId], references: [id])
     authorId  String
-    likes     User[]   @relation("PostLikes")
+    post      Post     @relation(fields: [postId], references: [id])
+    postId    String
 }
