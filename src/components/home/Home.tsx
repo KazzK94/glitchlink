@@ -22,7 +22,7 @@ export async function Home() {
 		<Container className="my-4 md:my-6">
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 				<div className="lg:col-span-2 space-y-6">
-					<CreatePostForm loggedUserId={user.id} />
+					<CreatePostForm />
 					<PostsList loggedUserId={user.id} />
 				</div>
 				<div className="space-y-6 md:space-y-0 lg:space-y-8 md:grid grid-cols-2 gap-8 lg:block">
