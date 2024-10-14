@@ -29,7 +29,7 @@ export function PostCommentCreateForm({ postId, className }: { postId: string, c
 	// TODO: Control submit on Ctrl+Enter
 
 	return (
-		<form onSubmit={handleSubmit} className={`bg-gray-800 rounded-lg ${className}`}>
+		<form onSubmit={handleSubmit} className={`bg-gray-800 rounded-lg px-1 ${className}`}>
 			<textarea
 				name='content'
 				ref={textareaRef}

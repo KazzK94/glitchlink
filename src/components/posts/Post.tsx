@@ -35,8 +35,8 @@ export function Post({ post, loggedUserId }: PostProps) {
 
 	return (
 		<article key={post.id} className={`bg-gray-800 pt-4 pb-2 rounded-lg ${conditionalClassName}`}>
-			<div className='flex mb-4 px-3'>
-				<div className="flex items-center flex-grow">
+			<div className='flex justify-between mb-4 px-4'>
+				<div className="flex items-center">
 					<div className="size-10 bg-gray-700 rounded-full mr-3"></div>
 					<div>
 						<h3 className="font-semibold">{post.author.name}</h3>
