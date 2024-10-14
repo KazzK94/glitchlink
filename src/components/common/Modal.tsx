@@ -14,7 +14,7 @@ import { useState } from 'react'
 
 interface ModalOpenerProps {
 	dialogTrigger?: string | React.ReactNode
-	dialogTriggerClassName?: string
+	className?: string
 	modalTitle: string | React.ReactNode
 	modalContent: string | React.ReactNode
 	children?: React.ReactNode
@@ -27,7 +27,7 @@ interface ModalOpenerProps {
 }
 
 export function ModalOpener({
-	dialogTrigger, dialogTriggerClassName, modalTitle, modalContent, children,
+	dialogTrigger, className, modalTitle, modalContent, children,
 	onConfirm, closeOnConfirm = true, confirmText, onCancel, showCancelButton, cancelText
 }: ModalOpenerProps) {
 
@@ -55,7 +55,7 @@ export function ModalOpener({
 
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
-			<DialogTrigger asChild={!isDialogTriggerString} className={`${dialogTriggerClassName}`}>
+			<DialogTrigger asChild={!isDialogTriggerString} className={`cursor-pointer ${className}`}>
 				{children || dialogTrigger}
 			</DialogTrigger>
 			<DialogContent className='px-5 pt-5 pb-4 mx-4 my-2 w-fit bg-gray-100 border-0 shadow-slate-400/20 rounded-lg'>
