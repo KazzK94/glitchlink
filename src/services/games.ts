@@ -49,7 +49,11 @@ export async function getOwnedVideoGames(userId: string = '') {
 	// Find user and get its video games
 	return await prisma.user.findUnique({
 		where: { id: userId },
-		select: { videoGames: true }
+		select: {
+			videoGames: {
+				orderBy: { title: 'asc' }
+			}
+		}
 	})
 }
 
