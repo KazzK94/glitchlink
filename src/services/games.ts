@@ -45,7 +45,6 @@ export async function getOwnedVideoGames(userId: string = '') {
 		const { user } = session
 		userId = user.id
 	}
-	console.log('userId:', userId)
 
 	// Find user and get its video games
 	return await prisma.user.findUnique({
