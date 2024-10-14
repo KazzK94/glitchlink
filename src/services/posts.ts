@@ -53,7 +53,7 @@ export async function getOwnedPosts(userId: string = '') {
 		where: { id: userId },
 		select: {
 			posts: {
-				include: { author: true },
+				include: { author: true, comments: { include: { author: true }, orderBy: { createdAt: 'desc' } } },
 				orderBy: { createdAt: 'desc' } // Newest first
 			}
 		}
@@ -75,14 +75,24 @@ export async function getPosts() {
 
 export async function getPostById(id: string) {
 	return await prisma.post.findUnique({
-		where: { id }
+		where: { id },
+		include: {
+			author: true,
+			comments: {
+				include: { author: true },
+				orderBy: { createdAt: 'desc' }
+			}
+		},
 	})
 }
 
 export async function getPostsByUser(userId: string) {
 	return await prisma.user.findUnique({
 		where: { id: userId },
-		select: { posts: true }
+		select: { posts: {
+			include: { author: true, comments: { include: { author: true }, orderBy: { createdAt: 'desc' } } },
+			orderBy: { createdAt: 'desc' } // Newest first
+		} },
 	})
 }
 
