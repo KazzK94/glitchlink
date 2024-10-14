@@ -15,6 +15,12 @@ interface PostProps {
 
 export function Post({ post, loggedUserId }: PostProps) {
 
+	// TODO: Delete this as soon as the backend is ready
+	const comments = [
+		getMockComment(),
+		getMockComment(),
+		getMockComment()
+	]
 
 	// TODO: 
 	// Logged User ID will be used:
@@ -47,7 +53,8 @@ export function Post({ post, loggedUserId }: PostProps) {
 			<div className='px-4 sm:px-6 flex justify-evenly sm:justify-between items-center'>
 				<div className="flex gap-x-4 flex-grow justify-evenly">
 					<Button variant="ghost"><ThumbsUpIcon size={20} /></Button>
-					<Button variant="ghost" onClick={toggleComments}><MessageSquareIcon size={20} /></Button>
+					{/* TODO: Replace (in next line) comments.length with post.comments.length */}
+					<ToggleCommentsButton onClick={toggleComments} commentsCount={comments.length} />
 					<Button variant="ghost"><Share2Icon size={20} /></Button>
 				</div>
 				<div className='hidden sm:block'>
@@ -58,12 +65,68 @@ export function Post({ post, loggedUserId }: PostProps) {
 			{showComments && (
 				<>
 					<div className='mx-1 px-1 mt-2 pt-2 border-t border-gray-600 flex flex-col gap-2'>
-						<PostComment />
-						<PostComment />
-						<PostComment />
+						{
+							// TODO: Replace this with the actual comments in the post
+							comments.map((comment, index) => (
+								<PostComment key={index} comment={comment} />
+							))
+						}
 					</div>
 				</>
 			)}
 		</article>
 	)
+}
+
+function ToggleCommentsButton({ onClick, commentsCount }: { onClick: () => void, commentsCount: number }) {
+	return (
+		<Button variant="ghost" onClick={onClick} className='flex items-center gap-1.5'>
+			<MessageSquareIcon size={20} />
+			{(commentsCount > 0) && <span>{commentsCount}</span>}
+		</Button>
+	)
+}
+
+
+// TODO: Delete this as soon as the backend is ready
+function getMockComment() {
+	const comments = [
+		{
+			content: 'I love this game!! It is so much fun to play and the graphics are amazing! I can\'t wait to see what the developers come up with for the next part!',
+			author: {
+				name: 'The Greatest Gamer',
+				username: 'gamergod192'
+			}
+		},
+		{
+			content: 'well if you ask me this game is a total waste of time lol better go play fortnite lmao',
+			author: {
+				name: 'Ray of Death',
+				username: 'killitwithfire777'
+			}
+		},
+		{
+			content: 'This game is so much fun!',
+			author: {
+				name: 'Pixel Queen',
+				username: 'pixelqueen99'
+			}
+		},
+		{
+			content: 'I love the graphics in this game, but it was kind of disappointing that there were no chickens :( man do I love chickens 🐔🍗',
+			author: {
+				name: 'Leroy Jenkins',
+				username: 'leroyyyyyyyy'
+			}
+		},
+		{
+			content: 'I have to agree with you, this game is amazing!',
+			author: {
+				name: 'The Greatest Gamer',
+				username: 'gamergod192'
+			}
+		}
+	]
+	const randomIndex = Math.floor(Math.random() * comments.length)
+	return comments[randomIndex]
 }
