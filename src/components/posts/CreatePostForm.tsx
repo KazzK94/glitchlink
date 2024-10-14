@@ -7,7 +7,7 @@ import { useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
 
-export function CreatePostForm({ loggedUserId }: { loggedUserId: string }) {
+export function CreatePostForm() {
 
 	const router = useRouter()
 	const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -20,7 +20,7 @@ export function CreatePostForm({ loggedUserId }: { loggedUserId: string }) {
 		// TODO: Show the user a proper error explaining the minimum length
 		if (!content || content.length < 6) return
 
-		await createPost({ content: content , authorId: loggedUserId })
+		await createPost({ content: content })
 		textareaRef.current!.value = ''
 
 		router.refresh()
