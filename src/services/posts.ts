@@ -27,6 +27,28 @@ export async function createPost({ content }: { content: string }) {
 	}
 }
 
+
+export async function getOwnedPosts(userId: string = '') {
+	if (!userId) {
+		// Get the session
+		const session = await getServerSession(authOptions)
+		if (!session) {
+			throw new Error('You must be signed in to create a post')
+		}
+		const { user } = session
+		userId = user.id
+	}
+
+	// Find user and get its posts
+	return await prisma.user.findUnique({
+		where: { id: userId },
+		select: { posts: {
+			include: { author: true },
+			orderBy: { createdAt: 'desc' } // Newest first
+		} }
+	})
+}
+
 export async function getPosts() {
 	return await prisma.post.findMany({
 		include: { author: true },

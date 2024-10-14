@@ -17,6 +17,8 @@ import { Container } from '@/components/Container'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button'
 import { GameCard } from '@/components/games/GameCard'
+import { getOwnedPosts } from '@/services/posts'
+import { Post } from '@/components/posts/Post'
 
 // NextJS force dynamic (TODO: Check this, it's not working... it's being cached)
 export const dynamic = 'force-dynamic'
@@ -59,7 +61,7 @@ export default async function ProfilePage() {
 					<MyVideoGames user={user} />
 				</TabsContent>
 				<TabsContent value='posts'>
-					<MyPosts />
+					<MyPosts user={user} />
 				</TabsContent>
 				<TabsContent value='friends'>
 					<FriendsList />
@@ -102,9 +104,7 @@ async function MyVideoGames({ user }: { user: User }) {
 
 	return (
 		<div className='px-3 py-1'>
-			{
-				videoGames.length === 0 && <p>No games added yet...</p>
-			}
+			{videoGames.length === 0 && <p>No games added yet...</p>}
 
 			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly mb-8 gap-4'>
 				{
@@ -125,14 +125,23 @@ async function MyVideoGames({ user }: { user: User }) {
 					Find{videoGames.length > 0 ? ' more ' : ' '}games
 				</Button>
 			</Link>
-		</div >
+		</div>
 	)
 }
 
-function MyPosts() {
+async function MyPosts({ user }: { user: User }) {
+
+	const { posts } = await getOwnedPosts(user.id) || { posts: [] }
+
 	return (
 		<div className='px-3 py-1'>
-			<p>No posts created yet...</p>
+			{posts.length === 0 && <p>No posts created yet...</p>}
+
+			<div className="mt-1 flex flex-col gap-3">
+				{posts.map((post) => (
+					<Post key={post.id} post={post} loggedUserId={user.id} />
+				))}
+			</div>
 		</div>
 	)
 }
