@@ -1,7 +1,7 @@
 
 import type { User, Post } from '@prisma/client'
 
-import { MessageSquareIcon, Share2Icon, ThumbsUpIcon } from 'lucide-react'
+import { MessageSquareIcon, Share2Icon, ThumbsUpIcon, EllipsisVerticalIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
@@ -21,14 +21,22 @@ export function Post({ post, loggedUserId }: PostProps) {
 	const conditionalClassName = post.authorId === loggedUserId ? 'border border-green-900/80' : ''
 
 	return (
-		<div key={post.id} className={`bg-gray-800 p-6 pb-4 rounded-lg ${conditionalClassName}`}>
-			<div className="flex items-center mb-4">
-				<div className="w-10 h-10 bg-gray-700 rounded-full mr-3"></div>
-				<div>
-					<h3 className="font-semibold">{post.author.name}</h3>
-					<p className="text-sm text-gray-400 italic">@{post.author.username}</p>
+		<article key={post.id} className={`bg-gray-800 p-6 pb-4 rounded-lg ${conditionalClassName}`}>
+
+			<div className='flex mb-4'>
+				<div className="flex items-center flex-grow">
+					<div className="w-10 h-10 bg-gray-700 rounded-full mr-3"></div>
+					<div>
+						<h3 className="font-semibold">{post.author.name}</h3>
+						<p className="text-sm text-gray-400 italic">@{post.author.username}</p>
+					</div>
+				</div>
+				<div className='flex items-center pb-2 cursor-pointer'>
+					<EllipsisVerticalIcon size={24} />
 				</div>
 			</div>
+
+
 			<p className="mb-5">{post.content}</p>
 
 			<div className='flex justify-evenly sm:justify-between items-center'>
@@ -41,6 +49,6 @@ export function Post({ post, loggedUserId }: PostProps) {
 					<p className="text-sm text-muted opacity-60 italic">{post.createdAt.toLocaleString()}</p>
 				</div>
 			</div>
-		</div>
+		</article>
 	)
 }
