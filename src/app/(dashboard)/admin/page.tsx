@@ -1,18 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import prisma from '@/lib/db'
-import { GamepadIcon, UsersIcon } from 'lucide-react'
+import { GamepadIcon, MessageSquareIcon, UsersIcon } from 'lucide-react'
 import Link from 'next/link'
 
-export default function AdminDashboardPage() {
-	return (
-		<DashboardData /> // All logic is in DashboardMenu.tsx Component (will be moved to page files in the future)F
-	)
-}
-
-async function DashboardData() {
+export default async function AdminDashboardPage() {
 
 	const usersCount = await prisma.user.count()
 	const videoGamesCount = await prisma.videoGame.count()
+	const postsCount = await prisma.post.count()
 
 	return (
 		<>
@@ -37,6 +32,17 @@ async function DashboardData() {
 					<CardContent>
 						<div className="text-2xl font-bold">{videoGamesCount}</div>
 					</CardContent>
+				</Card>
+				<Card>
+					<Link href="/admin/posts">
+						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+							<CardTitle className="text-sm font-medium">Posts</CardTitle>
+							<MessageSquareIcon className="size-4 text-muted-foreground" />
+						</CardHeader>
+						<CardContent>
+							<div className="text-2xl font-bold">{postsCount}</div>
+						</CardContent>
+					</Link>
 				</Card>
 			</div>
 		</>

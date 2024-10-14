@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-import { BarChart3, Menu, Users, X } from "lucide-react"
+import { MenuIcon, XIcon, BarChart3Icon, UsersIcon, MessageSquareIcon } from "lucide-react"
 import { usePathname } from 'next/navigation'
 
 export default function DashboardMenu() {
@@ -19,7 +19,7 @@ export default function DashboardMenu() {
 			<header className="h-16 border-b p-4 flex justify-between items-center lg:hidden">
 				<h1 className="text-2xl font-bold">GlitchLink Admin</h1>
 				<Button variant="ghost" size="icon" onClick={toggleSidebar}>
-					<Menu className="h-6 w-6" />
+					<MenuIcon className="h-6 w-6" />
 				</Button>
 			</header>
 
@@ -28,7 +28,7 @@ export default function DashboardMenu() {
 				<div className="p-4 flex justify-between items-center lg:justify-start opacity-0 lg:opacity-100">
 					<h1 className="text-2xl font-bold">GlitchLink Admin</h1>
 					<Button variant="ghost" size="icon" onClick={toggleSidebar} className="lg:hidden">
-						<X className="h-6 w-6" />
+						<XIcon className="h-6 w-6" />
 					</Button>
 				</div>
 				<nav className="mt-2 flex flex-col gap-0.5 bg-gray-900 lg:bg-transparent pb-2 fixed top-16 w-full lg:static px-2">
@@ -36,15 +36,22 @@ export default function DashboardMenu() {
 						href="/admin"
 						isActive={pathname === '/admin'}
 					>
-						<BarChart3 className="mr-2 size-5" />
+						<BarChart3Icon className="mr-2 size-5" />
 						Dashboard
 					</DashboardMenuLink>
 					<DashboardMenuLink
 						href="/admin/users"
 						isActive={pathname === '/admin/users'}
 					>
-						<Users className="mr-2 size-5" />
+						<UsersIcon className="mr-2 size-5" />
 						Users
+					</DashboardMenuLink>
+					<DashboardMenuLink
+						href="/admin/posts"
+						isActive={pathname === '/admin/posts'}
+					>
+						<MessageSquareIcon className="mr-2 size-5" />
+						Posts
 					</DashboardMenuLink>
 				</nav>
 			</div>
