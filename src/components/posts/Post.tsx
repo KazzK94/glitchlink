@@ -31,9 +31,9 @@ export function Post({ post, loggedUserId }: PostProps) {
 						<p className="text-sm text-gray-400 italic">@{post.author.username}</p>
 					</div>
 				</div>
-				<div className='flex items-center pb-2 cursor-pointer'>
+				<button className='flex justify-end items-center pb-2 min-w-8'>
 					<EllipsisVerticalIcon size={24} />
-				</div>
+				</button>
 			</div>
 
 
