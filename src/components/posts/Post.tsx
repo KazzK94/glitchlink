@@ -1,27 +1,32 @@
 
+import type { User, Post } from '@prisma/client'
+
 import { MessageSquareIcon, Share2Icon, ThumbsUpIcon } from 'lucide-react'
-import { Button } from '../ui/button'
+
+import { Button } from '@/components/ui/button'
 
 interface PostProps {
-	post: {
-		id: string
-		content: string
-		user: {
-			name: string
-			username: string
-		},
-		createdAt: string
+	post: Post & {
+		author: User
 	}
+	loggedUserId: string
 }
 
-export function Post({ post }: PostProps) {
+export function Post({ post, loggedUserId }: PostProps) {
+
+	// TODO: Logged User ID will be used to check if the user can update/delete the post
+	//   		as well as to see if the user has already liked the post
+	console.log({ loggedUserId })
+
+	const conditionalClassName = post.authorId === loggedUserId ? 'border border-green-900/80' : ''
+
 	return (
-		<div key={post.id} className="bg-gray-800 p-6 pb-4 rounded-lg">
+		<div key={post.id} className={`bg-gray-800 p-6 pb-4 rounded-lg ${conditionalClassName}`}>
 			<div className="flex items-center mb-4">
 				<div className="w-10 h-10 bg-gray-700 rounded-full mr-3"></div>
 				<div>
-					<h3 className="font-semibold">{post.user.name}</h3>
-					<p className="text-sm text-gray-400 italic">@{post.user.username}</p>
+					<h3 className="font-semibold">{post.author.name}</h3>
+					<p className="text-sm text-gray-400 italic">@{post.author.username}</p>
 				</div>
 			</div>
 			<p className="mb-5">{post.content}</p>
@@ -33,7 +38,7 @@ export function Post({ post }: PostProps) {
 					<Button variant="ghost"><Share2Icon size={20} /></Button>
 				</div>
 				<div className='hidden sm:block'>
-					<p className="text-sm text-muted opacity-60 italic">{post.createdAt}</p>
+					<p className="text-sm text-muted opacity-60 italic">{post.createdAt.toLocaleString()}</p>
 				</div>
 			</div>
 		</div>

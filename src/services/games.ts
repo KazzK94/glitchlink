@@ -26,13 +26,16 @@ export async function createOrGetVideoGame({ externalId, title, description, ima
 	}
 }
 
-export async function getVideoGame({ where }: { where: Prisma.VideoGameWhereInput }) {
-	return await prisma.videoGame.findFirst({ where: where || {} })
-}
-
 export async function getVideoGameById(id: string) {
 	return await prisma.videoGame.findUnique({
 		where: { id }
+	})
+}
+
+export async function getVideoGamesByUser(userId: string) {
+	return await prisma.user.findUnique({
+		where: { id: userId },
+		select: { videoGames: true }
 	})
 }
 
@@ -47,9 +50,3 @@ export async function addVideoGameToUser({ videoGameId, userId }: { videoGameId:
 	})
 }
 
-export async function getVideoGamesByUser(userId: string) {
-	return await prisma.user.findUnique({
-		where: { id: userId },
-		select: { videoGames: true }
-	})
-}

@@ -24,14 +24,10 @@ export async function createUser({ username, password, name, email, color }: Omi
 	}
 }
 
-export async function getUsers({ where }: { where: Prisma.UserWhereInput | null } = { where: null }) {
+export async function getUsers({ where }: { where: Prisma.UserWhereInput | null }) {
 	return where
 		? await prisma.user.findMany({ where, select: { id: true, username: true, name: true, color: true } })
 		: await prisma.user.findMany({ select: { id: true, username: true, name: true, color: true } })
-}
-
-export async function getUser({ where }: { where: Prisma.UserWhereInput }) {
-	return await prisma.user.findFirst({ where, select: { id: true, username: true, name: true, color: true } })
 }
 
 export async function getUserById({ id, isSelf = false }: { id: string, isSelf?: boolean }) {

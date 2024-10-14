@@ -1,17 +1,29 @@
 
+import { redirect } from 'next/navigation'
+
 import { Gamepad2Icon } from 'lucide-react'
 import { Container } from '@/components/Container'
 import { UserCard } from '@/components/users/UserCard'
 import { PostsList } from '@/components/posts/PostsList'
 import { CreatePostForm } from '@/components/posts/CreatePostForm'
 
-export function Home() {
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/services/nextAuthConfig'
+
+export async function Home() {
+
+	const session = await getServerSession(authOptions)
+	if (!session?.user) {
+		redirect('/login')
+	}
+	const { user } = session
+
 	return (
 		<Container className="my-4 md:my-6">
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 				<div className="lg:col-span-2 space-y-6">
-					<CreatePostForm />
-					<PostsList />
+					<CreatePostForm loggedUserId={user.id} />
+					<PostsList loggedUserId={user.id} />
 				</div>
 				<div className="space-y-6 md:space-y-0 lg:space-y-8 md:grid grid-cols-2 gap-8 lg:block">
 					<TrendingGames />
