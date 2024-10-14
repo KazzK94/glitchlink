@@ -24,7 +24,7 @@ export async function createUser({ username, password, name, email, color }: Omi
 	}
 }
 
-export async function getUsers({ where }: { where?: Prisma.UserWhereInput | null }) {
+export async function getUsers({ where }: { where?: Prisma.UserWhereInput | null } = {}) {
 	return where
 		? await prisma.user.findMany({ where, select: { id: true, username: true, name: true, color: true } })
 		: await prisma.user.findMany({ select: { id: true, username: true, name: true, color: true } })
