@@ -115,8 +115,8 @@ function getMockComment() {
 		{
 			content: 'I love the graphics in this game, but it was kind of disappointing that there were no chickens :( man do I love chickens 🐔🍗',
 			author: {
-				name: 'Leroy Jenkins',
-				username: 'leroyyyyyyyy'
+				name: 'Leeroy Jenkins',
+				username: 'leeroyyyyyyyy'
 			}
 		},
 		{
