@@ -2,12 +2,23 @@
 
 import prisma from '@/lib/db'
 
-export async function createPost({ content, authorId }: { content: string, authorId: string }) {
+import { getServerSession } from 'next-auth'
+import { authOptions } from './nextAuthConfig'
+
+export async function createPost({ content }: { content: string }) {
+
+	// Get the session
+	const session = await getServerSession(authOptions)
+	if (!session) {
+		throw new Error('You must be signed in to create a post')
+	}
+	const { user } = session
+
 	try {
 		return await prisma.post.create({
 			data: {
 				content,
-				authorId
+				authorId: user.id
 			}
 		})
 	} catch (error) {

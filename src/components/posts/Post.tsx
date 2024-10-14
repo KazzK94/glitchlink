@@ -1,9 +1,10 @@
+'use client'
 
 import type { User, Post } from '@prisma/client'
-
 import { MessageSquareIcon, Share2Icon, ThumbsUpIcon, EllipsisVerticalIcon } from 'lucide-react'
-
 import { Button } from '@/components/ui/button'
+import { useState } from 'react'
+import { PostComment } from './PostComment'
 
 interface PostProps {
 	post: Post & {
@@ -14,18 +15,24 @@ interface PostProps {
 
 export function Post({ post, loggedUserId }: PostProps) {
 
-	// TODO: Logged User ID will be used to check if the user can update/delete the post
-	//   		as well as to see if the user has already liked the post
-	console.log({ loggedUserId })
 
-	const conditionalClassName = post.authorId === loggedUserId ? 'border border-green-900/80' : ''
+	// TODO: 
+	// Logged User ID will be used:
+	// 		1) to check if the user is the author (can update/delete the post) or not (can report the post)
+	//   	2) to see if the user has already liked the post
+
+	const [showComments, setShowComments] = useState(false)
+	const toggleComments = () => {
+		setShowComments(!showComments)
+	}
+
+	const conditionalClassName = post.authorId === loggedUserId ? 'border border-blue-800/30' : ''
 
 	return (
-		<article key={post.id} className={`bg-gray-800 p-6 pb-4 rounded-lg ${conditionalClassName}`}>
-
-			<div className='flex mb-4'>
+		<article key={post.id} className={`bg-gray-800 pt-4 pb-2 rounded-lg ${conditionalClassName}`}>
+			<div className='flex mb-4 px-3'>
 				<div className="flex items-center flex-grow">
-					<div className="w-10 h-10 bg-gray-700 rounded-full mr-3"></div>
+					<div className="size-10 bg-gray-700 rounded-full mr-3"></div>
 					<div>
 						<h3 className="font-semibold">{post.author.name}</h3>
 						<p className="text-sm text-gray-400 italic">@{post.author.username}</p>
@@ -35,20 +42,28 @@ export function Post({ post, loggedUserId }: PostProps) {
 					<EllipsisVerticalIcon size={24} />
 				</button>
 			</div>
+			<p className="mb-5 px-4">{post.content}</p>
 
-
-			<p className="mb-5">{post.content}</p>
-
-			<div className='flex justify-evenly sm:justify-between items-center'>
+			<div className='px-4 sm:px-6 flex justify-evenly sm:justify-between items-center'>
 				<div className="flex gap-x-4 flex-grow justify-evenly">
 					<Button variant="ghost"><ThumbsUpIcon size={20} /></Button>
-					<Button variant="ghost"><MessageSquareIcon size={20} /></Button>
+					<Button variant="ghost" onClick={toggleComments}><MessageSquareIcon size={20} /></Button>
 					<Button variant="ghost"><Share2Icon size={20} /></Button>
 				</div>
 				<div className='hidden sm:block'>
 					<p className="text-sm text-muted opacity-60 italic">{post.createdAt.toLocaleString()}</p>
 				</div>
 			</div>
+
+			{showComments && (
+				<>
+					<div className='mx-1 px-1 mt-2 pt-2 border-t border-gray-600 flex flex-col gap-2'>
+						<PostComment />
+						<PostComment />
+						<PostComment />
+					</div>
+				</>
+			)}
 		</article>
 	)
 }

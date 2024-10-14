@@ -3,6 +3,9 @@
 import prisma from '@/lib/db'
 import { Prisma } from '@prisma/client'
 
+import { getServerSession } from 'next-auth'
+import { authOptions } from './nextAuthConfig'
+
 export async function createOrGetVideoGame({ externalId, title, description, image, genres, developers, platforms }: Prisma.VideoGameCreateInput) {
 	try {
 		return await prisma.videoGame.upsert({
@@ -29,6 +32,25 @@ export async function createOrGetVideoGame({ externalId, title, description, ima
 export async function getVideoGameById(id: string) {
 	return await prisma.videoGame.findUnique({
 		where: { id }
+	})
+}
+
+export async function getOwnedVideoGames(userId: string = '') {
+	if (!userId) {
+		// Get the session
+		const session = await getServerSession(authOptions)
+		if (!session) {
+			throw new Error('You must be signed in to create a post')
+		}
+		const { user } = session
+		userId = user.id
+	}
+	console.log('userId:', userId)
+
+	// Find user and get its video games
+	return await prisma.user.findUnique({
+		where: { id: userId },
+		select: { videoGames: true }
 	})
 }
 

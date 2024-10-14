@@ -1,7 +1,7 @@
 
 import { type VideoGame } from '@prisma/client'
 import { getUserById } from '@/services/users'
-import { getVideoGamesByUser } from '@/services/games'
+import { getOwnedVideoGames } from '@/services/games'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
@@ -98,7 +98,7 @@ function ProfileHeading({ user }: { user: User }) {
 
 async function MyVideoGames({ user }: { user: User }) {
 
-	const { videoGames } = await getVideoGamesByUser(user.id) || { videoGames: [] }
+	const { videoGames } = await getOwnedVideoGames(user.id) || { videoGames: [] }
 
 	return (
 		<div className='px-3 py-1'>
