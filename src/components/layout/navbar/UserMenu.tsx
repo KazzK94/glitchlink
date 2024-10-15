@@ -8,15 +8,14 @@ import { getNewNotifications } from '@/services/notifications'
 export async function UserMenu() {
 
 	const user = await getUserFromSession()
-	const isUserLogged = Boolean(user)
 
-	const notifications = await getNewNotifications(user.id)
+	const notifications = user ? await getNewNotifications(user.id) : []
 	const notificationsCount = notifications.length
 
 	return (
 		<div className='flex gap-0.5 md:gap-2 items-center'>
 			{
-				isUserLogged ? (
+				user ? (
 					<>
 						<UserButton url="/notifications" text="Notifications" className='relative'>
 							<BellIcon className="size-6 md:size-7 pt-1" />

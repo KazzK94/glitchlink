@@ -6,6 +6,7 @@ import { createNotification } from './notifications'
 
 export async function createPost({ content }: { content: string }) {
 	const user = await getUserFromSession()
+	if(!user) return null
 	try {
 		return await prisma.post.create({
 			data: {
@@ -21,6 +22,7 @@ export async function createPost({ content }: { content: string }) {
 
 export async function addCommentToPost({ post, content }: { post: { id: string, author: { id: string } }, content: string }) {
 	const user = await getUserFromSession()
+	if(!user) return null
 	try {
 		const createdComment = await prisma.comment.create({
 			data: {
@@ -48,6 +50,7 @@ export async function addCommentToPost({ post, content }: { post: { id: string, 
 export async function getOwnedPosts(userId: string = '') {
 	if (!userId) {
 		const user = await getUserFromSession()
+		if(!user) return { posts: [] }
 		userId = user.id
 	}
 

@@ -2,6 +2,7 @@
 import { type VideoGame } from '@prisma/client'
 import { getUserById } from '@/services/users'
 import { getOwnedVideoGames } from '@/services/games'
+import { getOwnedPosts } from '@/services/posts'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
@@ -17,7 +18,6 @@ import { Container } from '@/components/Container'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button'
 import { GameCard } from '@/components/games/GameCard'
-import { getOwnedPosts } from '@/services/posts'
 import { Post } from '@/components/posts/Post'
 
 // NextJS force dynamic (TODO: Check this, it's not working... it's being cached)

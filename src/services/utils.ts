@@ -7,7 +7,7 @@ export async function getUserFromSession() {
 	// Get the session
 	const session = await getServerSession(authOptions)
 	if (!session) {
-		throw new Error('You must be signed in to create a post')
+		return null
 	}
 	const { user } = session
 	return user

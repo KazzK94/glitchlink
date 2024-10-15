@@ -27,7 +27,3 @@ export function Notification({ notification }: { notification: Notification }) {
 		</Link>
 	)
 }
-
-async function forcedDelay(amount: number) {
-	await new Promise(resolve => setTimeout(resolve, amount))
-}

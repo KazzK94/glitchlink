@@ -4,7 +4,7 @@ import { Post } from '@/components/posts/Post'
 import { getPostById } from '@/services/posts'
 import { getUserFromSession } from '@/services/utils'
 
-export default async function ({ params }: { params: { id: string } }) {
+export default async function PostDetailPage({ params }: { params: { id: string } }) {
 
 	const postId = params.id
 	const post = await getPostById(postId)
@@ -14,7 +14,7 @@ export default async function ({ params }: { params: { id: string } }) {
 
 	return (
 		<Container asSection className='mt-4 max-w-[860px]'>
-			<Post post={post} loggedUserId={user.id || ''} />
+			<Post post={post} loggedUserId={user?.id || ''} />
 		</Container>
 	)
 }

@@ -24,6 +24,7 @@ export async function createNotification({ type, userId, message, targetUrl }: {
 export async function getNotifications(userId: string = '') {
 	if (!userId) {
 		const user = await getUserFromSession()
+		if(!user) return []
 		userId = user.id
 	}
 
@@ -36,6 +37,7 @@ export async function getNotifications(userId: string = '') {
 export async function getNewNotifications(userId: string = '') {
 	if (!userId) {
 		const user = await getUserFromSession()
+		if(!user) return []
 		userId = user.id
 	}
 
@@ -47,6 +49,7 @@ export async function getNewNotifications(userId: string = '') {
 
 export async function markNotificationAsRead(notificationId: string) {
 	const user = await getUserFromSession()
+	if(!user) return null
 
 	return await prisma.notification.update({
 		where: { id: notificationId, userId: user.id },
