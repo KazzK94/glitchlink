@@ -1,5 +1,5 @@
 
-import { Container } from '@/components/Container'
+import { Container } from '@/components/common/Container'
 import { Button } from "@/components/ui/button"
 import Link from 'next/link'
 

@@ -1,5 +1,5 @@
 
-import { Container } from '@/components/Container'
+import { Container } from '@/components/common/Container'
 import { Post } from '@/components/posts/Post'
 import { getPostById } from '@/services/posts'
 import { getUserFromSession } from '@/services/utils'

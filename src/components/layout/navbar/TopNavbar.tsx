@@ -1,5 +1,5 @@
 
-import { Container } from '@/components/Container'
+import { Container } from '@/components/common/Container'
 import { UserMenu } from './UserMenu'
 import NavbarLinksResponsive from './NavbarLinksResponsive'
 

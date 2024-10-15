@@ -4,7 +4,7 @@ import { getPopularVideoGames } from '@/services/games'
 import { getActiveUsers } from '@/services/users'
 
 import { Gamepad2Icon } from 'lucide-react'
-import { Container } from '@/components/Container'
+import { Container } from '@/components/common/Container'
 import { UserCard } from '@/components/users/UserCard'
 import { PostsList } from '@/components/posts/PostsList'
 import { PostCreateForm } from '@/components/posts/PostCreateForm'

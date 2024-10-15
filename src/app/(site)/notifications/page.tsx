@@ -1,5 +1,5 @@
 
-import { Container } from '@/components/Container'
+import { Container } from '@/components/common/Container'
 import { Notification } from '@/components/notifications/Notification'
 import { getNotifications } from '@/services/notifications'
 

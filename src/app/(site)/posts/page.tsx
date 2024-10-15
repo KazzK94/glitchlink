@@ -1,7 +1,7 @@
 
 import { PostsList } from '@/components/posts/PostsList'
 import { getUserFromSession } from '@/services/utils'
-import { Container } from '@/components/Container'
+import { Container } from '@/components/common/Container'
 
 export default async function PostsPage() {
 

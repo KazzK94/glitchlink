@@ -1,4 +1,4 @@
-import { Container } from '@/components/Container'
+import { Container } from '@/components/common/Container'
 
 export function Footer() {
 	return (

@@ -2,7 +2,7 @@
 import type { Metadata } from "next"
 import "../globals.css"
 
-import { Providers } from '@/components/Providers'
+import { Providers } from '@/components/layout/Providers'
 import { TopNavbar } from '@/components/layout/navbar/TopNavbar'
 
 import { getServerSession } from 'next-auth'

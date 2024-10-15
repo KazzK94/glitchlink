@@ -1,5 +1,5 @@
 
-import { Container } from '@/components/Container'
+import { Container } from '@/components/common/Container'
 import { getUserByUsername } from '@/services/users'
 
 export default async function UserDetailPage({ params }: { params: { username: string } }) {

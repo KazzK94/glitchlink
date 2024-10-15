@@ -1,6 +1,5 @@
 
 import { type VideoGame } from '@prisma/client'
-import { getUserById } from '@/services/users'
 import { getOwnedVideoGames } from '@/services/games'
 import { getOwnedPosts } from '@/services/posts'
 import { redirect } from 'next/navigation'
@@ -8,35 +7,26 @@ import Link from 'next/link'
 
 // AUTH
 import { type User } from 'next-auth'
-import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/services/nextAuthConfig'
 import { LogoutButton } from '@/components/auth/LogoutButton'
 
 // ICONS AND UI
 import { BookUserIcon, EditIcon, Gamepad2Icon, LogOutIcon, MessageSquareIcon } from 'lucide-react'
-import { Container } from '@/components/Container'
+import { Container } from '@/components/common/Container'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button'
 import { GameCard } from '@/components/games/GameCard'
 import { Post } from '@/components/posts/Post'
+import { getUserFromSession } from '@/services/utils'
 
 // NextJS force dynamic (TODO: Check this, it's not working... it's being cached)
 export const dynamic = 'force-dynamic'
 
 export default async function ProfilePage() {
 
-	const session = await getServerSession(authOptions)
-
-	if (!session || !session.user) {
-		redirect('/login')
-	}
-
-	const user = await getUserById({ id: session.user.id, isSelf: true })
-
+	const user = await getUserFromSession()
 	if (!user) {
 		redirect('/login')
 	}
-
 
 	return (
 		<Container asSection className='mt-4 relative'>

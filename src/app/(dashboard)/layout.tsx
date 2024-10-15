@@ -1,17 +1,18 @@
 
-
 import "../globals.css"
 
-import { Providers } from '@/components/Providers'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/services/nextAuthConfig'
+import { Providers } from '@/components/layout/Providers'
 import DashboardMenu from './components/DashboardMenu'
+import { getUserFromSession } from '@/services/utils'
+import { redirect } from 'next/navigation'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
 
-	const session = await getServerSession(authOptions)
+	const user = await getUserFromSession()
 	// TODO: Check admin permissions (tho it could be done in middleware for better performance and code organization)
-	console.log({ user: session?.user })
+	if(user?.username.toLowerCase() !== 'kazk9') {
+		redirect('/login')
+	}
 
 	return (
 		<html lang="en">

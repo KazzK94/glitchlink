@@ -1,4 +1,4 @@
-import { Container } from '@/components/Container'
+import { Container } from '@/components/common/Container'
 import { UsersList } from '@/components/users/UsersList'
 
 export default async function UsersPage() {
