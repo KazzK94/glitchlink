@@ -64,7 +64,7 @@ model Post {
     updatedAt DateTime  @updatedAt
     author    User      @relation(fields: [authorId], references: [id])
     authorId  String
-    likes     User[]    @relation("PostLikes")
+    likedBy   User[]    @relation("PostLikes")
     comments  Comment[]
 }
 

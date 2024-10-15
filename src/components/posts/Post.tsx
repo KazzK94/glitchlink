@@ -22,13 +22,24 @@ export function Post({ post, loggedUserId }: PostProps) {
 
 	const userIsAuthor = post.authorId === loggedUserId
 
+	const [isLiked, setIsLiked] = useState(post.likedBy.some(like => like.id === loggedUserId))
+	const [likes, setLikes] = useState(post.likedBy.length)
+
 	const [showComments, setShowComments] = useState(false)
 	const toggleComments = () => {
 		setShowComments(!showComments)
 	}
 
-	const toggleLike = () => {
-		setShowComments(!showComments)
+	const toggleLike = async () => {
+		const previousIsLiked = isLiked
+		setIsLiked(!previousIsLiked)
+		const response = await fetch(`/api/posts/${post.id}/likes`, { method: 'PATCH' })
+		if (!response.ok) {
+			setIsLiked(!previousIsLiked)
+			console.error('Failed to toggle like:', response)
+			return
+		}
+		setLikes(likes + (previousIsLiked ? -1 : 1))
 	}
 
 	return (
@@ -52,9 +63,9 @@ export function Post({ post, loggedUserId }: PostProps) {
 			{/* Buttons */}
 			<div className='px-4 sm:px-6 flex justify-evenly sm:justify-between items-center'>
 				<div className="flex gap-x-4 flex-grow justify-evenly">
-					<ToggleLikeButton onClick={toggleLike} likesCount={post.likes.length} />
+					<ToggleLikeButton onClick={toggleLike} likesCount={likes} isLiked={isLiked} />
 					<ToggleCommentsButton onClick={toggleComments} commentsCount={post.comments.length} />
-					<Button variant="ghost"><Share2Icon size={20} /></Button>
+					<ShareButton postId={post.id} />
 				</div>
 				<div className='hidden sm:block'>
 					<p className="text-sm text-muted opacity-60 italic">{post.createdAt.toLocaleString()}</p>
@@ -78,9 +89,9 @@ export function Post({ post, loggedUserId }: PostProps) {
 	)
 }
 
-function ToggleLikeButton({ onClick, likesCount }: { onClick: () => void, likesCount: number }) {
+function ToggleLikeButton({ onClick, likesCount, isLiked }: { onClick: () => void, likesCount: number, isLiked: boolean }) {
 	return (
-		<Button variant="ghost" onClick={onClick} className='flex items-center gap-1.5'>
+		<Button variant="ghost" onClick={onClick} className={`flex items-center gap-1.5 ${isLiked && 'text-blue-500 hover:text-blue-700'}`}>
 			<ThumbsUpIcon size={20} />
 			{(likesCount > 0) && <span>{likesCount}</span>}
 		</Button>
@@ -92,6 +103,21 @@ function ToggleCommentsButton({ onClick, commentsCount }: { onClick: () => void,
 		<Button variant="ghost" onClick={onClick} className='flex items-center gap-1.5'>
 			<MessageSquareIcon size={20} />
 			{(commentsCount > 0) && <span>{commentsCount}</span>}
+		</Button>
+	)
+}
+
+function ShareButton({ postId }: { postId: string }) {
+
+	const handleClick = () => {
+		const url = `${window.location.host}/posts/${postId}`
+		navigator.clipboard.writeText(url)
+		alert('Copied URL of the post.')
+	}
+
+	return (
+		<Button variant="ghost" onClick={handleClick}>
+			<Share2Icon size={20} />
 		</Button>
 	)
 }

@@ -5,6 +5,13 @@ import { getUserFromSession } from './utils'
 
 export async function createNotification({ type, userId, message, targetUrl }: { type: string, userId: string, message: string, targetUrl: string }) {
 	try {
+
+		const existingNotification = await prisma.notification.findFirst({
+			where: { type, userId, message, targetUrl }
+		})
+
+		if(existingNotification) return existingNotification
+
 		return await prisma.notification.create({
 			data: {
 				type,

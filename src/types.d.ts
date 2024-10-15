@@ -20,5 +20,5 @@ export interface CompleteComment extends Comment {
 export interface CompletePost extends Post {
 	author: User
 	comments: CompleteComment[]
-	likes: User[]
+	likedBy: User[]
 }
