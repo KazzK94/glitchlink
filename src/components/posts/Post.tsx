@@ -1,21 +1,15 @@
 'use client'
 
-import type { User, Post, Comment } from '@prisma/client'
 import { MessageSquareIcon, Share2Icon, ThumbsUpIcon, EllipsisVerticalIcon } from 'lucide-react'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { PostComment } from './comments/Comment'
 import { PostCommentCreateForm } from './comments/CommentCreateForm'
+import { CompletePost } from '@/types'
 
 interface PostProps {
-	post: Post & {
-		author: User
-	} & {
-		comments: (Comment & {
-			author: User
-		})[]
-	}
+	post: CompletePost
 	loggedUserId: string
 }
 
@@ -51,8 +45,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 
 			<div className='px-4 sm:px-6 flex justify-evenly sm:justify-between items-center'>
 				<div className="flex gap-x-4 flex-grow justify-evenly">
-					<Button variant="ghost"><ThumbsUpIcon size={20} /></Button>
-					{/* TODO: Replace (in next line) comments.length with post.comments.length */}
+					<ToggleLikeButton onClick={() => {}} likesCount={post.likes.length} />
 					<ToggleCommentsButton onClick={toggleComments} commentsCount={post.comments.length} />
 					<Button variant="ghost"><Share2Icon size={20} /></Button>
 				</div>
@@ -74,6 +67,15 @@ export function Post({ post, loggedUserId }: PostProps) {
 				</div>
 			)}
 		</article>
+	)
+}
+
+function ToggleLikeButton({ onClick, likesCount }: { onClick: () => void, likesCount: number }) {
+	return (
+		<Button variant="ghost" onClick={onClick} className='flex items-center gap-1.5'>
+			<ThumbsUpIcon size={20} />
+			{(likesCount > 0) && <span>{likesCount}</span>}
+		</Button>
 	)
 }
 
