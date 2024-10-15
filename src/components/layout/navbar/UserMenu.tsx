@@ -13,15 +13,15 @@ export async function UserMenu() {
 	const notificationsCount = notifications.length
 
 	return (
-		<div className='flex gap-0.5 md:gap-2 items-center'>
+		<div className='flex md:gap-0.5 items-center'>
 			{
 				user ? (
 					<>
 						<UserButton url="/notifications" text="Notifications" className='relative'>
-							<BellIcon className="size-6 md:size-7 pt-1" />
+							<BellIcon className="size-7 pt-1" />
 							{
 								notificationsCount > 0 && (
-									<span className='absolute bottom-2 right-1 px-1 text-xs font-bold rounded-full bg-red-900'>
+									<span className='absolute bottom-2 right-1 px-1 text-xs font-bold rounded-full bg-red-700'>
 										{notificationsCount}
 									</span>
 								)
