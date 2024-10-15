@@ -2,20 +2,31 @@
 import Link from 'next/link'
 import { UserIcon, LogInIcon, BellIcon } from 'lucide-react'
 
-import { getServerSession } from "next-auth/next"
+import { getUserFromSession } from '@/services/utils'
+import { getNewNotifications } from '@/services/notifications'
 
 export async function UserMenu() {
 
-	const session = await getServerSession()
-	const isUserLogged = Boolean(session?.user)
+	const user = await getUserFromSession()
+	const isUserLogged = Boolean(user)
+
+	const notifications = await getNewNotifications(user.id)
+	const notificationsCount = notifications.length
 
 	return (
 		<div className='flex gap-0.5 md:gap-2 items-center'>
 			{
 				isUserLogged ? (
 					<>
-						<UserButton url="#" text="Notifications">
+						<UserButton url="/notifications" text="Notifications" className='relative'>
 							<BellIcon className="size-6 md:size-7 pt-1" />
+							{
+								notificationsCount > 0 && (
+									<span className='absolute bottom-2 right-1 px-1 text-xs font-bold rounded-full bg-red-900'>
+										{notificationsCount}
+									</span>
+								)
+							}
 						</UserButton>
 						<UserButton url="/profile" text="My Profile">
 							<UserIcon className="size-7" />
@@ -32,9 +43,9 @@ export async function UserMenu() {
 	)
 }
 
-function UserButton({ url, text, children }: { url: string, text: string, children: React.ReactNode }) {
+function UserButton({ url, text, children, className }: { url: string, text: string, children: React.ReactNode, className?: string }) {
 	return (
-		<Link href={url} className='rounded-full p-2 hover:bg-gray-800 transition-colors'>
+		<Link href={url} className={`rounded-full p-2 hover:bg-gray-800 transition-colors ${className}`}>
 			{children}
 			<span className="sr-only">{text}</span>
 		</Link>

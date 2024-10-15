@@ -1,10 +1,8 @@
 'use server'
 
 import prisma from '@/lib/db'
-
-import { getServerSession } from 'next-auth'
-import { authOptions } from './nextAuthConfig'
 import { getUserFromSession } from './utils'
+import { createNotification } from './notifications'
 
 export async function createPost({ content }: { content: string }) {
 	const user = await getUserFromSession()
@@ -21,16 +19,26 @@ export async function createPost({ content }: { content: string }) {
 	}
 }
 
-export async function addCommentToPost({ postId, content }: { postId: string, content: string }) {
+export async function addCommentToPost({ post, content }: { post: { id: string, author: { id: string } }, content: string }) {
 	const user = await getUserFromSession()
 	try {
-		return await prisma.comment.create({
+		const createdComment = await prisma.comment.create({
 			data: {
 				content,
 				authorId: user.id,
-				postId
+				postId: post.id
 			}
 		})
+
+		await createNotification({
+			type: 'CommentedPost',
+			userId: post.author.id,
+			message: `@${user.username} commented on your post`,
+			targetUrl: `/posts/${post.id}`
+		})
+		
+		return createdComment
+		
 	} catch (error) {
 		console.error('Failed to create the comment:', error)
 		throw error
@@ -39,12 +47,7 @@ export async function addCommentToPost({ postId, content }: { postId: string, co
 
 export async function getOwnedPosts(userId: string = '') {
 	if (!userId) {
-		// Get the session
-		const session = await getServerSession(authOptions)
-		if (!session) {
-			throw new Error('You must be signed in to create a post')
-		}
-		const { user } = session
+		const user = await getUserFromSession()
 		userId = user.id
 	}
 
@@ -89,10 +92,12 @@ export async function getPostById(id: string) {
 export async function getPostsByUser(userId: string) {
 	return await prisma.user.findUnique({
 		where: { id: userId },
-		select: { posts: {
-			include: { author: true, comments: { include: { author: true }, orderBy: { createdAt: 'desc' } } },
-			orderBy: { createdAt: 'desc' } // Newest first
-		} },
+		select: {
+			posts: {
+				include: { author: true, comments: { include: { author: true }, orderBy: { createdAt: 'desc' } } },
+				orderBy: { createdAt: 'desc' } // Newest first
+			}
+		},
 	})
 }
 

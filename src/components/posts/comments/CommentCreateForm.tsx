@@ -6,8 +6,12 @@ import { useRouter } from 'next/navigation'
 import { addCommentToPost } from '@/services/posts'
 import { Button } from '@/components/ui/button'
 
+interface PostCommentCreateFormProps {
+	post: { id: string, author: { id: string } }
+	className?: string
+}
 
-export function PostCommentCreateForm({ postId, className }: { postId: string, className?: string }) {
+export function PostCommentCreateForm({ post, className }: PostCommentCreateFormProps) {
 
 	const router = useRouter()
 	const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -20,7 +24,7 @@ export function PostCommentCreateForm({ postId, className }: { postId: string, c
 		// TODO: Show the user a proper error explaining the minimum length
 		if (!content || content.length < 6) return
 
-		await addCommentToPost({ postId, content })
+		await addCommentToPost({ post: post, content })
 		textareaRef.current!.value = ''
 
 		router.refresh()

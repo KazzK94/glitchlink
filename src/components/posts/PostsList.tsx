@@ -7,7 +7,7 @@ export async function PostsList({ loggedUserId }: { loggedUserId: string }) {
 	const posts = await getPosts()
 
 	return (
-		<div className="space-y-5">
+		<div className="space-y-4">
 			{posts.map((post) => (
 				<Post key={post.id} post={post} loggedUserId={loggedUserId} />
 			))}

@@ -63,7 +63,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 
 			{showComments && (
 				<div className='mx-1 px-1 mt-2 pt-2 border-t border-gray-600'>
-					<PostCommentCreateForm postId={post.id} className='mb-4' />
+					<PostCommentCreateForm post={post} className='mb-4' />
 					<div className='flex flex-col gap-2'>
 						{
 							post.comments.map((comment, index) => (
