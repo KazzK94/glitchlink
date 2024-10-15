@@ -10,6 +10,8 @@ import { PostsList } from '@/components/posts/PostsList'
 import { PostCreateForm } from '@/components/posts/PostCreateForm'
 
 import { getUserFromSession } from '@/services/utils'
+import { Suspense } from 'react'
+import { PostsListFallback } from '../posts/PostsListFallback'
 
 export async function Home() {
 
@@ -19,13 +21,15 @@ export async function Home() {
 	}
 
 	return (
-		<Container className="my-4 md:my-6">
-			<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+		<Container className="my-4 lg:my-6">
+			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				<div className="lg:col-span-2 space-y-6">
 					<PostCreateForm />
-					<PostsList loggedUserId={user.id} />
+					<Suspense fallback={<PostsListFallback />}>
+						<PostsList loggedUserId={user.id} />
+					</Suspense>
 				</div>
-				<div className="space-y-6 md:space-y-0 lg:space-y-8 md:grid grid-cols-2 gap-8 lg:block">
+				<div className="hidden lg:block space-y-6">
 					<TrendingGames />
 					<SuggestedFriends />
 				</div>
@@ -58,7 +62,7 @@ async function SuggestedFriends() {
 	const suggestedFriends = await getActiveUsers(3)
 
 	return (
-		<div className="bg-gray-800 p-6 pt-5 rounded-lg">
+		<div className="bg-gray-800 px-4 py-5 rounded-lg">
 			<h2 className="text-xl font-semibold mb-4">Suggested Friends</h2>
 			<ul className="flex flex-col gap-4">
 				{suggestedFriends.map((friend) => (
