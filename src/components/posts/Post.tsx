@@ -20,15 +20,20 @@ export function Post({ post, loggedUserId }: PostProps) {
 	// 		1) to check if the user is the author (can update/delete the post) or not (can report the post)
 	//   	2) to see if the user has already liked the post
 
+	const userIsAuthor = post.authorId === loggedUserId
+
 	const [showComments, setShowComments] = useState(false)
 	const toggleComments = () => {
 		setShowComments(!showComments)
 	}
 
-	const conditionalClassName = post.authorId === loggedUserId ? 'border border-blue-800/30' : ''
+	const toggleLike = () => {
+		setShowComments(!showComments)
+	}
 
 	return (
-		<article key={post.id} className={`bg-gray-800 pt-4 pb-2 rounded-lg ${conditionalClassName}`}>
+		<article key={post.id} className={`bg-gray-800 pt-4 pb-2 rounded-lg ${userIsAuthor && 'border border-blue-800/30'}`}>
+			{/* Post Author */}
 			<div className='flex justify-between mb-4 px-4'>
 				<div className="flex items-center">
 					<div className="size-10 bg-gray-700 rounded-full mr-3"></div>
@@ -41,11 +46,13 @@ export function Post({ post, loggedUserId }: PostProps) {
 					<EllipsisVerticalIcon size={24} />
 				</button>
 			</div>
+			{/* Post Content */}
 			<p className="mb-5 px-4">{post.content}</p>
 
+			{/* Buttons */}
 			<div className='px-4 sm:px-6 flex justify-evenly sm:justify-between items-center'>
 				<div className="flex gap-x-4 flex-grow justify-evenly">
-					<ToggleLikeButton onClick={() => {}} likesCount={post.likes.length} />
+					<ToggleLikeButton onClick={toggleLike} likesCount={post.likes.length} />
 					<ToggleCommentsButton onClick={toggleComments} commentsCount={post.comments.length} />
 					<Button variant="ghost"><Share2Icon size={20} /></Button>
 				</div>
@@ -54,9 +61,10 @@ export function Post({ post, loggedUserId }: PostProps) {
 				</div>
 			</div>
 
+			{/* Comments (conditionally rendered) */}
 			{showComments && (
 				<div className='mx-1 px-1 mt-2 pt-2 border-t border-gray-600'>
-					<PostCommentCreateForm post={post} className='mb-4' />
+					<PostCommentCreateForm post={post} className='mb-3' />
 					<div className='flex flex-col gap-2'>
 						{
 							post.comments.map((comment, index) => (

@@ -33,11 +33,11 @@ export function PostCommentCreateForm({ post, className }: PostCommentCreateForm
 	// TODO: Control submit on Ctrl+Enter
 
 	return (
-		<form onSubmit={handleSubmit} className={`bg-gray-800 rounded-lg px-1 ${className}`}>
+		<form onSubmit={handleSubmit} className={`bg-gray-800 rounded-lg ${className}`}>
 			<textarea
+				className="text-sm p-3 w-full max-h-[50vh] bg-gray-700 text-white rounded-md"
 				name='content'
 				ref={textareaRef}
-				className="text-sm w-full max-h-[50vh] bg-gray-700 text-white rounded-md p-3 mb-0.5"
 				placeholder="Add a comment about this Post..."
 				rows={2}
 			></textarea>
