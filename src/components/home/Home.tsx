@@ -1,5 +1,7 @@
 
 import { redirect } from 'next/navigation'
+import { getPopularVideoGames } from '@/services/games'
+import { getActiveUsers } from '@/services/users'
 
 import { Gamepad2Icon } from 'lucide-react'
 import { Container } from '@/components/Container'
@@ -7,16 +9,14 @@ import { UserCard } from '@/components/users/UserCard'
 import { PostsList } from '@/components/posts/PostsList'
 import { PostCreateForm } from '@/components/posts/PostCreateForm'
 
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/services/nextAuthConfig'
+import { getUserFromSession } from '@/services/utils'
 
 export async function Home() {
 
-	const session = await getServerSession(authOptions)
-	if (!session?.user) {
+	const user = await getUserFromSession()
+	if (!user) {
 		redirect('/login')
 	}
-	const { user } = session
 
 	return (
 		<Container className="my-4 md:my-6">
@@ -35,15 +35,17 @@ export async function Home() {
 }
 
 
-function TrendingGames() {
+async function TrendingGames() {
+	const popularGames = await getPopularVideoGames(5)
+
 	return (
 		<div className="bg-gray-800 p-6 pt-5 rounded-lg">
 			<h2 className="text-xl font-semibold mb-4">Trending Games</h2>
 			<ul className="space-y-2">
-				{['Elden Ring', 'Fortnite', 'Valorant', 'Among Us', 'Minecraft'].map((game) => (
-					<li key={game} className="flex items-center">
+				{popularGames.map((game) => (
+					<li key={game.id} className="flex items-center">
 						<Gamepad2Icon className="h-5 w-5 mr-2" />
-						<span>{game}</span>
+						<span>{game.title}</span>
 					</li>
 				))}
 			</ul>
@@ -51,28 +53,9 @@ function TrendingGames() {
 	)
 }
 
-function SuggestedFriends() {
+async function SuggestedFriends() {
 
-	const suggestedFriends = [
-		{
-			id: crypto.randomUUID(),
-			name: 'Pixel Queen',
-			username: 'pixelqueen99',
-			color: '#ff66ff'
-		},
-		{
-			id: crypto.randomUUID(),
-			name: 'The Greatest Gamer',
-			username: 'gamergod192',
-			color: '#ffcc44'
-		},
-		{
-			id: crypto.randomUUID(),
-			name: 'Ray of Death',
-			username: 'killitwithfire777',
-			color: '#ff7777'
-		}
-	]
+	const suggestedFriends = await getActiveUsers(3)
 
 	return (
 		<div className="bg-gray-800 p-6 pt-5 rounded-lg">

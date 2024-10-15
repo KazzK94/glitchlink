@@ -7,7 +7,7 @@ export default async function UserDetailPage({ params }: { params: { username: s
 	const user = await getUserByUsername({ username: params.username })
 
 	// If no user: show error message "User Not Found"
-	if (!user) return <p className='text-xl text-center text-red-600 italic mt-12 bg-gray-700/40 w-fit px-5 py-3 mx-auto rounded border border-red-700/60 shadow-sm shadow-red-200/20'>Error: User Not Found</p>
+	if (!user) return <p className='text-xl text-center text-red-700 italic mt-12 bg-gray-700/40 w-fit px-5 py-3 mx-auto rounded border border-red-700/60 shadow-sm shadow-red-200/20'>Error: User Not Found</p>
 
 	return (
 		<Container className='mt-4'>

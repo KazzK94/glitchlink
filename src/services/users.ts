@@ -3,6 +3,7 @@
 import prisma from '@/lib/db'
 import { Prisma } from '@prisma/client'
 import bcrypt from 'bcrypt'
+import { getUserFromSession } from './utils'
 
 export async function createUser({ username, password, name, email, color }: Omit<Prisma.UserCreateInput, 'usernameLowercase'>) {
 	const usernameLowercase = username.toLowerCase()
@@ -21,6 +22,19 @@ export async function createUser({ username, password, name, email, color }: Omi
 	} catch (error) {
 		console.error('Failed to create user:', error)
 		throw error
+	}
+}
+
+export async function attemptLogin(username: string, password: string) {
+	const user = await prisma.user.findUnique({ where: { usernameLowercase: username.toLowerCase() } })
+	if (!user) return null
+	if (!bcrypt.compareSync(password, user.password)) return null
+	return {
+		id: user.id,
+		username: user.username,
+		name: user.name,
+		email: user.email,
+		color: user.color
 	}
 }
 
@@ -48,15 +62,13 @@ export async function getUserByUsername({ username, isSelf = false }: { username
 	})
 }
 
-export async function attemptLogin(username: string, password: string) {
-	const user = await prisma.user.findUnique({ where: { usernameLowercase: username.toLowerCase() } })
-	if (!user) return null
-	if (!bcrypt.compareSync(password, user.password)) return null
-	return {
-		id: user.id,
-		username: user.username,
-		name: user.name,
-		email: user.email,
-		color: user.color
-	}
+export async function getActiveUsers(amount: number = 3) {
+	const user = await getUserFromSession()
+
+	return await prisma.user.findMany({
+		where: { id: { not: user?.id } },
+		take: amount,
+		orderBy: { updatedAt: 'desc' },
+		select: { id: true, username: true, name: true, color: true }
+	})
 }

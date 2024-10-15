@@ -29,6 +29,17 @@ export async function createOrGetVideoGame({ externalId, title, description, ima
 	}
 }
 
+export async function addVideoGameToUser({ videoGameId, userId }: { videoGameId: string, userId: string }) {
+	return await prisma.user.update({
+		where: { id: userId },
+		data: {
+			videoGames: {
+				connect: { id: videoGameId }
+			}
+		}
+	})
+}
+
 export async function getVideoGameById(id: string) {
 	return await prisma.videoGame.findUnique({
 		where: { id }
@@ -64,14 +75,13 @@ export async function getVideoGamesByUser(userId: string) {
 	})
 }
 
-export async function addVideoGameToUser({ videoGameId, userId }: { videoGameId: string, userId: string }) {
-	return await prisma.user.update({
-		where: { id: userId },
-		data: {
-			videoGames: {
-				connect: { id: videoGameId }
-			}
-		}
+export async function getPopularVideoGames(amount: number = 3) {
+	return await prisma.videoGame.findMany({
+		orderBy: {
+			users: {
+				_count: 'desc',
+			},
+		},
+		take: amount
 	})
 }
-
