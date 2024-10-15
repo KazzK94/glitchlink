@@ -37,9 +37,9 @@ export function PostCommentCreateForm({ post, className }: PostCommentCreateForm
 			<textarea
 				name='content'
 				ref={textareaRef}
-				className="text-sm w-full min-h-20 max-h-[50vh] bg-gray-700 text-white rounded-md p-3 mb-0.5"
+				className="text-sm w-full max-h-[50vh] bg-gray-700 text-white rounded-md p-3 mb-0.5"
 				placeholder="Add a comment about this Post..."
-				rows={3}
+				rows={2}
 			></textarea>
 			<div className='flex w-full justify-end'>
 				<Button className="w-full px-4 py-2 text-sm rounded-md bg-gradient-to-br from-gray-600/90 to-slate-500/90 hover:from-slate-500/70 hover:to-slate-400/60">
