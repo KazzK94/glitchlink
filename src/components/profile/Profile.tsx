@@ -16,7 +16,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button'
 import { GameCard } from '@/components/games/GameCard'
 import { Post } from '@/components/posts/Post'
-import { getUserFromSession } from '@/services/utils'
+import { getUserFromSession } from '@/services/auth'
+import { getFriends } from '@/services/socialLinks'
+import { UsersList } from '../users/UsersList'
 
 // NextJS force dynamic (TODO: Check this, it's not working... it's being cached)
 export const dynamic = 'force-dynamic'
@@ -54,7 +56,7 @@ export async function Profile() {
 					<MyPosts user={user} />
 				</TabsContent>
 				<TabsContent value='friends'>
-					<FriendsList />
+					<FriendsList user={user} />
 				</TabsContent>
 			</Tabs>
 
@@ -121,7 +123,7 @@ async function MyVideoGames({ user }: { user: User }) {
 
 async function MyPosts({ user }: { user: User }) {
 
-	const { posts } = await getOwnedPosts(user.id) || { posts: [] }
+	const posts = await getOwnedPosts(user.id)
 
 	return (
 		<div className='px-3 py-1'>
@@ -136,7 +138,19 @@ async function MyPosts({ user }: { user: User }) {
 	)
 }
 
-function FriendsList() {
+async function FriendsList({ user }: { user: User }) {
+	const friends = await getFriends(user.id)
+
+	if (!friends || friends.length === 0) return <NoFriends />
+
+	return (
+		<div className='px-3 py-1'>
+			<UsersList users={friends} />
+		</div>
+	)
+}
+
+function NoFriends() {
 	return (
 		<div className='px-3 py-1'>
 			<p>YOU HAVE NO FRIENDS YET, LOL!!</p>

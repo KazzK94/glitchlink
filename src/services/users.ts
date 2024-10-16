@@ -3,7 +3,7 @@
 import prisma from '@/lib/db'
 import { Prisma } from '@prisma/client'
 import bcrypt from 'bcrypt'
-import { getUserFromSession } from './utils'
+import { getUserFromSession } from './auth'
 
 export async function createUser({ username, password, name, email, color }: Omit<Prisma.UserCreateInput, 'usernameLowercase'>) {
 	const usernameLowercase = username.toLowerCase()
@@ -62,6 +62,7 @@ export async function getUserByUsername({ username, isSelf = false }: { username
 	})
 }
 
+/** Get the {amount} most active users (not including self) */
 export async function getActiveUsers(amount: number = 3) {
 	const user = await getUserFromSession()
 

@@ -35,11 +35,13 @@ model SocialLink {
     status    SocialLinkStatus @default(PENDING)
     createdAt DateTime         @default(now())
     updatedAt DateTime         @updatedAt
+
+    @@unique([userAId, userBId])
 }
 
 enum SocialLinkStatus {
     PENDING
-    ACCEPTED
+    FRIENDS
     BLOCKED
 }
 

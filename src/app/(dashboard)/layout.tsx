@@ -3,7 +3,7 @@ import "../globals.css"
 
 import { Providers } from '@/components/layout/Providers'
 import DashboardMenu from './components/DashboardMenu'
-import { getUserFromSession } from '@/services/utils'
+import { getUserFromSession } from '@/services/auth'
 import { redirect } from 'next/navigation'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {

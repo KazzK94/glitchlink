@@ -1,6 +1,6 @@
 
 import { addLikeToPost, getPostById, removeLikeFromPost } from '@/services/posts'
-import { getUserFromSession } from '@/services/utils'
+import { getUserFromSession } from '@/services/auth'
 import { NextRequest } from 'next/server'
 
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {

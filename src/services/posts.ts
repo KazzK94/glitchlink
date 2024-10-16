@@ -1,7 +1,7 @@
 'use server'
 
 import prisma from '@/lib/db'
-import { getUserFromSession } from './utils'
+import { getUserFromSession } from './auth'
 import { createNotification } from './notifications'
 
 
@@ -104,12 +104,12 @@ export async function removeLikeFromPost(post: { id: string }) {
 export async function getOwnedPosts(userId: string = '') {
 	if (!userId) {
 		const user = await getUserFromSession()
-		if (!user) return { posts: [] }
+		if (!user) return []
 		userId = user.id
 	}
 
 	// Find user and get its posts
-	return await prisma.user.findUnique({
+	const userWithPosts = await prisma.user.findUnique({
 		where: { id: userId },
 		select: {
 			posts: {
@@ -122,6 +122,8 @@ export async function getOwnedPosts(userId: string = '') {
 			}
 		}
 	})
+
+	return userWithPosts?.posts || []
 }
 
 export async function getPosts() {

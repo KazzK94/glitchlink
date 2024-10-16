@@ -22,3 +22,5 @@ export interface CompletePost extends Post {
 	comments: CompleteComment[]
 	likedBy: User[]
 }
+
+export type SocialLinkDetailedStatus = 'NONE' | 'SENT_PENDING' | 'RECEIVED_PENDING' | 'FRIENDS' | 'BLOCKED' 

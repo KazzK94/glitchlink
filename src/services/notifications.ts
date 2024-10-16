@@ -1,7 +1,7 @@
 'use server'
 
 import prisma from '@/lib/db'
-import { getUserFromSession } from './utils'
+import { getUserFromSession } from './auth'
 
 export async function createNotification({ type, userId, message, targetUrl }: { type: string, userId: string, message: string, targetUrl: string }) {
 	try {
