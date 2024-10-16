@@ -7,18 +7,19 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
-
-import { cn } from '@/lib/utils'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { Form, FormControl, FormField, FormDescription, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 
+import { CircleCheckIcon, CircleAlertIcon, CircleDashed } from 'lucide-react'
+
 
 export function RegisterForm() {
 
 	const router = useRouter()
-	const [usernameAvailability, setUsernameAvailability] = useState<'available' | 'unavailable' | 'unknown'>('unknown')
+	const [usernameAvailability, setUsernameAvailability] = useState<'available' | 'unavailable' | 'checking' | 'unknown'>('unknown')
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	// 1. Define your form.
@@ -63,6 +64,7 @@ export function RegisterForm() {
 			if (!response.ok) {
 				const { message } = await response.json()
 				alert('Error trying to register: ' + message)
+				setIsLoading(false)
 				return
 			}
 			const newUser = await response.json()
@@ -75,16 +77,21 @@ export function RegisterForm() {
 		}
 	}
 
-	function onUsernameChange() {
-		if (usernameAvailability === 'unknown') return
-		setUsernameAvailability('unknown')
+	const debouncedCheckAvailability = useDebouncedCallback(({ username }: { username: string }) => {
+		checkAvailability({ username })
+	}, 3000)
+
+	function onUsernameChange(username: string) {
+		setUsernameAvailability('checking')
 		form.clearErrors('username')
+		debouncedCheckAvailability({ username })
 	}
 
 	async function checkAvailability({ username }: { username: string }) {
-		setUsernameAvailability('unknown')
+		setUsernameAvailability('checking')
 		form.clearErrors('username')
 		if (!username || username.length < 3) {
+			setUsernameAvailability('unavailable')
 			form.setError('username', { type: 'manual', message: 'Username must be at least 3 characters long.' })
 			return
 		}
@@ -108,19 +115,19 @@ export function RegisterForm() {
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Username</FormLabel>
-							<div className="flex gap-1 md:gap-2">
+							<div className="flex items-center gap-2">
 								<FormControl>
-									<Input {...field} onChangeCapture={onUsernameChange} />
+									<Input {...field} onChangeCapture={(event) => onUsernameChange(event.currentTarget.value)} />
 								</FormControl>
-								<Button
-									type="button" variant="secondary"
-									className={cn("shrink-0 border",
-										{ "bg-green-300 hover:bg-green-400 border-green-600": usernameAvailability === 'available' },
-										{ "bg-red-300 hover:bg-red-400 border-red-600": usernameAvailability === 'unavailable' }
-									)}
-									onClick={() => checkAvailability({ username: field.value })}>
-									Check Availability
-								</Button>
+								<div>
+									{usernameAvailability === 'available' && <CircleCheckIcon className="text-green-600" />}
+									{usernameAvailability === 'unavailable' && <CircleAlertIcon className="text-red-600" />}
+									{(usernameAvailability === 'unknown' || usernameAvailability === 'checking')
+										&& <CircleDashed className={`
+											text-gray-600 ${(usernameAvailability === 'checking') && 'animate-spin-slow'}
+										`} />
+									}
+								</div>
 							</div>
 							<FormDescription>
 								Your username must be unique, and at least 3 characters long.

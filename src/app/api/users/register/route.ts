@@ -5,10 +5,12 @@ import { type NextRequest } from 'next/server'
 export async function POST(request: NextRequest) {
 
 	const body = await request.json()
-	const { username, password, name, email, color } = body
+	const { username, password, name, email, color = '#ffffff' } = body
+
+	console.log({ userData: body })
 
 	// 1. Check if the username is already taken.
-	const existingUser = await getUserByUsername(username)
+	const existingUser = await getUserByUsername({ username })
 	if (existingUser) {
 		return Response.json({ message: 'Username is already taken.' }, { status: 400 })
 	}
