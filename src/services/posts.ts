@@ -44,6 +44,7 @@ export async function addCommentToPost({ post, content }: { post: { id: string, 
 	const user = await getUserFromSession()
 	if (!user) return null
 
+	const usernamesMentioned = extractMentions(content)
 
 	try {
 		const createdComment = await prisma.comment.create({
@@ -60,6 +61,22 @@ export async function addCommentToPost({ post, content }: { post: { id: string, 
 				message: `@${user.username} commented on your post`,
 				targetUrl: `/posts/${post.id}`
 			})
+		}
+
+		if(usernamesMentioned.length > 0) {
+			const usersMentioned = await prisma.user.findMany({
+				where: { usernameLowercase: { in: usernamesMentioned.map(usernameMentioned => usernameMentioned.toLowerCase()) } }
+			})
+			await Promise.all(usersMentioned.map(async (mentionedUser) => {
+				if (mentionedUser.id !== user.id) {
+					await createNotification({
+						type: 'MentionedInComment',
+						userId: mentionedUser.id,
+						message: `@${user.username} mentioned you in a comment`,
+						targetUrl: `/posts/${post.id}`
+					})
+				}
+			}))
 		}
 
 		return createdComment
@@ -194,7 +211,6 @@ export async function deletePost(id: string) {
 		where: { id }
 	})
 }
-
 
 
 function extractMentions(content: string): string[] {
