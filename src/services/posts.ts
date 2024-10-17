@@ -8,13 +8,32 @@ import { createNotification } from './notifications'
 export async function createPost({ content }: { content: string }) {
 	const user = await getUserFromSession()
 	if (!user) return null
+
+	const usernamesMentioned = extractMentions(content)
+
 	try {
-		return await prisma.post.create({
+		const newPost = await prisma.post.create({
 			data: {
 				content,
 				authorId: user.id
 			}
 		})
+		if (usernamesMentioned.length > 0) {
+			const usersMentioned = await prisma.user.findMany({
+				where: { usernameLowercase: { in: usernamesMentioned.map(usernameMentioned => usernameMentioned.toLowerCase()) } }
+			})
+			await Promise.all(usersMentioned.map(async (mentionedUser) => {
+				if (mentionedUser.id !== user.id) {
+					await createNotification({
+						type: 'MentionedInPost',
+						userId: mentionedUser.id,
+						message: `@${user.username} mentioned you in a post`,
+						targetUrl: `/posts/${newPost.id}`
+					})
+				}
+			}))
+		}
+		return newPost
 	} catch (error) {
 		console.error('Failed to create the post:', error)
 		throw error
@@ -174,4 +193,16 @@ export async function deletePost(id: string) {
 	return await prisma.post.delete({
 		where: { id }
 	})
+}
+
+
+
+function extractMentions(content: string): string[] {
+	const MENTIONS_REGEX = /\B@(\w+)\b/g
+	const mentions = []
+	let match
+	while ((match = MENTIONS_REGEX.exec(content)) !== null) {
+		mentions.push(match[1])
+	}
+	return mentions
 }

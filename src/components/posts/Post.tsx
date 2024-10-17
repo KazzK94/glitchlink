@@ -2,6 +2,7 @@
 
 import { MessageSquareIcon, Share2Icon, ThumbsUpIcon, EllipsisVerticalIcon } from 'lucide-react'
 import { useState } from 'react'
+import { usePosts } from '@/hooks/usePosts'
 
 import { Button } from '@/components/ui/button'
 import { PostComment } from './comments/Comment'
@@ -53,7 +54,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 				</button>
 			</div>
 			{/* Post Content */}
-			<p className="mb-5 px-4">{post.content}</p>
+			<PostParsedContent content={post.content} />
 
 			{/* Buttons */}
 			<div className='px-4 sm:px-6 flex justify-evenly sm:justify-between items-center'>
@@ -81,6 +82,21 @@ export function Post({ post, loggedUserId }: PostProps) {
 				</div>
 			)}
 		</article>
+	)
+}
+
+/** Returns the Post's content formatted, embedding the mentions and hashtags as links and creating <br>s for new lines */
+function PostParsedContent({ content }: { content: string }) {
+	const { parsePostContent } = usePosts()
+	return (
+		<div className='mb-5 px-4'>
+			{content.trim().split('\n').map((line, index) => (
+				<div key={index}>
+					{parsePostContent(line)}
+					<br />
+				</div>
+			))}
+		</div>
 	)
 }
 

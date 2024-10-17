@@ -1,3 +1,4 @@
+import { usePosts } from '@/hooks/usePosts'
 import type { User, Comment } from '@prisma/client'
 import { EllipsisVerticalIcon } from 'lucide-react'
 
@@ -9,7 +10,6 @@ interface CommentProps {
 }
 
 export function PostComment({ comment }: CommentProps) {
-
 	return (
 		<div className='bg-gray-700/40 p-3 rounded-lg'>
 			<div className='flex justify-between'>
@@ -25,10 +25,22 @@ export function PostComment({ comment }: CommentProps) {
 				</button>
 			</div>
 
-			<p className='text-sm mt-3 pr-5 md:pr-8'>
-				{comment.content}
-			</p>
+			<CommentParsedContent content={comment.content} />
 		</div>
 	)
 }
 
+/** Returns the Comment's content formatted, embedding the mentions and hashtags as links and creating <br>s for new lines */
+function CommentParsedContent({ content }: { content: string }) {
+	const { parsePostContent } = usePosts()
+	return (
+		<div className='text-sm mt-3 pr-5 md:pr-8'>
+			{content.trim().split('\n').map((line, index) => (
+				<div key={index}>
+					{parsePostContent(line)}
+					<br />
+				</div>
+			))}
+		</div>
+	)
+}
