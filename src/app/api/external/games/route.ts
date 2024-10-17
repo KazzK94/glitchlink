@@ -8,6 +8,6 @@ export async function GET(request: NextRequest) {
 	const page = Number(searchParams.get('page') || 1)
 
 	// Search for games (no search = all games) + paging
-	const games = await getGamesFromExternalApi({ search, page })
-	return Response.json(games)
+	const { games, isLastPage } = await getGamesFromExternalApi({ search, page })
+	return Response.json({ games, isLastPage })
 }

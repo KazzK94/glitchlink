@@ -9,7 +9,10 @@ export async function getGamesFromExternalApi({ search = '', page = 1, pageSize 
 		next: { revalidate: 3 * 24 * 60 * 60 /* revalidate every 3 days (revalidate in seconds) */ }
 	})
 	const data = await response.json()
-	return data.results
+	return {
+		games: data.results,
+		isLastPage: data.next === null
+	}
 }
 
 export async function getGameByIdFromExternalApi(id: number) {

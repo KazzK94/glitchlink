@@ -12,6 +12,7 @@ import { GameSearchBar } from './GameSearchBar'
 export function GamesList() {
 
 	const [games, setGames] = useState<Game[]>([])
+	const [isLastPageReached, setIsLastPageReached] = useState(false)
 	const [page, setPage] = useState(1)
 	const [loading, setLoading] = useState(true)
 	const [search, setSearch] = useState('')
@@ -25,9 +26,10 @@ export function GamesList() {
 	useEffect(() => {
 		async function fetchGames() {
 			const response = await fetch('/api/external/games')
-			const newGames = await response.json()
+			const { games : newGames, isLastPage } = await response.json()
 			setGames(newGames.map(getRelevantGameInfo))
 			setLoading(false)
+			setIsLastPageReached(isLastPage)
 		}
 		fetchGames()
 	}, [])
@@ -40,9 +42,10 @@ export function GamesList() {
 		setPage(1)
 		const searchUri = search ? `&search=${encodeURIComponent(search)}` : ''
 		const response = await fetch('/api/external/games?page=1' + searchUri)
-		const newGames = await response.json()
+		const { games : newGames, isLastPage } = await response.json()
 		setGames(newGames.map(getRelevantGameInfo))
 		setLoading(false)
+		setIsLastPageReached(isLastPage)
 	}
 
 	// On consequent queries (both with or without search):
@@ -51,10 +54,11 @@ export function GamesList() {
 		// Get the next page of games
 		const searchUri = search ? `&search=${encodeURIComponent(search)}` : ''
 		const response = await fetch('/api/external/games?page=' + (page + 1) + searchUri)
-		const newGames = await response.json()
+		const { games : newGames, isLastPage } = await response.json()
 		setPage((prevPage) => prevPage + 1)
 		setGames((prev) => [...prev, ...newGames.map(getRelevantGameInfo)])
 		setLoading(false)
+		setIsLastPageReached(isLastPage)
 	}
 
 	return (
@@ -83,7 +87,7 @@ export function GamesList() {
 			{loading && <p className='text-xl text-center mt-4'>Loading {games.length !== 0 && 'more'} games...</p>}
 
 			{/* Button: "Show more games" */}
-			{!loading && games.length !== 0 && <ButtonShowMoreGames onClick={fetchMoreGames} />}
+			{!loading && games.length !== 0 && !isLastPageReached && <ButtonShowMoreGames onClick={fetchMoreGames} />}
 
 			{/* Text (credit for Rawg): "Data obtained from RAWG.io's API" */}
 			{
