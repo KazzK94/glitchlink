@@ -11,7 +11,7 @@ export default async function NotificationsPage() {
 		<Container asSection className='mt-6'>
 			<h1 className='text-3xl mb-4'>Notifications</h1>
 
-			<div className='flex flex-col gap-2'>
+			<div className='flex flex-col gap-2 mb-4'>
 				{
 					notifications.map(notification => (
 						<Notification key={notification.id} notification={notification} />
