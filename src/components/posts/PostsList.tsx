@@ -4,6 +4,7 @@ import { Post } from './Post'
 
 export async function PostsList({ loggedUserId }: { loggedUserId: string }) {
 
+	// TODO: If url contains a 'hashtag' query param, filter posts by hashtag (e.g. /posts?hashtag=javascript -> search #javascript)
 	const posts = await getPosts()
 
 	return (
