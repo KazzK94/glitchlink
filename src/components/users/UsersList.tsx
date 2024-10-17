@@ -4,7 +4,7 @@ import { UserCard } from './UserCard'
 import { getSocialLinks } from '@/services/socialLinks'
 import { SocialLinkDetailedStatus, UserPublicInfo } from '@/types'
 
-export async function UsersList({ users }: { users?: UserPublicInfo[] }) {
+export async function UsersList({ users, className, cardClassName }: { users?: UserPublicInfo[], className?: string, cardClassName?: string }) {
 
 	if (!users) {
 		users = await getActiveUsers(12)
@@ -12,7 +12,7 @@ export async function UsersList({ users }: { users?: UserPublicInfo[] }) {
 	const socialLinksList = await getSocialLinks()
 
 	return (
-		<ul className='text-xl text-neutral-300 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+		<ul className={className}>
 			{users.map(foundUser => {
 				// Check if user is already a friend
 				const socialLink = socialLinksList?.find(link => link.userAId === foundUser.id || link.userBId === foundUser.id)
@@ -22,7 +22,7 @@ export async function UsersList({ users }: { users?: UserPublicInfo[] }) {
 						<UserCard user={foundUser}
 							socialLinkId={socialLink?.id}
 							socialLinkStatus={socialLinkStatus}
-							className='bg-gray-700/10 hover:bg-gray-700/15 shadow-sm shadow-gray-400 hover:shadow-gray-200 p-3'
+							className={cardClassName}
 						/>
 					</li>
 				)

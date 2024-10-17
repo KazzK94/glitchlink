@@ -5,13 +5,13 @@ import { getActiveUsers } from '@/services/users'
 
 import { Gamepad2Icon } from 'lucide-react'
 import { Container } from '@/components/common/Container'
-import { UserCard } from '@/components/users/UserCard'
 import { PostsList } from '@/components/posts/PostsList'
 import { PostCreateForm } from '@/components/posts/PostCreateForm'
 
 import { getUserFromSession } from '@/services/auth'
 import { Suspense } from 'react'
 import { PostsListFallback } from '../posts/PostsListFallback'
+import { UsersList } from '../users/UsersList'
 
 export async function Home() {
 
@@ -65,9 +65,7 @@ async function SuggestedFriends() {
 		<div className="bg-gray-800 p-4 pb-5 rounded-lg">
 			<h2 className="text-xl font-semibold pl-2 mb-3">Suggested Friends</h2>
 			<ul className="flex flex-col gap-2">
-				{suggestedFriends.map((friend) => (
-					<UserCard key={friend.id} user={friend} className='hover:bg-gray-700/15' />
-				))}
+				<UsersList users={suggestedFriends} className="space-y-2" cardClassName='hover:bg-gray-700/15' />
 			</ul>
 		</div>
 	)

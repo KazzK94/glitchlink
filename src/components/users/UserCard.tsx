@@ -14,7 +14,6 @@ interface UserCardProps {
 	className?: string
 }
 
-
 export function UserCard({ user, socialLinkId, socialLinkStatus = 'NONE', className }: UserCardProps) {
 
 	const router = useRouter()
@@ -36,8 +35,21 @@ export function UserCard({ user, socialLinkId, socialLinkStatus = 'NONE', classN
 	}
 
 	async function handleRemoveSocialLink() {
-		console.log(socialLinkId)
 		if (!confirm(`Remove your link with ${user.name} (@${user.username})?`)) return
+		removeSocialLink()
+	}
+
+	async function handleRemoveSocialLinkRequest() {
+		if (!confirm(`Cancel your friend request to ${user.name} (@${user.username})?`)) return
+		removeSocialLink()
+	}
+
+	async function handleRejectSocialLinkRequest() {
+		if (!confirm(`Cancel your friend request to ${user.name} (@${user.username})?`)) return
+		removeSocialLink()
+	}
+
+	async function removeSocialLink() {
 		if (!socialLinkId) return
 		await fetch('/api/users/socialLinks/' + socialLinkId, { method: 'DELETE' })
 		router.refresh()
@@ -70,12 +82,12 @@ export function UserCard({ user, socialLinkId, socialLinkStatus = 'NONE', classN
 				<IdleSocialLinkExisting onClick={handleRemoveSocialLink} />
 			)}
 			{(socialLinkStatus === 'SENT_PENDING') && (
-				<CancelSocialLinkRequest onClick={handleRemoveSocialLink} />
+				<CancelSocialLinkRequest onClick={handleRemoveSocialLinkRequest} />
 			)}
 			{(socialLinkStatus === 'RECEIVED_PENDING') && (
 				<div>
 					<AcceptSocialLinkRequest onClick={handleAcceptSocialLinkRequest} />
-					<DenySocialLinkRequest onClick={handleRemoveSocialLink} />
+					<RejectSocialLinkRequest onClick={handleRejectSocialLinkRequest} />
 				</div>
 			)}
 		</div>
@@ -92,7 +104,7 @@ function SendSocialLinkRequest({ onClick }: { onClick?: () => void }) {
 
 function IdleSocialLinkExisting({ onClick }: { onClick?: () => void }) {
 	return (
-		<Button onClick={onClick} variant="ghost" className='hover:bg-transparent hover:text-red-400 transition duration-200 group'>
+		<Button onClick={onClick} variant="ghost" className='hover:bg-transparent text-green-400 hover:text-red-400 transition duration-200 group'>
 			<UserCheckIcon className='group-hover:hidden' />
 			<UserXIcon className='hidden group-hover:inline-block' />
 		</Button>
@@ -101,7 +113,7 @@ function IdleSocialLinkExisting({ onClick }: { onClick?: () => void }) {
 
 function CancelSocialLinkRequest({ onClick }: { onClick?: () => void }) {
 	return (
-		<Button onClick={onClick} variant="ghost" className='hover:bg-transparent text-purple-400 hover:text-red-400 transition duration-200 group'>
+		<Button onClick={onClick} variant="ghost" className='hover:bg-transparent text-purple-300 hover:text-red-400 transition duration-200 group'>
 			<UserMinusIcon className='group-hover:hidden' />
 			<UserXIcon className='hidden group-hover:inline-block' />
 		</Button>
@@ -110,15 +122,15 @@ function CancelSocialLinkRequest({ onClick }: { onClick?: () => void }) {
 
 function AcceptSocialLinkRequest({onClick}: {onClick?: () => void}) {
 	return (
-		<Button onClick={onClick} variant="ghost" className='hover:bg-transparent text-green-200 hover:text-green-400 transition duration-200'>
+		<Button onClick={onClick} variant="ghost" className='hover:bg-transparent text-green-300 hover:text-green-400 transition duration-200'>
 			<CheckIcon />
 		</Button>
 	)
 }
 
-function DenySocialLinkRequest({onClick}: {onClick?: () => void}) {
+function RejectSocialLinkRequest({onClick}: {onClick?: () => void}) {
 	return (
-		<Button onClick={onClick} variant="ghost" className='hover:bg-transparent text-red-200 hover:text-red-400 transition duration-200'>
+		<Button onClick={onClick} variant="ghost" className='hover:bg-transparent text-red-300 hover:text-red-300 transition duration-200'>
 			<XIcon />
 		</Button>
 	)
