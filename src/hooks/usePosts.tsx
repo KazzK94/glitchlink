@@ -7,7 +7,7 @@ export function usePosts() {
 			if (/^@\w+$/.test(word)) {
 				return <span key={index} className="text-blue-500">{word}</span>
 			} else if (/^#\w+$/.test(word)) {
-				return <span key={index} className="text-gray-500">{word}</span>
+				return <span key={index} className="text-gray-400">{word}</span>
 			}
 			return word
 		})
