@@ -102,7 +102,7 @@ function PostParsedContent({ content }: { content: string }) {
 
 function ToggleLikeButton({ onClick, likesCount, isLikedByUser }: { onClick: () => void, likesCount: number, isLikedByUser: boolean }) {
 	return (
-		<Button variant="ghost" onClick={onClick} className={`flex items-center gap-1.5 ${isLikedByUser && 'text-blue-500 hover:text-blue-700'}`}>
+		<Button variant="ghost" onClick={onClick} className={`flex items-center gap-1.5 hover:bg-transparent ${isLikedByUser && 'text-blue-500 hover:text-blue-700'}`}>
 			<ThumbsUpIcon size={20} />
 			{(likesCount > 0) && <span>{likesCount}</span>}
 		</Button>
@@ -111,7 +111,7 @@ function ToggleLikeButton({ onClick, likesCount, isLikedByUser }: { onClick: () 
 
 function ToggleCommentsButton({ onClick, commentsCount }: { onClick: () => void, commentsCount: number }) {
 	return (
-		<Button variant="ghost" onClick={onClick} className='flex items-center gap-1.5'>
+		<Button variant="ghost" onClick={onClick} className='flex items-center gap-1.5 hover:bg-transparent'>
 			<MessageSquareIcon size={20} />
 			{(commentsCount > 0) && <span>{commentsCount}</span>}
 		</Button>
@@ -127,7 +127,7 @@ function ShareButton({ postId }: { postId: string }) {
 	}
 
 	return (
-		<Button variant="ghost" onClick={handleClick}>
+		<Button variant="ghost" onClick={handleClick} className="hover:bg-transparent">
 			<Share2Icon size={20} />
 		</Button>
 	)
