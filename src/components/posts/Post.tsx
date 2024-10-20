@@ -1,13 +1,12 @@
 'use client'
 
-import { MessageSquareIcon, Share2Icon, ThumbsUpIcon, EllipsisVerticalIcon } from 'lucide-react'
+import { EllipsisVerticalIcon } from 'lucide-react'
 import { useState } from 'react'
 import { usePosts } from '@/hooks/usePosts'
-
-import { Button } from '@/components/ui/button'
 import { PostComment } from './comments/Comment'
 import { PostCommentCreateForm } from './comments/CommentCreateForm'
 import { CompletePost } from '@/types'
+import { ToggleLikeButton, ToggleCommentsButton, ShareButton } from './PostButtons'
 
 interface PostProps {
 	post: CompletePost
@@ -97,38 +96,5 @@ function PostParsedContent({ content }: { content: string }) {
 				</div>
 			))}
 		</div>
-	)
-}
-
-function ToggleLikeButton({ onClick, likesCount, isLikedByUser }: { onClick: () => void, likesCount: number, isLikedByUser: boolean }) {
-	return (
-		<Button variant="ghost" onClick={onClick} className={`flex items-center gap-1.5 hover:bg-transparent ${isLikedByUser && 'text-blue-500 hover:text-blue-700'}`}>
-			<ThumbsUpIcon size={20} />
-			{(likesCount > 0) && <span>{likesCount}</span>}
-		</Button>
-	)
-}
-
-function ToggleCommentsButton({ onClick, commentsCount }: { onClick: () => void, commentsCount: number }) {
-	return (
-		<Button variant="ghost" onClick={onClick} className='flex items-center gap-1.5 hover:bg-transparent'>
-			<MessageSquareIcon size={20} />
-			{(commentsCount > 0) && <span>{commentsCount}</span>}
-		</Button>
-	)
-}
-
-function ShareButton({ postId }: { postId: string }) {
-
-	const handleClick = () => {
-		const url = `${window.location.host}/posts/${postId}`
-		navigator.clipboard.writeText(url)
-		alert('Copied URL of the post.')
-	}
-
-	return (
-		<Button variant="ghost" onClick={handleClick} className="hover:bg-transparent">
-			<Share2Icon size={20} />
-		</Button>
 	)
 }
