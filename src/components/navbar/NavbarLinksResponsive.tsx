@@ -34,6 +34,7 @@ export default function NavbarLinksResponsive() {
 		<div ref={rootRef} className='flex items-center gap-12'>
 			<div className="flex items-center gap-3">
 				<button
+					aria-label='Toggle main menu'
 					className="lg:hidden text-white"
 					onClick={() => setIsMenuOpen(!isMenuOpen)}
 				>

@@ -1,6 +1,7 @@
 'use client'
 
-import Link from 'next/link'
+import { PostHashtag } from '@/components/posts/parseds/Hashtag'
+import { PostMention } from '@/components/posts/parseds/Mention'
 import { Fragment } from 'react'
 
 export function usePosts() {
@@ -12,12 +13,12 @@ export function usePosts() {
 		  if (mentionMatch) {
 			return (
 			  <Fragment key={index}>
-				<Link href={`/u/${mentionMatch[1]}`} className="text-blue-500 hover:underline">@{mentionMatch[1]}</Link>
+				<PostMention username={mentionMatch[1]} />
 				{mentionMatch[2]}
 			  </Fragment>
 			)
 		  } else if (/^#\w+$/.test(word)) {
-			return <Link href='#' key={index} className="text-gray-400 hover:underline">{word}</Link>
+			return <PostHashtag key={index} hashtag={word} />
 		  }
 		  return word
 		})

@@ -8,7 +8,7 @@ export default async function PostsPage() {
 	const user = await getUserFromSession()
 
 	return (
-		<Container asSection className='mt-4 max-w-[860px]'>
+		<Container asSection className='mt-4 max-w-[760px]'>
 			<PostsList loggedUserId={user?.id || ''} />
 		</Container>
 	)

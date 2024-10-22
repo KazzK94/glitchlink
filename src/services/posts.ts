@@ -63,7 +63,7 @@ export async function addCommentToPost({ post, content }: { post: { id: string, 
 			})
 		}
 
-		if(usernamesMentioned.length > 0) {
+		if (usernamesMentioned.length > 0) {
 			const usersMentioned = await prisma.user.findMany({
 				where: { usernameLowercase: { in: usernamesMentioned.map(usernameMentioned => usernameMentioned.toLowerCase()) } }
 			})
@@ -152,7 +152,7 @@ export async function getOwnedPosts(userId: string = '') {
 				include: {
 					author: true,
 					likedBy: true,
-					comments: { include: { author: true }, orderBy: { createdAt: 'desc' } }
+					comments: { include: { author: true }, orderBy: { createdAt: 'asc' } }
 				},
 				orderBy: { createdAt: 'desc' } // Newest first
 			}
@@ -167,10 +167,7 @@ export async function getPosts() {
 		include: {
 			author: true,
 			likedBy: true,
-			comments: {
-				include: { author: true },
-				orderBy: { createdAt: 'desc' }
-			}
+			comments: { include: { author: true }, orderBy: { createdAt: 'asc' } }
 		},
 		orderBy: { createdAt: 'desc' } // Newest first
 	})
@@ -184,7 +181,7 @@ export async function getPostById(id: string) {
 			likedBy: true,
 			comments: {
 				include: { author: true },
-				orderBy: { createdAt: 'desc' }
+				orderBy: { createdAt: 'asc' }
 			}
 		},
 	})
@@ -198,7 +195,7 @@ export async function getPostsByUser(userId: string) {
 				include: {
 					author: true,
 					likedBy: true,
-					comments: { include: { author: true }, orderBy: { createdAt: 'desc' } }
+					comments: { include: { author: true }, orderBy: { createdAt: 'asc' } }
 				},
 				orderBy: { createdAt: 'desc' } // Newest first
 			}

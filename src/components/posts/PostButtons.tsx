@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 
 export function ToggleLikeButton({ onClick, likesCount, isLikedByUser }: { onClick: () => void, likesCount: number, isLikedByUser: boolean }) {
 	return (
-		<GenericPostButton onClick={onClick}
+		<GenericPostButton onClick={onClick} ariaLabel='Like post'
 			className={isLikedByUser ? 'text-blue-500 hover:text-blue-700' : ''}
 		>
 			<ThumbsUpIcon size={20} />
@@ -15,7 +15,7 @@ export function ToggleLikeButton({ onClick, likesCount, isLikedByUser }: { onCli
 
 export function ToggleCommentsButton({ onClick, commentsCount }: { onClick: () => void, commentsCount: number }) {
 	return (
-		<GenericPostButton onClick={onClick}>
+		<GenericPostButton onClick={onClick} ariaLabel='See comments'>
 			<MessageSquareIcon size={20} />
 			{(commentsCount > 0) && <span>{commentsCount}</span>}
 		</GenericPostButton>
@@ -31,15 +31,15 @@ export function ShareButton({ postId }: { postId: string }) {
 	}
 
 	return (
-		<GenericPostButton onClick={handleClick}>
+		<GenericPostButton onClick={handleClick} ariaLabel='Share post'>
 			<Share2Icon size={20} />
 		</GenericPostButton>
 	)
 }
 
-function GenericPostButton({children, onClick, className}: {children: React.ReactNode, onClick: () => void, className?: string}) {
+function GenericPostButton({children, onClick, className, ariaLabel}: {children: React.ReactNode, onClick: () => void, className?: string, ariaLabel?: string}) {
 	return (
-		<Button variant="ghost" onClick={onClick} 
+		<Button variant="ghost" onClick={onClick} aria-label={ariaLabel}
 			className={`flex items-center gap-1.5 hover:text-inherit hover:bg-transparent hover:opacity-80 ${className}`}>
 			{children}
 		</Button>

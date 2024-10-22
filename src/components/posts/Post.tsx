@@ -2,11 +2,11 @@
 
 import { EllipsisVerticalIcon } from 'lucide-react'
 import { useState } from 'react'
-import { usePosts } from '@/hooks/usePosts'
 import { PostComment } from './comments/Comment'
 import { PostCommentCreateForm } from './comments/CommentCreateForm'
 import { CompletePost } from '@/types'
 import { ToggleLikeButton, ToggleCommentsButton, ShareButton } from './PostButtons'
+import { PostParsedContent } from './PostParsedContent'
 
 interface PostProps {
 	post: CompletePost
@@ -38,7 +38,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 	}
 
 	return (
-		<article key={post.id} className={`bg-gray-800 pt-4 pb-2 rounded-lg ${userIsAuthor && 'border border-blue-800/30'}`}>
+		<article key={post.id} className={`bg-gray-800/85 pt-4 pb-2 rounded-lg ${userIsAuthor && 'border border-purple-600/20'}`}>
 			{/* Post Author */}
 			<div className='flex justify-between mb-4 px-4'>
 				<div className="flex items-center">
@@ -48,7 +48,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 						<p className="text-sm text-gray-400 italic">@{post.author.username}</p>
 					</div>
 				</div>
-				<button className='flex justify-end items-center pb-2 min-w-8'>
+				<button className='flex justify-end items-center pb-2 min-w-8' aria-label='Open post context menu'>
 					<EllipsisVerticalIcon size={24} />
 				</button>
 			</div>
@@ -69,32 +69,21 @@ export function Post({ post, loggedUserId }: PostProps) {
 
 			{/* Comments (conditionally rendered) */}
 			{showComments && (
-				<div className='mx-1 px-1 mt-2 pt-2 border-t border-gray-600'>
-					<PostCommentCreateForm post={post} className='mb-3' />
-					<div className='flex flex-col gap-2'>
-						{
-							post.comments.map((comment, index) => (
-								<PostComment key={index} comment={comment} />
-							))
-						}
-					</div>
+				<div className='my-1 pt-2 border-t border-gray-600 space-y-3'>
+					{post.comments.length > 0 && <>
+						<div className='flex flex-col gap-2 mx-2'>
+							{
+								post.comments.map((comment, index) => (
+									<PostComment key={index} comment={comment} />
+								))
+							}
+						</div>
+						<hr className='opacity-40 mx-1' />
+					</>}
+					<PostCommentCreateForm post={post} className='mx-2' />
 				</div>
 			)}
 		</article>
 	)
 }
 
-/** Returns the Post's content formatted, embedding the mentions and hashtags as links and creating <br>s for new lines */
-function PostParsedContent({ content }: { content: string }) {
-	const { parsePostContent } = usePosts()
-	return (
-		<div className='mb-5 px-4'>
-			{content.trim().split('\n').map((line, index) => (
-				<div key={index}>
-					{parsePostContent(line)}
-					<br />
-				</div>
-			))}
-		</div>
-	)
-}

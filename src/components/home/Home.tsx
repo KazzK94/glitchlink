@@ -23,7 +23,7 @@ export async function Home() {
 	return (
 		<Container className="my-4 lg:my-6">
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-				<div className="lg:col-span-2 space-y-6">
+				<div className="lg:col-span-2 space-y-6 max-w-[760px] lg:max-w-max mx-auto">
 					<PostCreateForm />
 					<Suspense fallback={<PostsListFallback />}>
 						<PostsList loggedUserId={user.id} />

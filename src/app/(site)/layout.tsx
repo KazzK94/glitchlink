@@ -2,8 +2,8 @@
 import type { Metadata } from "next"
 import "../globals.css"
 
-import { Providers } from '@/components/layout/Providers'
-import { TopNavbar } from '@/components/layout/navbar/TopNavbar'
+import { Providers } from '@/components/common/Providers'
+import { TopNavbar } from '@/components/navbar/TopNavbar'
 
 import { getServerSession } from 'next-auth'
 import { SessionValidator } from '@/components/auth/SessionValidator'
