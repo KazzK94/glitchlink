@@ -15,11 +15,12 @@ export const authOptions = {
 				try {
 					// Attempt to login with provided credentials
 					const user = await attemptLogin(credentials!.username, credentials!.password)
-
 					if (!user) throw new Error('Incorrect username or password.')
 
+					// TODO: create a Session instance in the DB
+
 					// Return user object if login is successful
-					return user
+					return user // <-- TODO: return the session id along with the user
 				} catch (error) {
 					// Return null if any error happens
 					throw new Error('Incorrect username or password.')
