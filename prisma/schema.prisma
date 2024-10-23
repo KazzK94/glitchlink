@@ -9,7 +9,7 @@ datasource db {
 
 model User {
     id                 String         @id @default(uuid())
-    username           String         @unique(map: "username_unique_ci") @db.VarChar(40)
+    username           String         @unique
     name               String
     email              String         @unique
     password           String
@@ -21,7 +21,8 @@ model User {
     posts              Post[]
     likedPosts         Post[]         @relation("PostLikes")
     comments           Comment[]
-    notifications      Notification[]
+    notifications      Notification[] @relation("NotificationTargetUser")
+    notifierOf         Notification[] @relation("NotificationGeneratedBy")
 }
 
 model SocialLink {
@@ -66,6 +67,8 @@ model Post {
     authorId  String
     likedBy   User[]    @relation("PostLikes")
     comments  Comment[]
+
+    @@index([authorId])
 }
 
 model Comment {
@@ -80,12 +83,32 @@ model Comment {
 }
 
 model Notification {
-    id        String   @id @default(uuid())
-    type      String
-    message   String
-    targetUrl String
-    read      Boolean  @default(false)
-    createdAt DateTime @default(now())
-    user      User     @relation(fields: [userId], references: [id])
-    userId    String
+    id            String                 @id @default(uuid())
+    generatedBy   User                   @relation("NotificationGeneratedBy", fields: [generatedById], references: [id])
+    generatedById String
+    targetUser    User                   @relation("NotificationTargetUser", fields: [targetUserId], references: [id])
+    targetUserId  String
+    entityType    NotificationEntityType
+    entityId      String // ID of the affected entity (post, comment, etc.)
+    actionType    NotificationActionType
+    read          Boolean                @default(false)
+    createdAt     DateTime               @default(now())
+
+    @@index([targetUserId])
+}
+
+enum NotificationEntityType {
+    POST
+    COMMENT
+    SOCIAL_LINK
+    OTHER
+}
+
+enum NotificationActionType {
+    MENTION_IN_POST
+    MENTION_IN_COMMENT
+    REPLY_TO_POST
+    SOCIAL_LINK_REQUEST
+    SOCIAL_LINK_ACCEPTED
+    OTHER
 }

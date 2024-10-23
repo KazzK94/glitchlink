@@ -2,24 +2,19 @@
 
 import prisma from '@/lib/db'
 import { getUserFromSession } from './auth'
+import { NotificationActionType, NotificationEntityType } from '@prisma/client'
 
-export async function createNotification({ type, userId, message, targetUrl }: { type: string, userId: string, message: string, targetUrl: string }) {
+export async function createNotification(
+	{ generatedById, targetUserId, entityType, entityId, actionType }
+		: { generatedById: string, targetUserId: string, entityType: NotificationEntityType, entityId: string, actionType: NotificationActionType }) {
 	try {
-
-		const existingNotification = await prisma.notification.findFirst({
-			where: { type, userId, message, targetUrl }
-		})
-
-		if(existingNotification) return existingNotification
-
 		return await prisma.notification.create({
 			data: {
-				type,
-				message,
-				targetUrl,
-				user: {
-					connect: { id: userId }
-				}
+				generatedById,
+				targetUserId,
+				entityType,
+				entityId,
+				actionType
 			}
 		})
 	} catch (error) {
@@ -31,12 +26,13 @@ export async function createNotification({ type, userId, message, targetUrl }: {
 export async function getNotifications(userId: string = '') {
 	if (!userId) {
 		const user = await getUserFromSession()
-		if(!user) return []
+		if (!user) return []
 		userId = user.id
 	}
 
 	return await prisma.notification.findMany({
-		where: { userId },
+		where: { targetUserId: userId },
+		include: { generatedBy: true },
 		orderBy: { createdAt: 'desc' }
 	})
 }
@@ -44,22 +40,23 @@ export async function getNotifications(userId: string = '') {
 export async function getNewNotifications(userId: string = '') {
 	if (!userId) {
 		const user = await getUserFromSession()
-		if(!user) return []
+		if (!user) return []
 		userId = user.id
 	}
 
 	return await prisma.notification.findMany({
-		where: { userId, read: false },
+		where: { targetUserId: userId, read: false },
+		include: { generatedBy: true },
 		orderBy: { createdAt: 'desc' }
 	})
 }
 
 export async function markNotificationAsRead(notificationId: string) {
 	const user = await getUserFromSession()
-	if(!user) return null
+	if (!user) return null
 
 	return await prisma.notification.update({
-		where: { id: notificationId, userId: user.id },
+		where: { id: notificationId, targetUserId: user.id },
 		data: { read: true }
 	})
 }

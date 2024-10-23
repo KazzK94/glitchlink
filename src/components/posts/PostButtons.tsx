@@ -8,7 +8,7 @@ export function ToggleLikeButton({ onClick, likesCount, isLikedByUser }: { onCli
 			className={isLikedByUser ? 'text-blue-500 hover:text-blue-700' : ''}
 		>
 			<ThumbsUpIcon size={20} />
-			{(likesCount > 0) && <span>{likesCount}</span>}
+			{(likesCount > 0) && <span className='!select-none'>{likesCount}</span>}
 		</GenericPostButton>
 	)
 }
@@ -17,7 +17,7 @@ export function ToggleCommentsButton({ onClick, commentsCount }: { onClick: () =
 	return (
 		<GenericPostButton onClick={onClick} ariaLabel='See comments'>
 			<MessageSquareIcon size={20} />
-			{(commentsCount > 0) && <span>{commentsCount}</span>}
+			{(commentsCount > 0) && <span className='!select-none'>{commentsCount}</span>}
 		</GenericPostButton>
 	)
 }

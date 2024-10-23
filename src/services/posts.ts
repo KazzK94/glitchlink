@@ -25,10 +25,11 @@ export async function createPost({ content }: { content: string }) {
 			await Promise.all(usersMentioned.map(async (mentionedUser) => {
 				if (mentionedUser.id !== user.id) {
 					await createNotification({
-						type: 'MentionedInPost',
-						userId: mentionedUser.id,
-						message: `@${user.username} mentioned you in a post`,
-						targetUrl: `/posts/${newPost.id}`
+						generatedById: user.id,
+						targetUserId: mentionedUser.id,
+						entityType: 'POST',
+						entityId: newPost.id,
+						actionType: 'MENTION_IN_POST'
 					})
 				}
 			}))
@@ -56,10 +57,11 @@ export async function addCommentToPost({ post, content }: { post: { id: string, 
 		})
 		if (user.id !== post.author.id) {
 			await createNotification({
-				type: 'CommentedPost',
-				userId: post.author.id,
-				message: `@${user.username} commented on your post`,
-				targetUrl: `/posts/${post.id}`
+				generatedById: user.id,
+				targetUserId: post.author.id,
+				entityType: 'POST',
+				entityId: post.id,
+				actionType: 'REPLY_TO_POST'
 			})
 		}
 
@@ -70,10 +72,11 @@ export async function addCommentToPost({ post, content }: { post: { id: string, 
 			await Promise.all(usersMentioned.map(async (mentionedUser) => {
 				if (mentionedUser.id !== user.id) {
 					await createNotification({
-						type: 'MentionedInComment',
-						userId: mentionedUser.id,
-						message: `@${user.username} mentioned you in a comment`,
-						targetUrl: `/posts/${post.id}`
+						generatedById: user.id,
+						targetUserId: mentionedUser.id,
+						entityType: 'COMMENT',
+						entityId: createdComment.id,
+						actionType: 'MENTION_IN_COMMENT'
 					})
 				}
 			}))
@@ -100,15 +103,6 @@ export async function addLikeToPost(post: { id: string, authorId: string }) {
 				}
 			}
 		})
-
-		if (user.id !== post.authorId) {
-			await createNotification({
-				type: 'LikedPost',
-				userId: post.authorId,
-				message: `@${user.username} liked your post`,
-				targetUrl: `/posts/${post.id}`
-			})
-		}
 
 		return true
 	} catch (error) {

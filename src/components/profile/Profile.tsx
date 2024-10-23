@@ -49,8 +49,6 @@ export async function Profile() {
 					<MyFriendsList user={user} />
 				</TabsContent>
 			</Tabs>
-
-
 		</Container>
 	)
 }

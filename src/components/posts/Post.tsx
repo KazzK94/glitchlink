@@ -7,6 +7,7 @@ import { PostCommentCreateForm } from './comments/CommentCreateForm'
 import { CompletePost } from '@/types'
 import { ToggleLikeButton, ToggleCommentsButton, ShareButton } from './PostButtons'
 import { PostParsedContent } from './PostParsedContent'
+import Link from 'next/link'
 
 interface PostProps {
 	post: CompletePost
@@ -48,13 +49,13 @@ export function Post({ post, loggedUserId }: PostProps) {
 		<article key={post.id} className={`bg-gray-800/85 pt-4 pb-2 rounded-lg ${userIsAuthor && 'border border-purple-600/20'}`}>
 			{/* Post Author */}
 			<div className='flex justify-between mb-4 px-4'>
-				<div className="flex items-center">
+				<Link href={`/u/${post.author.username}`} className="flex items-center">
 					<div className="size-10 bg-gray-700 rounded-full mr-3"></div>
 					<div>
-						<h3 className="font-semibold">{post.author.name}</h3>
-						<p className="text-sm text-gray-400 italic">@{post.author.username}</p>
+						<h3 className="font-semibold cursor-pointer">{post.author.name}</h3>
+						<p className="text-sm text-gray-400 italic cursor-pointer">@{post.author.username}</p>
 					</div>
-				</div>
+				</Link>
 				<button className='flex justify-end items-center pb-2 min-w-8' aria-label='Open post context menu'>
 					<EllipsisVerticalIcon size={24} />
 				</button>
