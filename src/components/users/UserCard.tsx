@@ -70,7 +70,7 @@ export function UserCard({ user, socialLinkId, socialLinkStatus = 'NONE', classN
 				<div className="size-10 bg-gray-700 rounded-full mr-3" />
 				<div className='flex flex-col'>
 					<Link href={`/u/${user.username}`}>
-						<span style={{ color: user.color }}>{user.name}</span>
+						<span>{user.name}</span>
 					</Link>
 					<span className='italic text-gray-400 text-sm'>@{user.username}</span>
 				</div>

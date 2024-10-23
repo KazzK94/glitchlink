@@ -14,7 +14,6 @@ export default async function UsersDashboardPage() {
 					<DashboardTableHeader>Name</DashboardTableHeader>
 					<DashboardTableHeader>Username</DashboardTableHeader>
 					<DashboardTableHeader>Email</DashboardTableHeader>
-					<DashboardTableHeader>Color</DashboardTableHeader>
 				</DashboardTableHeaders>
 				<DashboardTableBody>
 					{users.map((user) => (
@@ -25,10 +24,6 @@ export default async function UsersDashboardPage() {
 							<DashboardTableCell>{user.name}</DashboardTableCell>
 							<DashboardTableCell className="italic">@{user.username}</DashboardTableCell>
 							<DashboardTableCell>{user.email}</DashboardTableCell>
-							<DashboardTableCell className="flex items-center gap-1">
-								<span className='inline-block rounded size-3 mt-0.5' style={{ backgroundColor: user.color }} />
-								{user.color}
-							</DashboardTableCell>
 						</DashboardTableRow>
 					))}
 				</DashboardTableBody>

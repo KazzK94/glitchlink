@@ -1,30 +1,22 @@
 
-import { createUser, getUserByUsername } from '@/services/users'
+import { createUser } from '@/services/users'
 import { type NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {
 
 	const body = await request.json()
-	const { username, password, name, email, color = '#ffffff' } = body
+	const { username, password, name, email } = body
 
-	console.log({ userData: body })
-
-	// 1. Check if the username is already taken.
-	const existingUser = await getUserByUsername({ username })
-	if (existingUser) {
-		return Response.json({ message: 'Username is already taken.' }, { status: 400 })
+	try {
+		const user = await createUser({ username, password, name, email })
+		return Response.json({
+			id: user.id,
+			username: user.username,
+			name: user.name,
+			email: user.email,
+			createdAt: user.createdAt
+		})
+	} catch (error) {
+		Response.json({ message: 'Error creating user.', error }, { status: 400 })
 	}
-
-	// 2. Create the user.
-	const user = await createUser({ username, password, name, email, color })
-
-	return Response.json({
-		id: user.id,
-		username: user.username,
-		name: user.name,
-		email: user.email,
-		color: user.color,
-		createdAt: user.createdAt
-	})
-
 }

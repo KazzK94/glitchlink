@@ -17,7 +17,7 @@ export function ProfileHeading({ user }: { user: User }) {
 				</LogoutButton>
 			</div>
 			{/* Content */}
-			<h1 className='text-3xl font-semibold' style={{ color: user.color }}>
+			<h1 className='text-3xl font-semibold'>
 				{user.name}
 			</h1>
 			<p className='italic opacity-80 text-base mt-0.5 ml-1'>

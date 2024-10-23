@@ -12,7 +12,6 @@ declare module 'next-auth' {
 		name: string
 		username: string
 		email: string
-		color: string
 	}
 }
 
@@ -22,6 +21,5 @@ declare module 'next-auth/jwt' {
 		name: string
 		username: string
 		email: string
-		color: string
 	}
 }

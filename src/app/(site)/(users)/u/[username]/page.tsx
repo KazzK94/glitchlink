@@ -11,7 +11,7 @@ export default async function UserDetailPage({ params }: { params: { username: s
 
 	return (
 		<Container className='mt-4'>
-			<h1 className='text-3xl font-semibold' style={{ color: user.color }}>{user.name}</h1>
+			<h1 className='text-3xl font-semibold'>{user.name}</h1>
 			<p className='italic opacity-80 text-base mt-0.5 ml-1'>@{user.username}</p>
 
 			<h2 className='text-2xl mt-6'>{user.name}&apos;s Video Games</h2>

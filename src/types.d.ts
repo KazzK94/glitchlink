@@ -10,7 +10,6 @@ export interface UserPublicInfo {
 	id: string
 	username: string
 	name: string
-	color: string
 }
 
 export interface CompleteComment extends Comment {

@@ -30,9 +30,8 @@ export function RegisterForm() {
 			password: "",
 			confirmPassword: "",
 			name: "",
-			email: "",
-			color: "#ffffff"
-		},
+			email: ""
+		}
 	})
 
 	// 2. Define a submit handler.
@@ -40,7 +39,7 @@ export function RegisterForm() {
 		setIsLoading(true)
 		const existingUser = await getUser({
 			where: {
-				usernameLowercase: values.username.toLowerCase(),
+				username: values.username,
 				email: values.email
 			}
 		})
@@ -79,7 +78,7 @@ export function RegisterForm() {
 
 	const debouncedCheckAvailability = useDebouncedCallback(({ username }: { username: string }) => {
 		checkAvailability({ username })
-	}, 3000)
+	}, 1200)
 
 	function onUsernameChange(username: string) {
 		setUsernameAvailability('checking')
@@ -200,23 +199,6 @@ export function RegisterForm() {
 							<FormMessage />
 							<FormDescription>
 								Your email will be used if you forget your password.
-							</FormDescription>
-						</FormItem>
-					)}
-				/>
-				{/** COLOR */}
-				<FormField
-					control={form.control}
-					name="color"
-					render={({ field }) => (
-						<FormItem className='hidden'>
-							<FormLabel>Profile Color (click on it to change it)</FormLabel>
-							<FormControl>
-								<Input {...field} type='color' className='px-0.5 py-0' />
-							</FormControl>
-							<FormMessage />
-							<FormDescription>
-								This will be the color for your name in posts and messages.
 							</FormDescription>
 						</FormItem>
 					)}

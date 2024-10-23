@@ -20,7 +20,7 @@ export async function createPost({ content }: { content: string }) {
 		})
 		if (usernamesMentioned.length > 0) {
 			const usersMentioned = await prisma.user.findMany({
-				where: { usernameLowercase: { in: usernamesMentioned.map(usernameMentioned => usernameMentioned.toLowerCase()) } }
+				where: { username: { in: usernamesMentioned } }
 			})
 			await Promise.all(usersMentioned.map(async (mentionedUser) => {
 				if (mentionedUser.id !== user.id) {
@@ -65,7 +65,7 @@ export async function addCommentToPost({ post, content }: { post: { id: string, 
 
 		if (usernamesMentioned.length > 0) {
 			const usersMentioned = await prisma.user.findMany({
-				where: { usernameLowercase: { in: usernamesMentioned.map(usernameMentioned => usernameMentioned.toLowerCase()) } }
+				where: { username: { in: usernamesMentioned } }
 			})
 			await Promise.all(usersMentioned.map(async (mentionedUser) => {
 				if (mentionedUser.id !== user.id) {

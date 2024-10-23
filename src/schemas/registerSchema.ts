@@ -11,10 +11,7 @@ export const registerSchema = z.object({
 	password: z.string().min(4, { message: "Password must contain at least 4 characters." }),
 	confirmPassword: z.string(),
 	name: z.string().min(3, { message: "Name must be at least 3 characters long." }),
-	email: z.string().email({ message: "Invalid email." }),
-	color: z.string()
-		// Regex: color must be a valid hex color (#09f or #0492f7).
-		.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, { message: "Invalid color." })
+	email: z.string().email({ message: "Invalid email." })
 }).superRefine((data, ctx) => {
 	// Prevent users from being all spaces or too short by abusing spaces
 	if(data.username.trim().length !== data.username.length) {
