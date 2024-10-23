@@ -64,9 +64,7 @@ async function SuggestedFriends() {
 	return (
 		<div className="bg-gray-800 p-4 pb-5 rounded-lg">
 			<h2 className="text-xl font-semibold pl-2 mb-3">Suggested Friends</h2>
-			<ul className="flex flex-col gap-2">
-				<UsersList users={suggestedFriends} className="space-y-2" cardClassName='hover:bg-gray-700/15' />
-			</ul>
+			<UsersList users={suggestedFriends} className="space-y-2" cardClassName='hover:bg-gray-700/15' />
 		</div>
 	)
 }
