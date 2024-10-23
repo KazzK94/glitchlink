@@ -17,24 +17,31 @@ export function Post({ post, loggedUserId }: PostProps) {
 
 	const userIsAuthor = post.authorId === loggedUserId
 
-	const [isLikedByUser, setIsLikedByUser] = useState(post.likedBy.some(like => like.id === loggedUserId))
-	const [likes, setLikes] = useState(post.likedBy.length)
+	const [likesData, setLikesData] = useState({
+		likes: post.likedBy.length,
+		isLikedByUser: post.likedBy.some(like => like.id === loggedUserId)
+	})
+
+	const toggleLike = async () => {
+		const previousIsLiked = likesData.isLikedByUser
+		setLikesData({
+			likes: likesData.likes + (previousIsLiked ? -1 : 1),
+			isLikedByUser: !previousIsLiked
+		})
+		const response = await fetch(`/api/posts/${post.id}/likes`, { method: 'PATCH' })
+		if (!response.ok) {
+			console.error('Failed to toggle like:', response)
+			return
+		}
+		setLikesData({
+			likes: likesData.likes + (previousIsLiked ? -1 : 1),
+			isLikedByUser: !previousIsLiked
+		})
+	}
 
 	const [showComments, setShowComments] = useState(false)
 	const toggleComments = () => {
 		setShowComments(!showComments)
-	}
-
-	const toggleLike = async () => {
-		const previousIsLiked = isLikedByUser
-		setIsLikedByUser(!previousIsLiked)
-		const response = await fetch(`/api/posts/${post.id}/likes`, { method: 'PATCH' })
-		if (!response.ok) {
-			setIsLikedByUser(!previousIsLiked)
-			console.error('Failed to toggle like:', response)
-			return
-		}
-		setLikes(likes + (previousIsLiked ? -1 : 1))
 	}
 
 	return (
@@ -58,7 +65,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 			{/* Buttons */}
 			<div className='px-4 sm:px-6 flex justify-evenly sm:justify-between items-center'>
 				<div className="flex gap-x-4 flex-grow justify-evenly">
-					<ToggleLikeButton onClick={toggleLike} likesCount={likes} isLikedByUser={isLikedByUser} />
+					<ToggleLikeButton onClick={toggleLike} likesCount={likesData.likes} isLikedByUser={likesData.isLikedByUser} />
 					<ToggleCommentsButton onClick={toggleComments} commentsCount={post.comments.length} />
 					<ShareButton postId={post.id} />
 				</div>
