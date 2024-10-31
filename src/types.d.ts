@@ -1,4 +1,4 @@
-import type { Comment, Post, User, Notification } from '@prisma/client'
+import type { Comment, Post, User, Notification, VideoGame } from '@prisma/client'
 
 export interface Game {
 	id: number
@@ -9,7 +9,8 @@ export interface Game {
 export interface UserPublicInfo {
 	id: string
 	username: string
-	name: string
+	name: string,
+	videogames?: VideoGame[]
 }
 
 export interface CompleteComment extends Comment {
