@@ -1,9 +1,7 @@
 import { type User } from 'next-auth'
 import { type VideoGame } from '@prisma/client'
 import { getOwnedVideoGames } from '@/services/games'
-import { Button } from '../ui/button'
 import { GameCard } from '../games/GameCard'
-import Link from 'next/link'
 
 export async function MyVideoGames({ user }: { user: User }) {
 
@@ -27,11 +25,6 @@ export async function MyVideoGames({ user }: { user: User }) {
 					))
 				}
 			</div>
-			<Link href='/games' className='inline-block mb-4 ml-2'>
-				<Button className='text-lg bg-green-700/90 hover:bg-green-600/80' >
-					Find{videoGames.length > 0 ? ' more ' : ' '}games
-				</Button>
-			</Link>
 		</div>
 	)
 }
