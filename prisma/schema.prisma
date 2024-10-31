@@ -8,21 +8,24 @@ datasource db {
 }
 
 model User {
-    id                 String         @id @default(uuid())
-    username           String         @unique
-    name               String
-    email              String         @unique
-    password           String
-    createdAt          DateTime       @default(now())
-    updatedAt          DateTime       @updatedAt
-    userAInSocialLinks SocialLink[]   @relation("SocialLinkA")
-    userBInSocialLinks SocialLink[]   @relation("SocialLinkB")
-    videoGames         VideoGame[]
-    posts              Post[]
-    likedPosts         Post[]         @relation("PostLikes")
-    comments           Comment[]
-    notifications      Notification[] @relation("NotificationTargetUser")
-    notifierOf         Notification[] @relation("NotificationGeneratedBy")
+    id                   String         @id @default(uuid())
+    username             String         @unique
+    name                 String
+    email                String         @unique
+    password             String
+    createdAt            DateTime       @default(now())
+    updatedAt            DateTime       @updatedAt
+    userAInSocialLinks   SocialLink[]   @relation("SocialLinkA")
+    userBInSocialLinks   SocialLink[]   @relation("SocialLinkB")
+    userAInConversations Conversation[] @relation("ConversationUserA")
+    userBInConversations Conversation[] @relation("ConversationUserB")
+    messages             Message[]
+    videoGames           VideoGame[]
+    posts                Post[]
+    likedPosts           Post[]         @relation("PostLikes")
+    comments             Comment[]
+    notifications        Notification[] @relation("NotificationTargetUser")
+    notifierOf           Notification[] @relation("NotificationGeneratedBy")
 }
 
 model SocialLink {
@@ -111,4 +114,25 @@ enum NotificationActionType {
     SOCIAL_LINK_REQUEST
     SOCIAL_LINK_ACCEPTED
     OTHER
+}
+
+model Conversation {
+    id        String    @id @default(uuid())
+    messages  Message[]
+    userA     User      @relation("ConversationUserA", fields: [userAId], references: [id], onDelete: Cascade)
+    userAId   String
+    userB     User      @relation("ConversationUserB", fields: [userBId], references: [id], onDelete: Cascade)
+    userBId   String
+    createdAt DateTime  @default(now())
+}
+
+model Message {
+    id             String       @id @default(uuid())
+    content        String
+    conversation   Conversation @relation(fields: [conversationId], references: [id])
+    conversationId String
+    author         User         @relation(fields: [authorId], references: [id])
+    authorId       String
+    createdAt      DateTime     @default(now())
+    updatedAt      DateTime     @updatedAt
 }
