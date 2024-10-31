@@ -60,9 +60,13 @@ function NotificationWrapper({ href, notification, children }: { href: string, n
 				</Link>
 				{/* Buttons */}
 				<span className='flex gap-3'>
-					<button onClick={handleMarkAsRead}>
-						<BookOpenCheckIcon size={24} className='text-grey-400 cursor-pointer' />
-					</button>
+					{
+						!notification.read && (
+							<button onClick={handleMarkAsRead}>
+								<BookOpenCheckIcon size={24} className='text-grey-400 cursor-pointer' />
+							</button>
+						)
+					}
 					<button onClick={handleDelete}>
 						<XIcon size={24} className='text-grey-400 cursor-pointer' />
 					</button>
