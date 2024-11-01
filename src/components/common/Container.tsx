@@ -8,6 +8,6 @@ interface ContainerProps {
 
 export function Container({ children, id, className, asSection }: ContainerProps) {
 	return asSection 
-		? <section id={id} className={`max-w-[1080px] mx-auto px-4 ${className}`}>{children}</section> 
-		: <div id={id} className={`max-w-[1080px] mx-auto px-4 ${className}`}>{children}</div>
+		? <section id={id} className={`w-full max-w-[1080px] mx-auto px-4 ${className}`}>{children}</section> 
+		: <div id={id} className={`w-full max-w-[1080px] mx-auto px-4 ${className}`}>{children}</div>
 }

@@ -30,7 +30,7 @@ export async function Home() {
 					</Suspense>
 				</div>
 				<div className="hidden lg:block relative">
-					<div className='sticky top-20 space-y-4'>
+					<div className='sticky top-6 space-y-4'>
 						<TrendingGames />
 						<SuggestedFriends />
 					</div>
@@ -45,7 +45,7 @@ async function TrendingGames() {
 	const popularGames = await getPopularVideoGames(3)
 
 	return (
-		<div className="bg-gray-800 p-6 pt-5 rounded-lg">
+		<div className="bg-gray-800 p-6 pt-5 rounded-lg shadow shadow-gray-400">
 			<h2 className="text-2xl font-semibold mb-4">Trending Games</h2>
 			<ul className="space-y-3">
 				{popularGames.map((game) => (
@@ -69,7 +69,7 @@ async function SuggestedFriends() {
 	const suggestedFriends = await getActiveUsers(3)
 
 	return (
-		<div className="bg-gray-800 p-4 pb-5 rounded-lg">
+		<div className="bg-gray-800 p-4 pb-5 rounded-lg shadow shadow-gray-400">
 			<h2 className="text-2xl font-semibold pl-2 mb-3">Suggested Friends</h2>
 			<UsersList users={suggestedFriends} className="space-y-2" cardClassName='hover:bg-gray-700/15' />
 		</div>

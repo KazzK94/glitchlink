@@ -29,7 +29,7 @@ export function PostCreateForm() {
 	// TODO: Control submit on Ctrl+Enter
 
 	return (
-		<form onSubmit={handleSubmit} className="bg-gray-800 px-6 py-5 rounded-lg">
+		<form onSubmit={handleSubmit} className="bg-gray-800 px-6 py-5 rounded-lg shadow-sm shadow-gray-300">
 			<h2 className="text-xl font-semibold mb-4">What have you been playing?</h2>
 			<textarea
 				name='content'

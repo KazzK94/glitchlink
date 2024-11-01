@@ -46,7 +46,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 	}
 
 	return (
-		<article key={post.id} className={`bg-gray-800/85 pt-4 pb-2 rounded-lg ${userIsAuthor && 'border border-purple-600/20'}`}>
+		<article key={post.id} className={`bg-gray-800/85 pt-4 pb-2 rounded-lg shadow shadow-gray-400 ${userIsAuthor && 'border border-purple-600/20'}`}>
 			{/* Post Author */}
 			<div className='flex justify-between mb-4 px-4'>
 				<Link href={`/u/${post.author.username}`} className="flex items-center">
