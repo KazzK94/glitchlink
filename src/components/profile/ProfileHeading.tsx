@@ -3,6 +3,7 @@ import { User } from 'next-auth'
 import { EditIcon, LogOutIcon } from 'lucide-react'
 import { LogoutButton } from '../auth/LogoutButton'
 import Link from 'next/link'
+import { Avatar } from './Avatar'
 
 export function ProfileHeading({ user }: { user: User }) {
 	return (
@@ -17,12 +18,19 @@ export function ProfileHeading({ user }: { user: User }) {
 				</LogoutButton>
 			</div>
 			{/* Content */}
-			<h1 className='text-3xl font-semibold text-blue-200'>
-				{user.name}
-			</h1>
-			<p className='italic opacity-80 text-base mt-0.5 ml-1'>
-				@{user.username}
-			</p>
+			<div className="flex gap-4 items-center ml-2">
+				<div className="left">
+					<Avatar avatarUrl={user.avatar} />
+				</div>
+				<div className="right">
+					<h1 className='text-3xl font-semibold text-blue-200'>
+						{user.name}
+					</h1>
+					<p className='italic opacity-80 text-base mt-0.5 ml-1'>
+						@{user.username}
+					</p>
+				</div>
+			</div>
 		</div>
 	)
 }

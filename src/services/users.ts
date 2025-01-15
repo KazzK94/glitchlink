@@ -38,8 +38,20 @@ export async function attemptLogin(username: string, password: string) {
 		id: user.id,
 		username: user.username,
 		name: user.name,
-		email: user.email
+		email: user.email,
+		avatar: user.avatar
 	}
+}
+
+export async function updateUser({ data }: { data: Prisma.UserUpdateInput }) {
+	const user = await getUserFromSession()
+	if (!user) throw new Error('No user logged.')
+
+	return await prisma.user.update({
+		where: { id: user.id },
+		data
+	})
+
 }
 
 export async function getUsers({ where }: { where?: Prisma.UserWhereInput | null } = {}) {

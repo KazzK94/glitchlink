@@ -53,7 +53,8 @@ export const authOptions = {
 					id: token.id,
 					name: token.name,
 					username: token.username,
-					email: token.email
+					email: token.email,
+					avatar: token.avatar
 				}
 			}
 			return session

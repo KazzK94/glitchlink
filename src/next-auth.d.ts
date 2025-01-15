@@ -12,6 +12,7 @@ declare module 'next-auth' {
 		name: string
 		username: string
 		email: string
+		avatar: string | null | undefined
 	}
 }
 
@@ -21,5 +22,6 @@ declare module 'next-auth/jwt' {
 		name: string
 		username: string
 		email: string
+		avatar: string | null | undefined
 	}
 }
