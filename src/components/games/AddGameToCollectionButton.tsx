@@ -72,7 +72,7 @@ function parseGameData(gameData: {
 	return {
 		externalId: gameData.id,
 		title: gameData.name,
-		image: gameData.background_image || '/images/game_placeholder.png',
+		image: gameData.background_image || '/images/game-placeholder.jpg',
 		genres: gameData.genres.map((genre: { name: string }) => genre.name),
 		platforms: gameData.parent_platforms.map((platform: { platform: { name: string } }) => platform.platform.name),
 		description: gameData.description_raw.split('\n\n')[0],

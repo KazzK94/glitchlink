@@ -121,6 +121,6 @@ function getRelevantGameInfo(game: Game) {
 	return {
 		id: game.id,
 		name: game.name,
-		background_image: game.background_image || '/images/game_placeholder.png'
+		background_image: game.background_image || '/images/game-placeholder.jpg'
 	}
 }
