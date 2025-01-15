@@ -56,8 +56,8 @@ export async function updateUser({ data }: { data: Prisma.UserUpdateInput }) {
 
 export async function getUsers({ where }: { where?: Prisma.UserWhereInput | null } = {}) {
 	return where
-		? await prisma.user.findMany({ where, select: { id: true, username: true, name: true } })
-		: await prisma.user.findMany({ select: { id: true, username: true, name: true } })
+		? await prisma.user.findMany({ where, select: { id: true, username: true, name: true, avatar: true } })
+		: await prisma.user.findMany({ select: { id: true, username: true, name: true, avatar: true } })
 }
 
 export async function getUser({ where }: { where: Prisma.UserWhereInput }) {
@@ -67,7 +67,7 @@ export async function getUser({ where }: { where: Prisma.UserWhereInput }) {
 export async function getUserById({ id, isSelf = false }: { id: string, isSelf?: boolean }) {
 	return await prisma.user.findUnique({
 		where: { id },
-		select: { id: true, username: true, name: true, videoGames: true, email: isSelf, createdAt: true, updatedAt: isSelf }
+		select: { id: true, username: true, name: true, avatar: true, videoGames: true, email: isSelf, createdAt: true, updatedAt: isSelf }
 	})
 }
 
@@ -76,7 +76,7 @@ export async function getUserByUsername({ username, isSelf = false }: { username
 		where: {
 			username: { equals: username, mode: 'insensitive' }
 		},
-		select: { id: true, username: true, name: true, email: isSelf, videoGames: { orderBy: { title: 'asc' } } }
+		select: { id: true, username: true, name: true, avatar: true, email: isSelf, videoGames: { orderBy: { title: 'asc' } } }
 	})
 }
 
