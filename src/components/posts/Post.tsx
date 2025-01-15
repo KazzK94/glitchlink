@@ -8,6 +8,7 @@ import { CompletePost } from '@/types'
 import { ToggleLikeButton, ToggleCommentsButton, ShareButton } from './PostButtons'
 import { PostParsedContent } from './PostParsedContent'
 import Link from 'next/link'
+import { Avatar } from '../users/Avatar'
 
 interface PostProps {
 	post: CompletePost
@@ -50,7 +51,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 			{/* Post Author */}
 			<div className='flex justify-between mb-4 px-4'>
 				<Link href={`/u/${post.author.username}`} className="flex items-center">
-					<div className="size-10 bg-gray-700 rounded-full mr-3"></div>
+					<Avatar src={post.author.avatar} className="size-12 rounded-full mr-3" />
 					<div>
 						<h3 className="font-semibold cursor-pointer">{post.author.name}</h3>
 						<p className="text-sm text-gray-400 italic cursor-pointer">@{post.author.username}</p>

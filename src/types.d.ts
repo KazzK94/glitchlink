@@ -11,6 +11,7 @@ export interface UserPublicInfo {
 	username: string
 	name: string,
 	videogames?: VideoGame[]
+	avatar: string | null | undefined
 }
 
 export interface CompleteComment extends Comment {

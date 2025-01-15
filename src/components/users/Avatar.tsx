@@ -6,8 +6,8 @@ import { useRef, useState } from 'react'
 
 const AVATAR_PLACEHOLDER_URL = '/images/avatar-placeholder.webp'
 
-export function Avatar({ avatarUrl, className, isSelf = false }: { avatarUrl: string | null | undefined, className?: string, isSelf: boolean }) {
-	const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null | undefined>(avatarUrl)
+export function Avatar({ src, className, isSelf = false }: { src: string | null | undefined, className?: string, isSelf?: boolean }) {
+	const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null | undefined>(src)
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const handleOpenFileSelector = () => {
@@ -31,11 +31,12 @@ export function Avatar({ avatarUrl, className, isSelf = false }: { avatarUrl: st
 		})
 		const data = await response.json()
 		setUploadedImageUrl(data.avatarUrl)
+		console.log({data})
 	}
 
 	return (
 		<div onClick={handleOpenFileSelector} className={`rounded-full size-16 border-2 overflow-hidden ${isSelf ? 'cursor-pointer hover:opacity-60 transition' : ''} ${className || ''}`}>
-			<img className='w-full h-full object-cover' src={uploadedImageUrl ? uploadedImageUrl : AVATAR_PLACEHOLDER_URL} />
+			<img className='w-full h-full object-cover' alt='User avatar' src={uploadedImageUrl ? uploadedImageUrl : AVATAR_PLACEHOLDER_URL} />
 			<input type='file' className='hidden' ref={inputRef} onChange={handleSubmit} accept='.jpg,.jpeg,.png,.avif,.webp' />
 		</div>
 	)

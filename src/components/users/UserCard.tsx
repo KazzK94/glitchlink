@@ -6,6 +6,7 @@ import { UserPlusIcon, UserCheckIcon, UserXIcon, UserMinusIcon, CheckIcon, XIcon
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
+import { Avatar } from './Avatar'
 
 interface UserCardProps {
 	user: UserPublicInfo
@@ -67,7 +68,7 @@ export function UserCard({ user, socialLinkId, socialLinkStatus = 'NONE', classN
 	return (
 		<div key={user.id} className={`flex items-center justify-between transition duration-200 rounded-lg p-2 ${className}`}>
 			<div className="flex items-center">
-				<div className="size-10 bg-gray-700 rounded-full mr-3" />
+				<Avatar src={user.avatar} className="size-14 bg-gray-700 rounded-full mr-3" />
 				<div className='flex flex-col'>
 					<Link href={`/u/${user.username}`}>
 						<span>{user.name}</span>

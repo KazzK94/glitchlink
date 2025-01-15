@@ -23,6 +23,7 @@ export const authOptions = {
 					return user // <-- TODO: return the session id along with the user
 				} catch (error) {
 					// Return null if any error happens
+					console.error(error)
 					throw new Error('Incorrect username or password.')
 				}
 			}

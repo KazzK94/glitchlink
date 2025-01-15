@@ -88,6 +88,6 @@ export async function getActiveUsers(amount: number = 3) {
 		where: { id: { not: user?.id } },
 		take: amount,
 		orderBy: { updatedAt: 'desc' },
-		select: { id: true, username: true, name: true }
+		select: { id: true, username: true, name: true, avatar: true }
 	})
 }
