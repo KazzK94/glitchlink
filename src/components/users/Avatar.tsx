@@ -35,7 +35,7 @@ export function Avatar({ src, className, isSelf = false }: { src: string | null 
 
 	return (
 		<div onClick={handleOpenFileSelector} className={`rounded-full border-2 overflow-hidden ${isSelf ? 'cursor-pointer hover:opacity-60 transition' : ''} ${className || ''}`}>
-			<img className={'object-cover' + className} alt='User avatar' src={uploadedImageUrl ? uploadedImageUrl : AVATAR_PLACEHOLDER_URL} />
+			<img className={'object-cover ' + className} alt='User avatar' src={uploadedImageUrl ? uploadedImageUrl : AVATAR_PLACEHOLDER_URL} />
 			<input type='file' className='hidden' ref={inputRef} onChange={handleSubmit} accept='.jpg,.jpeg,.png,.avif,.webp' />
 		</div>
 	)
