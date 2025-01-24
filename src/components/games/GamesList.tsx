@@ -17,8 +17,6 @@ export function GamesList() {
 	const [loading, setLoading] = useState(true)
 	const [search, setSearch] = useState('')
 
-
-	// TODO: Figure out a better way to check if user is logged in (we're running useSession() on every card...)
 	const session = useSession()
 	const userIsLogged = Boolean(session?.data)
 
