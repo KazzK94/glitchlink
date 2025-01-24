@@ -60,6 +60,48 @@ export async function getUsers({ where }: { where?: Prisma.UserWhereInput | null
 		: await prisma.user.findMany({ select: { id: true, username: true, name: true, avatar: true } })
 }
 
+export async function getUserProfile(userId: string = '') {
+
+	if (!userId) {
+		const user = await getUserFromSession()
+		if (!user) throw new Error('No user logged.')
+		userId = user.id
+	}
+
+	const user = await prisma.user.findUnique({
+		where: { id: userId },
+		select: {
+			id: true, username: true, name: true, avatar: true, email: true,
+			videoGames: { orderBy: { title: 'asc' } },
+			posts: {
+				include: {
+					author: true, likedBy: true,
+					comments: {
+						include: { author: true },
+						orderBy: { createdAt: 'asc' }
+					}
+				},
+				orderBy: { createdAt: 'desc' }
+			},
+			userAInSocialLinks: { where: { status: 'FRIENDS' }, select: { userB: { select: { id: true, username: true, name: true, avatar: true } } } },
+			userBInSocialLinks: { where: { status: 'FRIENDS' }, select: { userA: { select: { id: true, username: true, name: true, avatar: true } } } }
+		}
+	})
+
+	if (!user) throw new Error('User not found.')
+
+	const socialLinks = [
+		...user.userAInSocialLinks.map(data => data.userB),
+		...user.userBInSocialLinks.map(data => data.userA)
+	]
+	console.log(JSON.stringify(socialLinks))
+
+	return {
+		...user,
+		socialLinks
+	}
+}
+
 export async function getUser({ where }: { where: Prisma.UserWhereInput }) {
 	return await prisma.user.findFirst({ where })
 }

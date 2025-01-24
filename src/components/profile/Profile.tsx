@@ -1,10 +1,12 @@
 
 import { redirect } from 'next/navigation'
-
+import { getUserProfile } from '@/services/users'
+import { getUserFromSession } from '@/services/auth'
 import { BookUserIcon, Gamepad2Icon, MessageSquareIcon } from 'lucide-react'
+
+// Components
 import { Container } from '@/components/common/Container'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { getUserFromSession } from '@/services/auth'
 import { MyFriendsList } from './MyFriendsList'
 import { MyVideoGames } from './MyVideogames'
 import { MyPosts } from './MyPosts'
@@ -13,9 +15,13 @@ import { ProfileHeading } from './ProfileHeading'
 // NextJS force dynamic (TODO: Check this, it's not working... it's being cached)
 export const dynamic = 'force-dynamic'
 
-export async function Profile() {
+export async function Profile({ userId }: { userId?: string }) {
 
-	const user = await getUserFromSession()
+	const loggedUser = await getUserFromSession()
+	if (!loggedUser) {
+		redirect('/login')
+	}
+	const user = await getUserProfile(userId || loggedUser?.id)
 	if (!user) {
 		redirect('/login')
 	}
@@ -40,13 +46,13 @@ export async function Profile() {
 					</TabsTrigger>
 				</TabsList>
 				<TabsContent value='games'>
-					<MyVideoGames user={user} />
+					<MyVideoGames videoGames={user.videoGames} />
 				</TabsContent>
 				<TabsContent value='posts'>
-					<MyPosts user={user} />
+					<MyPosts loggedUserId={user.id} posts={user.posts} />
 				</TabsContent>
 				<TabsContent value='friends'>
-					<MyFriendsList user={user} />
+					<MyFriendsList friends={user.socialLinks} />
 				</TabsContent>
 			</Tabs>
 		</Container>

@@ -1,11 +1,9 @@
 
-import { type User } from 'next-auth'
-import { getFriends } from '@/services/socialLinks'
 import { UsersList } from '../users/UsersList'
 import Link from 'next/link'
+import { UserPublicInfo } from '@/types'
 
-export async function MyFriendsList({ user }: { user: User }) {
-	const friends = await getFriends(user.id)
+export async function MyFriendsList({ friends }: { friends: UserPublicInfo[] }) {
 
 	if (!friends || friends.length === 0) return <NoFriends />
 

@@ -1,12 +1,8 @@
-import { type User } from 'next-auth'
+
 import { type VideoGame } from '@prisma/client'
-import { getOwnedVideoGames } from '@/services/games'
 import { GameCard } from '../games/GameCard'
 
-export async function MyVideoGames({ user }: { user: User }) {
-
-	const { videoGames } = await getOwnedVideoGames(user.id) || { videoGames: [] }
-
+export async function MyVideoGames({ videoGames }: { videoGames: VideoGame[] }) {
 	return (
 		<div className='px-3 py-1'>
 			{videoGames.length === 0 && <p>No games added yet...</p>}

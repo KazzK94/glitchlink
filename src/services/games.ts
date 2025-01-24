@@ -3,8 +3,7 @@
 import prisma from '@/lib/db'
 import { Prisma } from '@prisma/client'
 
-import { getServerSession } from 'next-auth'
-import { authOptions } from './nextAuthConfig'
+import { getUserFromSession } from './auth'
 
 export async function createOrGetVideoGame({ externalId, title, description, image, genres, developers, platforms }: Prisma.VideoGameCreateInput) {
 	try {
@@ -48,12 +47,10 @@ export async function getVideoGameById(id: string) {
 
 export async function getOwnedVideoGames(userId: string = '') {
 	if (!userId) {
-		// Get the session
-		const session = await getServerSession(authOptions)
-		if (!session) {
-			throw new Error('You must be signed in to create a post')
+		const user = await getUserFromSession()
+		if (!user || !user.id) {
+			throw new Error('You must provide a user ID to get their videogames, or be logged in to get yours.')
 		}
-		const { user } = session
 		userId = user.id
 	}
 

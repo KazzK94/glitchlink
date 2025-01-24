@@ -11,6 +11,7 @@ export interface UserPublicInfo {
 	username: string
 	name: string,
 	videogames?: VideoGame[]
+	posts?: Post[]
 	avatar: string | null | undefined
 }
 
