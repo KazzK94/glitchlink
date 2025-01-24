@@ -5,7 +5,7 @@ const BASE_QUERY_PARAMS = '?key=8941ce3c4a6248cebc73ad45ffc780c2&ordering=-relev
 
 export async function getGamesFromExternalApi({ search = '', page = 1, pageSize = 12 }: { search?: string, page?: number, pageSize?: number } = {}) {
 	const baseUrl = search ? BASE_URL : BASE_URL_NO_SEARCH
-	const response = await fetch(`${baseUrl}${BASE_QUERY_PARAMS}&page=${page}&page_size=${pageSize}&search=${search}&search_exact=true`, {
+	const response = await fetch(`${baseUrl}${BASE_QUERY_PARAMS}&page=${page}&page_size=${pageSize}&search=${search}&search_precise=true`, {
 		next: { revalidate: 3 * 24 * 60 * 60 /* revalidate every 3 days (revalidate in seconds) */ }
 	})
 	const data = await response.json()
