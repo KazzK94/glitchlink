@@ -33,15 +33,15 @@ export function PostCommentCreateForm({ post, className }: PostCommentCreateForm
 	// TODO: Control submit on Ctrl+Enter
 
 	return (
-		<form onSubmit={handleSubmit} className={`bg-gray-800 rounded-lg ${className}`}>
+		<form onSubmit={handleSubmit} className={className}>
 			<textarea
-				className="text-sm p-3 w-full max-h-[50vh] bg-gray-700 text-white rounded-md"
+				className="text-sm p-3 w-full max-h-[50vh] bg-gray-700/60 text-white rounded-sm placeholder:opacity-80 placeholder:italic"
 				name='content'
 				ref={textareaRef}
-				placeholder="Add a comment about this Post..."
-				rows={2}
+				placeholder="Add a comment here..."
+				rows={3}
 			></textarea>
-			<div className='flex w-full justify-end'>
+			<div className='flex w-full justify-end mt-0.5'>
 				<Button className="w-full px-4 py-2 text-sm rounded-md bg-gradient-to-br from-gray-600/90 to-slate-500/90 hover:from-slate-500/70 hover:to-slate-400/60">
 					Comment
 				</Button>
