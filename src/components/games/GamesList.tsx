@@ -65,7 +65,7 @@ export function GamesList() {
 
 			{
 				games.length > 0 && (
-					<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly mb-8 gap-4'>
+					<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly mx-2 mb-8 gap-4'>
 						{
 							games.map(game => (
 								<GameCard

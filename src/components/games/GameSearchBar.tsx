@@ -26,9 +26,9 @@ export function GameSearchBar({ className, onSearch }: GameSearchBarProps) {
 	}
 
 	return (
-		<div className='my-4 relative'>
+		<div className='my-5 mt-8 relative'>
 			<input
-				className={`w-full border border-gray-300 bg-slate-500/10 px-3 py-2 rounded-lg ${className}`}
+				className={`w-full border border-gray-300 bg-black/40 px-3 py-2 rounded-lg ${className}`}
 				type='text'
 				placeholder='Search for games...'
 				name='search'
