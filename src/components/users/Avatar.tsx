@@ -11,6 +11,7 @@ export function Avatar({ src, className, isSelf = false }: { src: string | null 
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const handleOpenFileSelector = () => {
+		if (!isSelf) return
 		inputRef.current?.click()
 	}
 
