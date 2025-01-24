@@ -12,7 +12,7 @@ import { MyVideoGames } from './MyVideogames'
 import { MyPosts } from './MyPosts'
 import { ProfileHeading } from './ProfileHeading'
 
-// NextJS force dynamic (TODO: Check this, it's not working... it's being cached)
+// Force Dynamic (no cache)
 export const dynamic = 'force-dynamic'
 
 export async function Profile({ userId }: { userId?: string }) {
