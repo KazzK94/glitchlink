@@ -2,8 +2,6 @@
 
 import { useRef, useState } from 'react'
 
-// TODO: Prevent Avatar edition if profile is not the user's profile
-
 const AVATAR_PLACEHOLDER_URL = '/images/avatar-placeholder.webp'
 
 export function Avatar({ src, className, isSelf = false }: { src: string | null | undefined, className?: string, isSelf?: boolean }) {
