@@ -29,11 +29,9 @@ export async function Home() {
 						<PostsList loggedUserId={user.id} />
 					</Suspense>
 				</div>
-				<div className="hidden lg:block relative">
-					<div className='sticky top-6 space-y-4'>
-						<TrendingGames />
-						<SuggestedFriends />
-					</div>
+				<div className='hidden lg:block space-y-4'>
+					<TrendingGames />
+					<SuggestedFriends />
 				</div>
 			</div>
 		</Container>
