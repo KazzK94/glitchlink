@@ -87,6 +87,15 @@ export function RegisterForm() {
 		debouncedCheckAvailability({ username })
 	}
 
+	function onPasswordChange(password: string) {
+		const confirmPassword = form.getValues('confirmPassword')
+		if (confirmPassword && password !== confirmPassword) {
+			form.setError('confirmPassword', { type: 'manual', message: 'Passwords do not match.' })
+		} else {
+			form.clearErrors('confirmPassword')
+		}
+	}
+
 	async function checkAvailability({ username }: { username: string }) {
 		setUsernameAvailability('checking')
 		form.clearErrors('username')
@@ -114,103 +123,116 @@ export function RegisterForm() {
 					<p className="mt-1 text-base text-center text-gray-200">It will be brief, we promise!</p>
 				</div>
 
-				<div className='space-y-3 md:columns-2 [column-gap:3rem] [column-rule:solid_1px_#9991]'>
-					{/** USERNAME */}
-					<FormField
-						control={form.control}
-						name="username"
-						render={({ field }) => (
-							<FormItem className='px-1 pt-2 break-inside-avoid-column'>
-								<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Username</FormLabel>
-								<div className="flex items-center gap-2">
-									<FormControl>
-										<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500"  {...field} onChangeCapture={(event) => onUsernameChange(event.currentTarget.value)} />
-									</FormControl>
-									<div>
-										{usernameAvailability === 'available' && <CircleCheckIcon className="text-green-600" />}
-										{usernameAvailability === 'unavailable' && <CircleAlertIcon className="text-red-600" />}
-										{(usernameAvailability === 'unknown' || usernameAvailability === 'checking')
-											&& <CircleDashed className={`
+				<div className='space-y-3 md:space-y-0 grid grid-cols-1 md:grid-cols-2 md:gap-x-8'>
+					<div className='space-y-3'>
+						{/** USERNAME */}
+						<FormField
+							control={form.control}
+							name="username"
+							render={({ field }) => (
+								<FormItem className='px-1 break-inside-avoid-column'>
+									<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Username</FormLabel>
+									<div className="flex items-center gap-2">
+										<FormControl>
+											<Input
+												className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500"
+												onChangeCapture={(event) => onUsernameChange(event.currentTarget.value)}
+												{...field}
+											/>
+										</FormControl>
+										<div>
+											{usernameAvailability === 'available' && <CircleCheckIcon className="text-green-600" />}
+											{usernameAvailability === 'unavailable' && <CircleAlertIcon className="text-red-600" />}
+											{(usernameAvailability === 'unknown' || usernameAvailability === 'checking')
+												&& <CircleDashed className={`
 											text-gray-600 ${(usernameAvailability === 'checking') && 'animate-spin-slow'}
 										`} />
-										}
+											}
+										</div>
 									</div>
-								</div>
-								<FormMessage />
-								<FormDescription>
-									Your username must be at least 3 characters long.
-								</FormDescription>
-							</FormItem>
-						)}
-					/>
-					{/** PASSWORD */}
-					<FormField
-						control={form.control}
-						name="password"
-						render={({ field }) => (
-							<FormItem className='px-1 break-inside-avoid-column'>
-								<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Password</FormLabel>
-								<FormControl>
-									<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500" {...field} type="password" />
-								</FormControl>
-								<FormMessage />
-								<FormDescription>
-									A password must contain at least 4 characters.
-								</FormDescription>
-							</FormItem>
-						)}
-					/>
-					{/** CONFIRM PASSWORD */}
-					<FormField
-						control={form.control}
-						name="confirmPassword"
-						render={({ field }) => (
-							<FormItem className='px-1 md:pb-3 break-inside-avoid-column'>
-								<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Confirm Password</FormLabel>
-								<FormControl>
-									<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500"  {...field} type="password" />
-								</FormControl>
-								<FormMessage />
-								<FormDescription>
-									Confirm your password (both must match).
-								</FormDescription>
-							</FormItem>
-						)}
-					/>
-					{/** NAME */}
-					<FormField
-						control={form.control}
-						name="name"
-						render={({ field }) => (
-							<FormItem className='px-1 md:pt-2 break-inside-avoid-column'>
-								<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Name</FormLabel>
-								<FormControl>
-									<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500" {...field} />
-								</FormControl>
-								<FormMessage />
-								<FormDescription>
-									Your display name. It must be at least 3 characters long.
-								</FormDescription>
-							</FormItem>
-						)}
-					/>
-					{/** EMAIL */}
-					<FormField
-						control={form.control}
-						name="email"
-						render={({ field }) => (
-							<FormItem className='px-1 break-inside-avoid-column'>
-								<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Email</FormLabel>
-								<FormControl>
-									<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500" {...field} />
-								</FormControl>
-								<FormMessage />
-								<FormDescription>
-									Your email will be used if you forget your password.
-								</FormDescription>
-							</FormItem>
-						)}
-					/>
+									<FormMessage />
+									<FormDescription>
+										Your username must be at least 3 characters long.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+						{/** PASSWORD */}
+						<FormField
+							control={form.control}
+							name="password"
+							render={({ field }) => (
+								<FormItem className='px-1 break-inside-avoid-column'>
+									<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Password</FormLabel>
+									<FormControl>
+										<Input 
+										className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500" 
+										onChangeCapture={(event) => onPasswordChange(event.currentTarget.value)}
+										type="password"
+										{...field} 
+										 />
+									</FormControl>
+									<FormMessage />
+									<FormDescription>
+										A password must contain at least 4 characters.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+						{/** CONFIRM PASSWORD */}
+						<FormField
+							control={form.control}
+							name="confirmPassword"
+							render={({ field }) => (
+								<FormItem className='px-1 break-inside-avoid-column'>
+									<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Confirm Password</FormLabel>
+									<FormControl>
+										<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500"  {...field} type="password" />
+									</FormControl>
+									<FormMessage />
+									<FormDescription>
+										Confirm your password (both must match).
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+					</div>
+					<div className='space-y-3'>
+						{/** NAME */}
+						<FormField
+							control={form.control}
+							name="name"
+							render={({ field }) => (
+								<FormItem className='px-1 break-inside-avoid-column'>
+									<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Name</FormLabel>
+									<FormControl>
+										<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500" {...field} />
+									</FormControl>
+									<FormMessage />
+									<FormDescription>
+										Your display name. It must be at least 3 characters long.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+						{/** EMAIL */}
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormItem className='px-1 break-inside-avoid-column'>
+									<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Email</FormLabel>
+									<FormControl>
+										<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500" {...field} />
+									</FormControl>
+									<FormMessage />
+									<FormDescription>
+										Your email will be used if you forget your password.
+									</FormDescription>
+								</FormItem>
+							)}
+						/>
+					</div>
 				</div>
 				<Button type="submit" disabled={isLoading} className='mt-6 px-4 py-5 w-full rounded-lg text-base font-semibold text-black bg-gradient-to-r from-cyan-50 to-purple-50 hover:from-cyan-100 hover:to-purple-50'>
 					Register
