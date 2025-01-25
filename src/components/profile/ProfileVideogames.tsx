@@ -2,7 +2,7 @@
 import { type VideoGame } from '@prisma/client'
 import { GameCard } from '../games/GameCard'
 
-export async function MyVideoGames({ videoGames }: { videoGames: VideoGame[] }) {
+export async function ProfileVideoGames({ videoGames }: { videoGames: VideoGame[] }) {
 	return (
 		<div className='px-3 py-1'>
 			{videoGames.length === 0 && <p>No games added yet...</p>}

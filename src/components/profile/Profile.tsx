@@ -7,9 +7,9 @@ import { BookUserIcon, Gamepad2Icon, MessageSquareIcon } from 'lucide-react'
 // Components
 import { Container } from '@/components/common/Container'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MyFriendsList } from './MyFriendsList'
-import { MyVideoGames } from './MyVideogames'
-import { MyPosts } from './MyPosts'
+import { ProfileFriendsList } from './ProfileFriendsList'
+import { ProfileVideoGames } from './ProfileVideogames'
+import { ProfilePosts } from './ProfilePosts'
 import { ProfileHeading } from './ProfileHeading'
 
 // Force Dynamic (no cache)
@@ -46,13 +46,13 @@ export async function Profile({ userId }: { userId?: string }) {
 					</TabsTrigger>
 				</TabsList>
 				<TabsContent value='games'>
-					<MyVideoGames videoGames={user.videoGames} />
+					<ProfileVideoGames videoGames={user.videoGames} />
 				</TabsContent>
 				<TabsContent value='posts'>
-					<MyPosts loggedUserId={user.id} posts={user.posts} />
+					<ProfilePosts loggedUserId={user.id} posts={user.posts} />
 				</TabsContent>
 				<TabsContent value='friends'>
-					<MyFriendsList friends={user.socialLinks} />
+					<ProfileFriendsList friends={user.socialLinks} />
 				</TabsContent>
 			</Tabs>
 		</Container>

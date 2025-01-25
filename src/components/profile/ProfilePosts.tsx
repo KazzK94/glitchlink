@@ -2,7 +2,7 @@
 import { Post } from '../posts/Post'
 import { CompletePost } from '@/types'
 
-export async function MyPosts({ posts, loggedUserId }: { posts: CompletePost[], loggedUserId: string }) {
+export async function ProfilePosts({ posts, loggedUserId }: { posts: CompletePost[], loggedUserId: string }) {
 	return (
 		<div className='px-3 py-1'>
 			{posts.length === 0 && <p>No posts created yet...</p>}

@@ -3,7 +3,7 @@ import { UsersList } from '../users/UsersList'
 import Link from 'next/link'
 import { UserPublicInfo } from '@/types'
 
-export async function MyFriendsList({ friends }: { friends: UserPublicInfo[] }) {
+export async function ProfileFriendsList({ friends }: { friends: UserPublicInfo[] }) {
 
 	if (!friends || friends.length === 0) return <NoFriends />
 
