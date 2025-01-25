@@ -82,7 +82,7 @@ model Comment {
     updatedAt DateTime @updatedAt
     author    User     @relation(fields: [authorId], references: [id])
     authorId  String
-    post      Post     @relation(fields: [postId], references: [id])
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
     postId    String
 }
 
