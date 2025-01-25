@@ -14,6 +14,7 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 
 import { CircleCheckIcon, CircleAlertIcon, CircleDashed } from 'lucide-react'
+import Link from 'next/link'
 
 
 export function RegisterForm() {
@@ -78,7 +79,7 @@ export function RegisterForm() {
 
 	const debouncedCheckAvailability = useDebouncedCallback(({ username }: { username: string }) => {
 		checkAvailability({ username })
-	}, 1200)
+	}, 850)
 
 	function onUsernameChange(username: string) {
 		setUsernameAvailability('checking')
@@ -106,105 +107,123 @@ export function RegisterForm() {
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-96 mx-auto space-y-4">
-				{/** USERNAME */}
-				<FormField
-					control={form.control}
-					name="username"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Username</FormLabel>
-							<div className="flex items-center gap-2">
-								<FormControl>
-									<Input {...field} onChangeCapture={(event) => onUsernameChange(event.currentTarget.value)} />
-								</FormControl>
-								<div>
-									{usernameAvailability === 'available' && <CircleCheckIcon className="text-green-600" />}
-									{usernameAvailability === 'unavailable' && <CircleAlertIcon className="text-red-600" />}
-									{(usernameAvailability === 'unknown' || usernameAvailability === 'checking')
-										&& <CircleDashed className={`
+			<form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-md md:max-w-3xl mx-auto bg-gray-800/80 p-6 rounded-2xl shadow-lg border border-gray-400">
+
+				<div className='mb-4 border-b border-gray-600/20 pb-4'>
+					<h1 className="text-3xl font-bold text-center text-white">Create an account</h1>
+					<p className="mt-1 text-base text-center text-gray-200">It will be brief, we promise!</p>
+				</div>
+
+				<div className='space-y-3 md:columns-2 [column-gap:3rem] [column-rule:solid_1px_#7774]'>
+					{/** USERNAME */}
+					<FormField
+						control={form.control}
+						name="username"
+						render={({ field }) => (
+							<FormItem className='px-1 pt-2 break-inside-avoid-column'>
+								<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Username</FormLabel>
+								<div className="flex items-center gap-2">
+									<FormControl>
+										<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500"  {...field} onChangeCapture={(event) => onUsernameChange(event.currentTarget.value)} />
+									</FormControl>
+									<div>
+										{usernameAvailability === 'available' && <CircleCheckIcon className="text-green-600" />}
+										{usernameAvailability === 'unavailable' && <CircleAlertIcon className="text-red-600" />}
+										{(usernameAvailability === 'unknown' || usernameAvailability === 'checking')
+											&& <CircleDashed className={`
 											text-gray-600 ${(usernameAvailability === 'checking') && 'animate-spin-slow'}
 										`} />
-									}
+										}
+									</div>
 								</div>
-							</div>
-							<FormDescription>
-								Your username must be unique, and at least 3 characters long.
-							</FormDescription>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				{/** PASSWORD */}
-				<FormField
-					control={form.control}
-					name="password"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Password</FormLabel>
-							<FormControl>
-								<Input {...field} type="password" />
-							</FormControl>
-							<FormMessage />
-							<FormDescription>
-								Create a strong password. It should contain at least 4 characters.
-							</FormDescription>
-						</FormItem>
-					)}
-				/>
-				{/** CONFIRM PASSWORD */}
-				<FormField
-					control={form.control}
-					name="confirmPassword"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Confirm Password</FormLabel>
-							<FormControl>
-								<Input {...field} type="password" />
-							</FormControl>
-							<FormDescription>
-								Type your password again.
-							</FormDescription>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				{/** NAME */}
-				<FormField
-					control={form.control}
-					name="name"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Name</FormLabel>
-							<FormControl>
-								<Input {...field} />
-							</FormControl>
-							<FormMessage />
-							<FormDescription>
-								Your display name. It must be at least 3 characters long.
-							</FormDescription>
-						</FormItem>
-					)}
-				/>
-				{/** EMAIL */}
-				<FormField
-					control={form.control}
-					name="email"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Email</FormLabel>
-							<FormControl>
-								<Input {...field} />
-							</FormControl>
-							<FormMessage />
-							<FormDescription>
-								Your email will be used if you forget your password.
-							</FormDescription>
-						</FormItem>
-					)}
-				/>
+								<FormMessage />
+								<FormDescription>
+									Your username must be at least 3 characters long.
+								</FormDescription>
+							</FormItem>
+						)}
+					/>
+					{/** PASSWORD */}
+					<FormField
+						control={form.control}
+						name="password"
+						render={({ field }) => (
+							<FormItem className='px-1 break-inside-avoid-column'>
+								<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Password</FormLabel>
+								<FormControl>
+									<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500" {...field} type="password" />
+								</FormControl>
+								<FormMessage />
+								<FormDescription>
+									A password must contain at least 4 characters.
+								</FormDescription>
+							</FormItem>
+						)}
+					/>
+					{/** CONFIRM PASSWORD */}
+					<FormField
+						control={form.control}
+						name="confirmPassword"
+						render={({ field }) => (
+							<FormItem className='px-1 md:pb-3 break-inside-avoid-column'>
+								<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Confirm Password</FormLabel>
+								<FormControl>
+									<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500"  {...field} type="password" />
+								</FormControl>
+								<FormMessage />
+								<FormDescription>
+									Confirm your password (both must match).
+								</FormDescription>
+							</FormItem>
+						)}
+					/>
+					{/** NAME */}
+					<FormField
+						control={form.control}
+						name="name"
+						render={({ field }) => (
+							<FormItem className='px-1 md:pt-2 break-inside-avoid-column'>
+								<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Name</FormLabel>
+								<FormControl>
+									<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500" {...field} />
+								</FormControl>
+								<FormMessage />
+								<FormDescription>
+									Your display name. It must be at least 3 characters long.
+								</FormDescription>
+							</FormItem>
+						)}
+					/>
+					{/** EMAIL */}
+					<FormField
+						control={form.control}
+						name="email"
+						render={({ field }) => (
+							<FormItem className='px-1 break-inside-avoid-column'>
+								<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Email</FormLabel>
+								<FormControl>
+									<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500" {...field} />
+								</FormControl>
+								<FormMessage />
+								<FormDescription>
+									Your email will be used if you forget your password.
+								</FormDescription>
+							</FormItem>
+						)}
+					/>
+				</div>
+				<Button type="submit" disabled={isLoading} className='mt-6 px-4 py-5 w-full rounded-lg text-base font-semibold text-black bg-gradient-to-r from-cyan-50 to-purple-50 hover:from-cyan-100 hover:to-purple-50'>
+					Register
+				</Button>
 
-				<Button type="submit" disabled={isLoading} variant='secondary' className='w-full'>Register</Button>
+				<p className='mt-5 mx-auto md:text-sm font-semibold text-pretty flex flex-col md:flex-row gap-x-1.5 justify-center items-center'>
+					<span>
+						Already have an account?
+					</span>
+					<Link href='/login' className="text-cyan-400 hover:text-cyan-500">
+						Log in here!
+					</Link>
+				</p>
 			</form>
 		</Form>
 	)

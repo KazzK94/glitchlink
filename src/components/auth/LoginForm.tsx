@@ -109,7 +109,7 @@ export function LoginForm() {
 					type="submit"
 					disabled={isLoading}
 					variant='secondary'
-					className='mt-4 px-4 py-5 w-full rounded-xl text-base font-semibold text-black bg-gradient-to-r from-cyan-100 to-purple-100 hover:from-cyan-200 hover:to-purple-200'>
+					className='mt-4 px-4 py-5 w-full rounded-lg text-base font-semibold text-black bg-gradient-to-r from-cyan-50 to-purple-50 hover:from-cyan-100 hover:to-purple-100'>
 					{isLoading ? "Logging in..." : "Log in"}
 				</Button>
 

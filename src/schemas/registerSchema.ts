@@ -22,7 +22,7 @@ export const registerSchema = z.object({
 		})
 	}
 	// Force first character to be a letter
-	if (!data.username[0].match(/[a-zA-Z]/)) {
+	if (data.username.length > 0 && !data.username[0].match(/[a-zA-Z]/)) {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
 			message: "Username must start with a letter.",
