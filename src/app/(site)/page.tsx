@@ -10,8 +10,6 @@ export default async function HomePage() {
 	const session = await getServerSession(authOptions)
 	const isUserLogged = Boolean(session?.user)
 
-	await new Promise(resolve => setTimeout(resolve, 30000))
-
 	return (
 		<div className="min-h-screen">
 			<main>
