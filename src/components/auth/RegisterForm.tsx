@@ -123,7 +123,7 @@ export function RegisterForm() {
 					<p className="mt-1 text-base text-center text-gray-200">It will be brief, we promise!</p>
 				</div>
 
-				<div className='space-y-3 md:space-y-0 grid grid-cols-1 md:grid-cols-2 md:gap-x-8'>
+				<div className='space-y-3 md:space-y-0 grid grid-cols-1 md:grid-cols-2 md:gap-x-12'>
 					<div className='space-y-3'>
 						{/** USERNAME */}
 						<FormField
