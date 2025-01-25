@@ -44,7 +44,7 @@ export async function UserProfile({ username }: { username: string }) {
 			{/* Content */}
 			<div className="flex gap-4 items-center ml-2">
 				<div>
-					<Avatar src={user.avatar} className='size-16' isSelf={isSelf} />
+					<Avatar src={user.avatar} className='size-16' editable={isSelf} />
 				</div>
 				<div>
 					<h1 className='text-xl font-semibold text-blue-200'>

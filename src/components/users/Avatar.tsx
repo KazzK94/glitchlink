@@ -4,12 +4,12 @@ import { useRef, useState } from 'react'
 
 const AVATAR_PLACEHOLDER_URL = '/images/avatar-placeholder.webp'
 
-export function Avatar({ src, className, isSelf = false }: { src: string | null | undefined, className?: string, isSelf?: boolean }) {
+export function Avatar({ src, className, editable = false }: { src: string | null | undefined, className?: string, editable?: boolean }) {
 	const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null | undefined>(src)
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const handleOpenFileSelector = () => {
-		if (!isSelf) return
+		if (!editable) return
 		inputRef.current?.click()
 	}
 
@@ -33,7 +33,7 @@ export function Avatar({ src, className, isSelf = false }: { src: string | null 
 	}
 
 	return (
-		<div onClick={handleOpenFileSelector} className={`rounded-full border-2 overflow-hidden ${isSelf ? 'cursor-pointer hover:opacity-60 transition' : ''} ${className || ''}`}>
+		<div onClick={handleOpenFileSelector} className={`rounded-full border-2 overflow-hidden ${editable ? 'cursor-pointer hover:opacity-60 transition' : ''} ${className || ''}`}>
 			<img className={'object-cover ' + className} alt='User avatar' src={uploadedImageUrl ? uploadedImageUrl : AVATAR_PLACEHOLDER_URL} />
 			<input type='file' className='hidden' ref={inputRef} onChange={handleSubmit} accept='.jpg,.jpeg,.png,.avif,.webp' />
 		</div>

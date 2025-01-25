@@ -20,7 +20,7 @@ export function ProfileHeading({ user }: { user: User }) {
 			{/* Content */}
 			<div className="flex gap-4 items-center ml-2">
 				<div className="left">
-					<Avatar src={user.avatar} className='size-16' isSelf />
+					<Avatar src={user.avatar} className='size-16' editable />
 				</div>
 				<div className="right">
 					<h1 className='text-3xl font-semibold text-blue-200'>
