@@ -98,7 +98,7 @@ export function UserCard({ user, socialLinkId, socialLinkStatus = 'NONE', classN
 function SendSocialLinkRequest({ onClick }: { onClick?: () => void }) {
 	return (
 		<Button aria-label='Send request' onClick={onClick} variant="ghost"
-			className='hover:bg-transparent text-green-100 hover:text-green-400 transition duration-200'>
+			className='hover:bg-transparent text-green-50 hover:text-green-400 transition duration-200'>
 			<UserPlusIcon />
 		</Button>
 	)
@@ -107,7 +107,7 @@ function SendSocialLinkRequest({ onClick }: { onClick?: () => void }) {
 function IdleSocialLinkExisting({ onClick }: { onClick?: () => void }) {
 	return (
 		<Button aria-label='Remove friend' onClick={onClick} variant="ghost"
-			className='hover:bg-transparent text-green-400 hover:text-red-400 transition duration-200 group'>
+			className='hover:bg-transparent text-blue-400 hover:text-red-400 transition duration-200 group'>
 			<UserCheckIcon className='group-hover:hidden' />
 			<UserXIcon className='hidden group-hover:inline-block' />
 		</Button>
@@ -117,7 +117,7 @@ function IdleSocialLinkExisting({ onClick }: { onClick?: () => void }) {
 function CancelSocialLinkRequest({ onClick }: { onClick?: () => void }) {
 	return (
 		<Button aria-label='Cancel request' onClick={onClick} variant="ghost"
-			className='hover:bg-transparent text-purple-300 hover:text-red-400 transition duration-200 group'>
+			className='hover:bg-transparent text-purple-400 hover:text-red-400 transition duration-200 group'>
 			<UserMinusIcon className='group-hover:hidden' />
 			<UserXIcon className='hidden group-hover:inline-block' />
 		</Button>
