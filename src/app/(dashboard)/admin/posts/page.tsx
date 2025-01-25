@@ -16,7 +16,7 @@ export default async function UsersDashboardPage() {
 					<DashboardTableHeader>ID</DashboardTableHeader>
 					<DashboardTableHeader>Author</DashboardTableHeader>
 					<DashboardTableHeader>Content</DashboardTableHeader>
-					<DashboardTableHeader>DELETE POST</DashboardTableHeader>
+					<DashboardTableHeader>DELETE</DashboardTableHeader>
 				</DashboardTableHeaders>
 				<DashboardTableBody>
 					{posts.map((post) => (
