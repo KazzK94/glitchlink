@@ -35,23 +35,22 @@ Some sections will show differently based on the user's session (like the top-ri
 
 ## Profile
 The profile route (/profile) is a protected route via middleware. If user is not logged in, this will redirect to /login.
-As for the profile page's content... well, yeah, that's not implemented properly yet. We're using /profile to store links to functionalities that don't have their place yet.
+It contains the user's Video Games, Posts and Friends.
 
 ## Games
-The games section (/games) shows a list of games, and a search bar to find the games you want.
-If the user is logged in, hovering over a GameCard will show a button to "Add to my games". However, this behavior is not implemented yet (see "Implementing Soon" for more info).
+The games section (/games) shows a list of games (obtained from an external API), and a search bar to find the games you want.
+If the user is logged in, hovering over a GameCard shows a button to "Add to my collection". 
 
+## Admin Panel
+This panel was created for testing purposes only, but it's open for anyone to see at /admin. Yes, anyone can play admin in GlitchLink right now.
+However, this is not being maintained for now.
 
 # Implementing soon
 
-## Add Games to User's Collection
-As for now, Games are retrieved from an external API. However, we want to also have our own table in our database with the game's reference, so we can have a db relation between User and Game.
-We will implement this relation first, and then we will make it so when a user clicks on the button, the system checks if the game is stored in our database. If it isn't, it stores it. After that, the User and the Game will be linked using Prisma (relation many-to-many).
+## Control Owned Games
+When browsing games, the owned games still show the button "Add to my collection".
+We will replace this button with something that indicates that you already own that game, and an option to remove it from your collection.
 
-## Profile (a little more decent)
-The profile will now show the user's Name (with the profile's stored color), as well as the games they added to their profile.
-It will also have an option to edit the User's information, such as the username, name and color.
-
-## Users Privileges and Status
-We will add a privilege level to users in the database (user, mod, admin...).
-We will also add a status to user accounts (pending, active, banned, disabled...).
+## Other users' profiles
+We want to use the same template we have for the logged user to show the information of other users too.
+Of course the options will be different than the ones showed for the logged user.
