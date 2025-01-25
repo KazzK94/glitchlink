@@ -94,7 +94,6 @@ export async function getUserProfile(userId: string = '') {
 		...user.userAInSocialLinks.map(data => data.userB),
 		...user.userBInSocialLinks.map(data => data.userA)
 	]
-	console.log(JSON.stringify(socialLinks))
 
 	return {
 		...user,

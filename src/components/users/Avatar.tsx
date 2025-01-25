@@ -30,7 +30,6 @@ export function Avatar({ src, className, isSelf = false }: { src: string | null 
 		})
 		const data = await response.json()
 		setUploadedImageUrl(data.avatarUrl)
-		console.log({ data })
 	}
 
 	return (

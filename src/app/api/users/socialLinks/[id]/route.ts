@@ -21,7 +21,6 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
 	const socialLinkId = params.id
-	console.log('Deleting SocialLink:', socialLinkId)
 	const result = await deleteSocialLink(socialLinkId)
 	return Response.json({ message: 'SocialLink deletion executed', result })
 }
