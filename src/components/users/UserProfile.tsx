@@ -34,7 +34,7 @@ export async function UserProfile({ username }: { username: string }) {
 					</div>
 				) : (
 					<div className='float-right flex items-center gap-3'>
-						<Link href={`/dm/${user.username}`} className='flex items-center border-2 rounded-lg p-3 z-10 text-purple-300 border-purple-300/80 hover:text-purple-300 hover:border-purple-400'>
+						<Link href={`/dm/${user.username}`} className='flex items-center border-2 rounded-lg p-2.5 z-10 text-purple-300 border-purple-300/80 hover:text-purple-300 hover:border-purple-400'>
 							<MailIcon size={24} />
 						</Link>
 					</div>
@@ -43,14 +43,14 @@ export async function UserProfile({ username }: { username: string }) {
 
 			{/* Content */}
 			<div className="flex gap-4 items-center ml-2">
-				<div className="left">
+				<div>
 					<Avatar src={user.avatar} className='size-16' isSelf={isSelf} />
 				</div>
-				<div className="right">
-					<h1 className='text-3xl font-semibold text-blue-200'>
+				<div>
+					<h1 className='text-xl font-semibold text-blue-200'>
 						{user.name}
 					</h1>
-					<p className='italic opacity-80 text-base mt-0.5 ml-1'>
+					<p className='italic opacity-80 text-sm mt-0.5 ml-1'>
 						@{user.username}
 					</p>
 				</div>
