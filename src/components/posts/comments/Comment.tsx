@@ -2,6 +2,7 @@
 import type { User, Comment } from '@prisma/client'
 import { EllipsisVerticalIcon } from 'lucide-react'
 import { CommentParsedContent } from './CommentParsedContent'
+import { Avatar } from '@/components/users/Avatar'
 
 
 interface CommentProps {
@@ -15,7 +16,7 @@ export function PostComment({ comment }: CommentProps) {
 		<div className='bg-gray-700/70 p-3 rounded-lg'>
 			<div className='flex justify-between'>
 				<div className="flex items-center flex-grow">
-					<div className="size-8 bg-gray-600 rounded-full mr-2"></div>
+					<Avatar src={comment.author.avatar} className='size-10 mr-2' />
 					<div>
 						<h3 className="text-sm font-semibold">{comment.author.name}</h3>
 						<p className="text-xs text-gray-400 italic">@{comment.author.username}</p>
