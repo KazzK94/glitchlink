@@ -109,12 +109,12 @@ export function RegisterForm() {
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-md md:max-w-3xl mx-auto bg-gray-800/80 p-6 rounded-2xl shadow-lg border border-gray-400">
 
-				<div className='mb-4 border-b border-gray-600/20 pb-4'>
+				<div className='mb-4 border-b border-gray-600/50 pb-4'>
 					<h1 className="text-3xl font-bold text-center text-white">Create an account</h1>
 					<p className="mt-1 text-base text-center text-gray-200">It will be brief, we promise!</p>
 				</div>
 
-				<div className='space-y-3 md:columns-2 [column-gap:3rem] [column-rule:solid_1px_#7774]'>
+				<div className='space-y-3 md:columns-2 [column-gap:3rem] [column-rule:solid_1px_#9991]'>
 					{/** USERNAME */}
 					<FormField
 						control={form.control}
