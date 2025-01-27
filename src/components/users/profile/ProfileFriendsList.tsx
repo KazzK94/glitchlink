@@ -3,7 +3,7 @@ import { UsersList } from '../UsersList'
 import Link from 'next/link'
 import { UserPublicInfo } from '@/types'
 
-export async function ProfileFriendsList({ friends }: { friends: UserPublicInfo[] }) {
+export async function ProfileFriendsList({ friends, loggedUserId }: { friends: UserPublicInfo[], loggedUserId?: string }) {
 
 	if (!friends || friends.length === 0) return <NoFriends />
 
@@ -13,6 +13,7 @@ export async function ProfileFriendsList({ friends }: { friends: UserPublicInfo[
 				className='text-xl text-neutral-300 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'
 				cardClassName='bg-gray-700/10 hover:bg-gray-700/15 shadow-sm shadow-gray-400/90 hover:shadow-gray-200/90 p-3'
 				users={friends}
+				loggedUserId={loggedUserId}
 			/>
 		</div>
 	)

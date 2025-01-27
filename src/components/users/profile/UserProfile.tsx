@@ -15,6 +15,7 @@ import { Avatar } from '../Avatar'
 import { ProfileVideoGames } from './ProfileVideogames'
 import { ProfilePosts } from './ProfilePosts'
 import { ProfileFriendsList } from './ProfileFriendsList'
+import { UserContextOpener } from './UserContextOpener'
 
 export async function UserProfile({ username }: { username?: string }) {
 
@@ -39,10 +40,11 @@ export async function UserProfile({ username }: { username?: string }) {
 						</LogoutButton>
 					</div>
 				) : (
-					<div className='float-right flex items-center gap-3'>
-						<Link href={`/dm/${user.username}`} className='flex items-center border-2 rounded-lg p-2.5 z-10 text-purple-300 border-purple-300/80 hover:text-purple-300 hover:border-purple-400'>
-							<MailIcon size={24} />
+					<div className='float-right flex items-center gap-2'>
+						<Link href={`/dm/${user.username}`} className='flex items-center rounded-lg p-2.5 z-10 text-purple-300 border-purple-300/80 hover:text-purple-300 hover:border-purple-400'>
+							<MailIcon className='size-7' />
 						</Link>
+						<UserContextOpener user={user} />
 					</div>
 				)
 			}
@@ -82,10 +84,10 @@ export async function UserProfile({ username }: { username?: string }) {
 					<ProfileVideoGames videoGames={user.videoGames} />
 				</TabsContent>
 				<TabsContent value='posts'>
-					<ProfilePosts loggedUserId={user.id} posts={user.posts} />
+					<ProfilePosts posts={user.posts} loggedUserId={user.id} />
 				</TabsContent>
 				<TabsContent value='friends'>
-					<ProfileFriendsList friends={user.socialLinks} />
+					<ProfileFriendsList friends={user.socialLinks} loggedUserId={loggedUser?.id} />
 				</TabsContent>
 			</Tabs>
 		</Container>

@@ -13,9 +13,10 @@ interface UserCardProps {
 	socialLinkId?: string
 	socialLinkStatus?: SocialLinkDetailedStatus | null | undefined
 	className?: string
+	isSelf?: boolean
 }
 
-export function UserCard({ user, socialLinkId, socialLinkStatus = 'NONE', className }: UserCardProps) {
+export function UserCard({ user, socialLinkId, socialLinkStatus = 'NONE', className, isSelf = false }: UserCardProps) {
 
 	const router = useRouter()
 
@@ -76,21 +77,27 @@ export function UserCard({ user, socialLinkId, socialLinkStatus = 'NONE', classN
 					<span className='italic text-gray-400 text-sm'>@{user.username}</span>
 				</div>
 			</div>
-			{(socialLinkStatus === 'NONE') && (
-				<SendSocialLinkRequest onClick={handleSendSocialLinkRequest} />
-			)}
-			{(socialLinkStatus === 'FRIENDS') && (
-				<IdleSocialLinkExisting onClick={handleRemoveSocialLink} />
-			)}
-			{(socialLinkStatus === 'SENT_PENDING') && (
-				<CancelSocialLinkRequest onClick={handleRemoveSocialLinkRequest} />
-			)}
-			{(socialLinkStatus === 'RECEIVED_PENDING') && (
-				<div>
-					<AcceptSocialLinkRequest onClick={handleAcceptSocialLinkRequest} />
-					<RejectSocialLinkRequest onClick={handleRejectSocialLinkRequest} />
-				</div>
-			)}
+			{
+				!isSelf && (
+					<>
+						{(socialLinkStatus === 'NONE') && (
+							<SendSocialLinkRequest onClick={handleSendSocialLinkRequest} />
+						)}
+						{(socialLinkStatus === 'FRIENDS') && (
+							<IdleSocialLinkExisting onClick={handleRemoveSocialLink} />
+						)}
+						{(socialLinkStatus === 'SENT_PENDING') && (
+							<CancelSocialLinkRequest onClick={handleRemoveSocialLinkRequest} />
+						)}
+						{(socialLinkStatus === 'RECEIVED_PENDING') && (
+							<div>
+								<AcceptSocialLinkRequest onClick={handleAcceptSocialLinkRequest} />
+								<RejectSocialLinkRequest onClick={handleRejectSocialLinkRequest} />
+							</div>
+						)}
+					</>
+				)
+			}
 		</div>
 	)
 }

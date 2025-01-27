@@ -1,15 +1,15 @@
 
 import { getActiveUsers } from '@/services/users'
 import { UserCard } from './UserCard'
-import { getSocialLinks } from '@/services/socialLinks'
+import { getSelfSocialLinks } from '@/services/socialLinks'
 import { SocialLinkDetailedStatus, UserPublicInfo } from '@/types'
 
-export async function UsersList({ users, className, cardClassName }: { users?: UserPublicInfo[], className?: string, cardClassName?: string }) {
+export async function UsersList({ users, className, cardClassName, loggedUserId }: { users?: UserPublicInfo[], className?: string, cardClassName?: string, loggedUserId?: string, hideSelf?: boolean }) {
 
 	if (!users) {
 		users = await getActiveUsers(12)
 	}
-	const socialLinksList = await getSocialLinks()
+	const socialLinksList = await getSelfSocialLinks()
 
 	return (
 		<ul className={className}>
@@ -17,12 +17,15 @@ export async function UsersList({ users, className, cardClassName }: { users?: U
 				// Check if user is already a friend
 				const socialLink = socialLinksList?.find(link => link.userAId === foundUser.id || link.userBId === foundUser.id)
 				const socialLinkStatus = parseSocialLink({ socialLink, targetId: foundUser.id })
+
+				console.log({ foundUserId: foundUser.id, loggedUserId })
 				return (
 					<li key={foundUser.id}>
 						<UserCard user={foundUser}
 							socialLinkId={socialLink?.id}
 							socialLinkStatus={socialLinkStatus}
 							className={cardClassName}
+							isSelf={foundUser.id === loggedUserId}
 						/>
 					</li>
 				)
