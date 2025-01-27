@@ -5,11 +5,10 @@ import { Prisma } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import { getUserFromSession } from './auth'
 
+/** Attempts to create a user in the DB, or throws an error in case it cannot create it */
 export async function createUser({ username, password, name, email }: Prisma.UserCreateInput) {
-
-	const existingUser = await getUserByUsername({ username })
+	const existingUser = await getUser({ where: { username: { equals: username, mode: 'insensitive' } } })
 	if (existingUser) throw new Error('Username is already taken.')
-
 	const hashedPassword = await bcrypt.hash(password, 10)
 	try {
 		return await prisma.user.create({
@@ -26,8 +25,9 @@ export async function createUser({ username, password, name, email }: Prisma.Use
 	}
 }
 
+/** Attempts to Log In, or returns null in case the login is incorrect */
 export async function attemptLogin(username: string, password: string) {
-	// We do it manually to retrieve the password too (getUserByUsername doesn't fetch it)
+	// We do the findFirst manually to retrieve the password too
 	const user = await prisma.user.findFirst({
 		where: { username: { equals: username, mode: 'insensitive' } }
 	})
@@ -54,24 +54,44 @@ export async function updateUser({ data }: { data: Prisma.UserUpdateInput }) {
 
 }
 
+/** Get the basic information of a user (name, username and avatar) */
+export async function getUser({ username, where }: { username: string, where?: Prisma.UserWhereInput } | { username?: string, where: Prisma.UserWhereInput }) {
+	if (!username && !where) return null
+	if (!where) where = {}
+	if (username) where.username = { equals: username, mode: 'insensitive' }
+	return await prisma.user.findFirst({
+		where,
+		select: { id: true, username: true, name: true, avatar: true }
+	})
+}
+
+/** Get a list of users (basic information only) matching the {where} conditions. */
 export async function getUsers({ where }: { where?: Prisma.UserWhereInput | null } = {}) {
 	return where
 		? await prisma.user.findMany({ where, select: { id: true, username: true, name: true, avatar: true } })
 		: await prisma.user.findMany({ select: { id: true, username: true, name: true, avatar: true } })
 }
 
-export async function getUserProfile(userId: string = '') {
+/** Get the Profile information of a user (basic information + posts, games, friends...) */
+export async function getUserProfile({ userId, username }: { userId: string, username?: undefined } | { username: string, userId?: undefined }) {
 
-	if (!userId) {
-		const user = await getUserFromSession()
-		if (!user) throw new Error('No user logged.')
-		userId = user.id
+	const loggedUser = await getUserFromSession()
+	if (!userId && !username) {
+		if (!loggedUser) throw new Error('No user logged.')
+		userId = loggedUser.id
 	}
 
+	const isSelf = loggedUser?.id === userId
+	const key = userId ? 'id' : 'username'
+
+	const whereOptions = {
+		[key]: userId || username
+	} as { id: string } | { username: string }
+
 	const user = await prisma.user.findUnique({
-		where: { id: userId },
+		where: whereOptions,
 		select: {
-			id: true, username: true, name: true, avatar: true, email: true,
+			id: true, username: true, name: true, avatar: true, email: isSelf,
 			videoGames: { orderBy: { title: 'asc' } },
 			posts: {
 				include: {
@@ -101,30 +121,9 @@ export async function getUserProfile(userId: string = '') {
 	}
 }
 
-export async function getUser({ where }: { where: Prisma.UserWhereInput }) {
-	return await prisma.user.findFirst({ where })
-}
-
-export async function getUserById({ id, isSelf = false }: { id: string, isSelf?: boolean }) {
-	return await prisma.user.findUnique({
-		where: { id },
-		select: { id: true, username: true, name: true, avatar: true, videoGames: true, email: isSelf, createdAt: true, updatedAt: isSelf }
-	})
-}
-
-export async function getUserByUsername({ username, isSelf = false }: { username: string, isSelf?: boolean }) {
-	return await prisma.user.findFirst({
-		where: {
-			username: { equals: username, mode: 'insensitive' }
-		},
-		select: { id: true, username: true, name: true, avatar: true, email: isSelf, videoGames: { orderBy: { title: 'asc' } } }
-	})
-}
-
-/** Get the {amount} most active users (not including self) */
+/** Get the `amount` most active users (not including self) */
 export async function getActiveUsers(amount: number = 3) {
 	const user = await getUserFromSession()
-
 	return await prisma.user.findMany({
 		where: { id: { not: user?.id } },
 		take: amount,

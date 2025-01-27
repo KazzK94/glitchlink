@@ -1,16 +1,15 @@
 
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/services/nextAuthConfig'
+import { getUserFromSession } from '@/services/auth'
 
-import { getUserById } from '@/services/users'
+import { getUserProfile } from '@/services/users'
 
 export async function GET() {
-	const session = await getServerSession(authOptions)
-	if (!session || !session.user || !session.user.id) {
+	const loggedUser = await getUserFromSession()
+	if (!loggedUser || !loggedUser.id) {
 		return Response.json({ ok: false }, { status: 403 })
 	}
 
-	const user = await getUserById({ id: session.user.id, isSelf: true })
+	const user = await getUserProfile({ userId: loggedUser.id })
 
 	if (!user) {
 		return Response.json({ ok: false }, { status: 403 })

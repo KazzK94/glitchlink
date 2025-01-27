@@ -1,5 +1,5 @@
 
-import { Post } from '../posts/Post'
+import { Post } from '../../posts/Post'
 import { CompletePost } from '@/types'
 
 export async function ProfilePosts({ posts, loggedUserId }: { posts: CompletePost[], loggedUserId: string }) {

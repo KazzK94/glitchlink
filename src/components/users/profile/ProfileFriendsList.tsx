@@ -1,5 +1,5 @@
 
-import { UsersList } from '../users/UsersList'
+import { UsersList } from '../UsersList'
 import Link from 'next/link'
 import { UserPublicInfo } from '@/types'
 
