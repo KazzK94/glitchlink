@@ -62,7 +62,7 @@ export function LoginForm() {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className="w-full max-w-sm mx-auto bg-gray-800/80 p-6 rounded-2xl shadow-lg border border-gray-400">
+				className="w-full max-w-sm mx-auto bg-gray-800/50 p-6 rounded-2xl shadow-lg border border-gray-400">
 
 				<div className='mb-3'>
 					<h1 className="text-3xl font-bold text-center text-white">Welcome Back</h1>

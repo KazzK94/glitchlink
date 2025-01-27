@@ -1,7 +1,7 @@
 'use client'
 
 import { registerSchema, type RegisterSchema } from '@/schemas/registerSchema'
-import { getUser, getUserByUsername } from '@/services/users'
+import { getUser } from '@/services/users'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useState } from 'react'
@@ -104,7 +104,7 @@ export function RegisterForm() {
 			form.setError('username', { type: 'manual', message: 'Username must be at least 3 characters long.' })
 			return
 		}
-		const isUsernameTaken = Boolean(await getUserByUsername({ username }))
+		const isUsernameTaken = Boolean(await getUser({ username }))
 		if (isUsernameTaken) {
 			setUsernameAvailability('unavailable')
 			form.setError('username', { type: 'manual', message: 'Username is already taken.' })
@@ -116,7 +116,7 @@ export function RegisterForm() {
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-md md:max-w-3xl mx-auto bg-gray-800/80 p-6 rounded-2xl shadow-lg border border-gray-400">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-md md:max-w-3xl mx-auto bg-gray-800/50 p-6 rounded-2xl shadow-lg border border-gray-400">
 
 				<div className='mb-4 border-b border-gray-600/50 pb-4'>
 					<h1 className="text-3xl font-bold text-center text-white">Create an account</h1>
