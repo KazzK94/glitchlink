@@ -1,6 +1,5 @@
 'use client'
 
-import { EllipsisVerticalIcon } from 'lucide-react'
 import { useState } from 'react'
 import { PostComment } from './comments/Comment'
 import { PostCommentCreateForm } from './comments/CommentCreateForm'
@@ -9,6 +8,9 @@ import { ToggleLikeButton, ToggleCommentsButton, ShareButton } from './PostButto
 import { PostParsedContent } from './PostParsedContent'
 import Link from 'next/link'
 import { Avatar } from '../users/Avatar'
+import { ContextOpener, ContextOption } from '../common/ContextOpener'
+import { EditIcon, TrashIcon } from 'lucide-react'
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 
 interface PostProps {
 	post: CompletePost
@@ -17,7 +19,7 @@ interface PostProps {
 
 export function Post({ post, loggedUserId }: PostProps) {
 
-	const userIsAuthor = post.authorId === loggedUserId
+	const loggedUserIsAuthor = post.authorId === loggedUserId
 
 	const [likesData, setLikesData] = useState({
 		likes: post.likedBy.length,
@@ -47,7 +49,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 	}
 
 	return (
-		<article key={post.id} className={`bg-gray-800/85 pt-4 pb-2 rounded-lg shadow shadow-gray-400/60 ${userIsAuthor && 'border border-purple-600/20'}`}>
+		<article key={post.id} className={`bg-gray-800/85 pt-4 pb-2 rounded-lg shadow shadow-gray-400/60 ${loggedUserIsAuthor && 'border border-purple-600/20'}`}>
 			{/* Post Author */}
 			<div className='flex justify-between mb-4 px-4'>
 				<Link href={`/u/${post.author.username}`} className="flex items-center">
@@ -57,9 +59,36 @@ export function Post({ post, loggedUserId }: PostProps) {
 						<p className="text-sm text-gray-400 italic cursor-pointer">@{post.author.username}</p>
 					</div>
 				</Link>
-				<button className='flex justify-end items-center pb-2 min-w-8' aria-label='Open post context menu'>
-					<EllipsisVerticalIcon size={24} />
-				</button>
+				<div className='flex justify-end items-start -mr-2 -mt-0.5 min-w-8'>
+					<ContextOpener>
+						{loggedUserIsAuthor && (
+							<>
+								<ContextOption
+									onClick={() => { alert('Editing posts is Not Implemented Yet') }}
+								>
+									<EditIcon className='size-4' />
+									Edit Post
+								</ContextOption>
+								<ContextOption
+									className='text-red-500'
+									onClick={() => { alert('Deleting posts is Not Implemented Yet') }}
+								>
+									<TrashIcon className='size-4' />
+									Delete Post
+								</ContextOption>
+							</>
+						)}
+						{!loggedUserIsAuthor && (
+							<ContextOption
+								className='text-red-500'
+								onClick={() => { alert('Reporting posts is Not Implemented Yet') }}
+							>
+								<ExclamationTriangleIcon className='size-4' />
+								Report Post
+							</ContextOption>
+						)}
+					</ContextOpener>
+				</div>
 			</div>
 			{/* Post Content */}
 			<PostParsedContent content={post.content} />
