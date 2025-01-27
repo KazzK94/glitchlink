@@ -36,7 +36,7 @@ export async function acceptSocialLinkRequest(socialLinkId: string) {
 }
 
 /** Get self's Social Links */
-export async function getSocialLinks() {
+export async function getSelfSocialLinks() {
 	const user = await getUserFromSession()
 	if (!user) return null
 	try {

@@ -1,10 +1,10 @@
 
 
-import { getSocialLinks, sendSocialLinkRequest } from '@/services/socialLinks'
+import { getSelfSocialLinks, sendSocialLinkRequest } from '@/services/socialLinks'
 import { type NextRequest } from 'next/server'
 
 export async function GET() {
-	const socialLinks = await getSocialLinks()
+	const socialLinks = await getSelfSocialLinks()
 	return Response.json(socialLinks)
 }
 
