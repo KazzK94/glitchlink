@@ -18,7 +18,6 @@ export async function UsersList({ users, className, cardClassName, loggedUserId 
 				const socialLink = socialLinksList?.find(link => link.userAId === foundUser.id || link.userBId === foundUser.id)
 				const socialLinkStatus = parseSocialLink({ socialLink, targetId: foundUser.id })
 
-				console.log({ foundUserId: foundUser.id, loggedUserId })
 				return (
 					<li key={foundUser.id}>
 						<UserCard user={foundUser}
