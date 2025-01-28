@@ -112,7 +112,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 						<div className='flex flex-col gap-2 mx-2'>
 							{
 								post.comments.map((comment, index) => (
-									<PostComment key={index} comment={comment} />
+									<PostComment key={index} comment={comment} loggedUserId={loggedUserId} />
 								))
 							}
 						</div>
