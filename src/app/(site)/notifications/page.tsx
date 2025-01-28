@@ -13,9 +13,15 @@ export default async function NotificationsPage() {
 
 			<div className='flex flex-col gap-2 mb-4'>
 				{
-					notifications.map(notification => (
-						<Notification key={notification.id} notification={notification} />
-					))
+					notifications.length === 0 ? (
+						<p className='italic text-gray-400'>
+							You don&apos;t have any notifications yet...
+						</p>
+					) : (
+						notifications.map(notification => (
+							<Notification key={notification.id} notification={notification} />
+						))
+					)
 				}
 			</div>
 		</Container>
