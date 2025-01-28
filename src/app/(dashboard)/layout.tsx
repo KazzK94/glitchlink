@@ -6,12 +6,14 @@ import DashboardMenu from './components/DashboardMenu'
 import { getUserFromSession } from '@/services/auth'
 import { redirect } from 'next/navigation'
 
+const ADMIN_ID = process.env.ADMIN_ID
+
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
 
 	const user = await getUserFromSession()
-	// TODO: Check admin permissions (tho it could be done in middleware for better performance and code organization)
-	if(user?.username.toLowerCase() !== 'kazk9') {
-		redirect('/login')
+	// TODO: Check admin permissions (it could be done in middleware for better performance and code organization)
+	if(user?.id !== ADMIN_ID) {
+		redirect('/')
 	}
 
 	return (
