@@ -11,6 +11,7 @@ import { Avatar } from '../users/Avatar'
 import { ContextOpener, ContextOption } from '../common/ContextOpener'
 import { EditIcon, TrashIcon } from 'lucide-react'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
+import { useRouter } from 'next/navigation'
 
 interface PostProps {
 	post: CompletePost
@@ -19,13 +20,17 @@ interface PostProps {
 
 export function Post({ post, loggedUserId }: PostProps) {
 
+	const router = useRouter()
+
 	const loggedUserIsAuthor = post.authorId === loggedUserId
 
 	const [likesData, setLikesData] = useState({
 		likes: post.likedBy.length,
 		isLikedByUser: post.likedBy.some(like => like.id === loggedUserId)
 	})
+	const [showComments, setShowComments] = useState(false)
 
+	// Add or remove a like to the post (against DB)
 	const toggleLike = async () => {
 		const previousIsLiked = likesData.isLikedByUser
 		setLikesData({
@@ -43,10 +48,28 @@ export function Post({ post, loggedUserId }: PostProps) {
 		})
 	}
 
-	const [showComments, setShowComments] = useState(false)
+	// Show/hide comments
 	const toggleComments = () => {
 		setShowComments(!showComments)
 	}
+
+	// Confirm delete post
+	const handleDeletePost = async () => {
+		if (!confirm('Are you sure you want to delete this post?')) {
+			// If not confirmed, stop here
+			return
+		}
+		const response = await fetch(`/api/posts/${post.id}`, {
+			method: 'DELETE'
+		})
+		if (!response.ok) {
+			alert('Failed to delete post')
+			return
+		}
+		alert('Post deleted correctly')
+		router.refresh()
+	}
+
 
 	return (
 		<article key={post.id} className={`bg-gray-800/85 pt-4 pb-2 rounded-lg shadow shadow-gray-400/60 ${loggedUserIsAuthor && 'border border-purple-600/20'}`}>
@@ -71,7 +94,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 								</ContextOption>
 								<ContextOption
 									className='text-red-500'
-									onClick={() => { alert('Deleting posts is Not Implemented Yet') }}
+									onClick={handleDeletePost}
 								>
 									<TrashIcon className='size-4' />
 									Delete Post

@@ -4,6 +4,7 @@ import prisma from '@/lib/db'
 import { getUserFromSession } from './auth'
 import { createNotification } from './notifications'
 
+const ADMIN_ID = process.env.ADMIN_ID
 
 export async function createPost({ content }: { content: string }) {
 	const user = await getUserFromSession()
@@ -198,6 +199,18 @@ export async function getPostsByUser(userId: string) {
 }
 
 export async function deletePost(id: string) {
+	const loggedUser = await getUserFromSession()
+	if (!loggedUser) return null
+
+	const post = await prisma.post.findUnique({
+		where: {
+			id,
+			authorId: (loggedUser.id !== ADMIN_ID) ? loggedUser.id : undefined
+		}
+	})
+
+	if (!post) return null
+
 	return await prisma.post.delete({
 		where: { id }
 	})
