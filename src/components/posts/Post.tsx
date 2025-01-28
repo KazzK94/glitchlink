@@ -12,6 +12,7 @@ import { ContextOpener, ContextOption } from '../common/ContextOpener'
 import { EditIcon, TrashIcon } from 'lucide-react'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 interface PostProps {
 	post: CompletePost
@@ -53,6 +54,10 @@ export function Post({ post, loggedUserId }: PostProps) {
 		setShowComments(!showComments)
 	}
 
+	const handleEditPost = () => {
+		toast.warning('Editing posts is Not Implemented Yet')
+	}
+
 	// Confirm delete post
 	const handleDeletePost = async () => {
 		if (!confirm('Are you sure you want to delete this post?')) {
@@ -63,12 +68,15 @@ export function Post({ post, loggedUserId }: PostProps) {
 			method: 'DELETE'
 		})
 		if (!response.ok) {
-			alert('Failed to delete post')
+			toast.error('Error: Failed to delete post')
 			return
 		}
 		router.refresh()
 	}
 
+	const handleReportPost = () => {
+		toast.warning('Reporting posts is Not Implemented Yet')
+	}
 
 	return (
 		<article key={post.id} className={`bg-gray-800/85 pt-4 pb-2 rounded-lg shadow shadow-gray-400/60 ${loggedUserIsAuthor && 'border border-purple-600/20'}`}>
@@ -85,16 +93,11 @@ export function Post({ post, loggedUserId }: PostProps) {
 					<ContextOpener>
 						{loggedUserIsAuthor && (
 							<>
-								<ContextOption
-									onClick={() => { alert('Editing posts is Not Implemented Yet') }}
-								>
+								<ContextOption onClick={handleEditPost}>
 									<EditIcon className='size-4' />
 									Edit Post
 								</ContextOption>
-								<ContextOption
-									className='text-red-500'
-									onClick={handleDeletePost}
-								>
+								<ContextOption onClick={handleDeletePost} className='text-red-500'>
 									<TrashIcon className='size-4' />
 									Delete Post
 								</ContextOption>
@@ -103,7 +106,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 						{!loggedUserIsAuthor && (
 							<ContextOption
 								className='text-red-500'
-								onClick={() => { alert('Reporting posts is Not Implemented Yet') }}
+								onClick={handleReportPost}
 							>
 								<ExclamationTriangleIcon className='size-4' />
 								Report Post

@@ -15,6 +15,7 @@ import { Button } from '../ui/button'
 
 import { CircleCheckIcon, CircleAlertIcon, CircleDashed } from 'lucide-react'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 
 export function RegisterForm() {
@@ -63,17 +64,17 @@ export function RegisterForm() {
 			})
 			if (!response.ok) {
 				const { message } = await response.json()
-				alert('Error trying to register: ' + message)
+				toast.error('Error trying to register: ' + message)
 				setIsLoading(false)
 				return
 			}
 			const newUser = await response.json()
-			alert(`User Created: ${newUser.username}. \nNow redirecting to login page...`)
+			toast.success(`User Created: @${newUser.username}. \nNow redirecting to login page...`)
 			router.push('/login')
 		} catch (error) {
 			setIsLoading(false)
 			console.error('Failed to register user:', error)
-			alert('Unknown error. Check the console for more info. ')
+			toast.error('Unknown error. Check the console for more info and contact an administrator. ')
 		}
 	}
 

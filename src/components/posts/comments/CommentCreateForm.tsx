@@ -5,6 +5,7 @@ import { useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { addCommentToPost } from '@/services/posts'
 import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
 
 interface PostCommentCreateFormProps {
 	post: { id: string, author: { id: string } }
@@ -21,7 +22,7 @@ export function PostCommentCreateForm({ post, className }: PostCommentCreateForm
 		const formData = new FormData(e.currentTarget)
 		const content = formData.get('content') as string
 		
-		if (!content || content.length < 3) return alert('A comment must be at least 3 characters long')
+		if (!content || content.length < 3) return toast.warning('A comment must be at least 3 characters long')
 		
 		await addCommentToPost({ post: post, content })
 		textareaRef.current!.value = ''

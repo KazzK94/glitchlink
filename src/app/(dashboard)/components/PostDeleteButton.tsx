@@ -3,6 +3,7 @@
 import { XIcon } from 'lucide-react'
 import { ModalOpener } from '@/components/common/Modal'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export function PostDeleteButton({ postId }: { postId: string }) {
 
@@ -13,10 +14,10 @@ export function PostDeleteButton({ postId }: { postId: string }) {
 			method: 'DELETE'
 		})
 		if (!response.ok) {
-			alert('Failed to delete post')
+			toast.error('Error: Failed to delete post')
 			return
 		}
-		alert('Post deleted correctly')
+		toast.success('Post deleted correctly')
 		router.refresh()
 	}
 

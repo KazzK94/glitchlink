@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 const AVATAR_PLACEHOLDER_URL = '/images/avatar-placeholder.webp'
 
@@ -16,7 +17,7 @@ export function Avatar({ src, className, editable = false }: { src: string | nul
 	const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault()
 		if (!e.target || !e.target.files || e.target.files.length === 0) {
-			return alert('No file selected')
+			return toast.warning('No file selected')
 		}
 
 		const selectedFile = e.target.files[0]

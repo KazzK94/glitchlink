@@ -7,6 +7,7 @@ import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { EditIcon, TrashIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 
 interface CommentProps {
@@ -19,7 +20,7 @@ interface CommentProps {
 export function PostComment({ comment, loggedUserId }: CommentProps) {
 
 	const router = useRouter()
-	
+
 	// Confirm delete post
 	const handleDeleteComment = async () => {
 		if (!confirm('Are you sure you want to delete this comment?')) {
@@ -30,10 +31,18 @@ export function PostComment({ comment, loggedUserId }: CommentProps) {
 			method: 'DELETE'
 		})
 		if (!response.ok) {
-			alert('Error: Failed to delete comment')
+			toast.error('Error: Failed to delete comment')
 			return
 		}
 		router.refresh()
+	}
+
+	const handleEditComment = () => {
+		toast.warning('Editing comments is Not Implemented Yet')
+	}
+
+	const handleReportComment = () => {
+		toast.warning('Reporting comments is Not Implemented Yet')
 	}
 
 
@@ -51,7 +60,7 @@ export function PostComment({ comment, loggedUserId }: CommentProps) {
 					{
 						loggedUserId === comment.authorId && (
 							<>
-								<ContextOption onClick={() => alert('Editing comments is Not Implemented Yet')}>
+								<ContextOption onClick={handleEditComment}>
 									<EditIcon className='size-4' />Edit Comment
 								</ContextOption>
 								<ContextOption className='text-red-500' onClick={handleDeleteComment}>
@@ -62,7 +71,7 @@ export function PostComment({ comment, loggedUserId }: CommentProps) {
 					}
 					{
 						loggedUserId !== comment.authorId && (
-							<ContextOption className='text-red-500' onClick={() => alert('Reporting comments is Not Implemented Yet')}>
+							<ContextOption className='text-red-500' onClick={handleReportComment}>
 								<ExclamationTriangleIcon className='size-4' />Report Comment
 							</ContextOption>
 						)

@@ -5,6 +5,8 @@ import "../globals.css"
 import { Providers } from '@/components/common/Providers'
 import { TopNavbar } from '@/components/navbar/TopNavbar'
 
+import { Toaster } from 'sonner'
+
 import { getServerSession } from 'next-auth'
 import { SessionValidator } from '@/components/auth/SessionValidator'
 import { authOptions } from '@/services/nextAuthConfig'
@@ -35,6 +37,7 @@ export default async function RootLayout({
 					</div>
 					<SessionValidator session={session} />
 				</Providers>
+				<Toaster position='bottom-right' richColors closeButton pauseWhenPageIsHidden />
 			</body>
 		</html>
 	)

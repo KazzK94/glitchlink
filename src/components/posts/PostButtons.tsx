@@ -1,6 +1,7 @@
 
 import { MessageSquareIcon, Share2Icon, ThumbsUpIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
 
 export function ToggleLikeButton({ onClick, likesCount, isLikedByUser }: { onClick: () => void, likesCount: number, isLikedByUser: boolean }) {
 	return (
@@ -27,7 +28,7 @@ export function ShareButton({ postId }: { postId: string }) {
 	const handleClick = () => {
 		const url = `${window.location.host}/posts/${postId}`
 		navigator.clipboard.writeText(url)
-		alert('Copied URL of the post.')
+		toast.success('Copied URL of the post.')
 	}
 
 	return (
