@@ -116,14 +116,14 @@ export function RegisterForm() {
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-md md:max-w-3xl mx-auto bg-gray-800/50 p-6 rounded-2xl shadow-lg border border-gray-400">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-md md:max-w-3xl mx-auto bg-gray-800/80 p-6 rounded-2xl shadow-lg">
 
 				<div className='mb-4 border-b border-gray-600/50 pb-4'>
 					<h1 className="text-3xl font-bold text-center text-white">Create an account</h1>
 					<p className="mt-1 text-base text-center text-gray-200">It will be brief, we promise!</p>
 				</div>
 
-				<div className='space-y-3 md:space-y-0 grid grid-cols-1 md:grid-cols-2 md:gap-x-12'>
+				<div className='space-y-3 md:space-y-0 grid grid-cols-1 md:grid-cols-2 md:gap-x-12 px-2'>
 					<div className='space-y-3'>
 						{/** USERNAME */}
 						<FormField
@@ -135,7 +135,7 @@ export function RegisterForm() {
 									<div className="flex items-center gap-2">
 										<FormControl>
 											<Input
-												className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500"
+												className="mt-1 block w-full rounded-sm bg-black/40 border-0"
 												onChangeCapture={(event) => onUsernameChange(event.currentTarget.value)}
 												{...field}
 											/>
@@ -165,12 +165,12 @@ export function RegisterForm() {
 								<FormItem className='px-1 break-inside-avoid-column'>
 									<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Password</FormLabel>
 									<FormControl>
-										<Input 
-										className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500" 
-										onChangeCapture={(event) => onPasswordChange(event.currentTarget.value)}
-										type="password"
-										{...field} 
-										 />
+										<Input
+											className="mt-1 block w-full rounded-sm bg-black/40 border-0"
+											onChangeCapture={(event) => onPasswordChange(event.currentTarget.value)}
+											type="password"
+											{...field}
+										/>
 									</FormControl>
 									<FormMessage />
 									<FormDescription>
@@ -187,7 +187,7 @@ export function RegisterForm() {
 								<FormItem className='px-1 break-inside-avoid-column'>
 									<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Confirm Password</FormLabel>
 									<FormControl>
-										<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500"  {...field} type="password" />
+										<Input className="mt-1 block w-full rounded-sm bg-black/40 border-0"  {...field} type="password" />
 									</FormControl>
 									<FormMessage />
 									<FormDescription>
@@ -206,7 +206,7 @@ export function RegisterForm() {
 								<FormItem className='px-1 break-inside-avoid-column'>
 									<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Name</FormLabel>
 									<FormControl>
-										<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500" {...field} />
+										<Input className="mt-1 block w-full rounded-sm bg-black/40 border-0" {...field} />
 									</FormControl>
 									<FormMessage />
 									<FormDescription>
@@ -223,7 +223,7 @@ export function RegisterForm() {
 								<FormItem className='px-1 break-inside-avoid-column'>
 									<FormLabel className="ml-0.5 text-base font-medium text-gray-200">Email</FormLabel>
 									<FormControl>
-										<Input className="block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500" {...field} />
+										<Input className="mt-1 block w-full rounded-sm bg-black/40 border-0" {...field} />
 									</FormControl>
 									<FormMessage />
 									<FormDescription>
@@ -234,10 +234,12 @@ export function RegisterForm() {
 						/>
 					</div>
 				</div>
-				<Button type="submit" disabled={isLoading} className='mt-6 px-4 py-5 w-full rounded-lg text-base font-semibold text-black bg-gradient-to-r from-cyan-50 to-purple-50 hover:from-cyan-100 hover:to-purple-50'>
-					Register
-				</Button>
 
+				<div className='px-2.5'>
+					<Button type="submit" disabled={isLoading} className='mt-6 px-4 py-5 w-full rounded-lg text-base font-semibold text-black bg-gradient-to-r from-cyan-50 to-purple-50 hover:from-cyan-100 hover:to-purple-50'>
+						Register
+					</Button>
+				</div>
 				<p className='mt-5 mx-auto md:text-sm font-semibold text-pretty flex flex-col md:flex-row gap-x-1.5 justify-center items-center'>
 					<span>
 						Already have an account?

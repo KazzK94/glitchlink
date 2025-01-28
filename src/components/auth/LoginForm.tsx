@@ -62,7 +62,7 @@ export function LoginForm() {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className="w-full max-w-sm mx-auto bg-gray-800/50 p-6 rounded-2xl shadow-lg border border-gray-400">
+				className="w-full max-w-md mx-auto bg-gray-800/70 p-8 rounded-xl shadow-lg ">
 
 				<div className='mb-3'>
 					<h1 className="text-3xl font-bold text-center text-white">Welcome Back</h1>
@@ -79,7 +79,7 @@ export function LoginForm() {
 								<FormControl>
 									<Input
 										{...field}
-										className="mt-1 block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500"
+										className="mt-1 block w-full rounded-sm bg-black/40 border-0"
 									/>
 								</FormControl>
 							</FormItem>
@@ -95,7 +95,7 @@ export function LoginForm() {
 									<Input
 										{...field}
 										type="password"
-										className="mt-1 block w-full rounded-sm bg-black/15 border-gray-500 focus:ring-blue-500 focus:border-blue-500"
+										className="mt-1 block w-full rounded-sm bg-black/40 border-0"
 									/>
 								</FormControl>
 							</FormItem>
