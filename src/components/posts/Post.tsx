@@ -66,7 +66,6 @@ export function Post({ post, loggedUserId }: PostProps) {
 			alert('Failed to delete post')
 			return
 		}
-		alert('Post deleted correctly')
 		router.refresh()
 	}
 

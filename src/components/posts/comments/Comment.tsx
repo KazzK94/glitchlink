@@ -33,7 +33,6 @@ export function PostComment({ comment, loggedUserId }: CommentProps) {
 			alert('Error: Failed to delete comment')
 			return
 		}
-		alert('Comment deleted correctly')
 		router.refresh()
 	}
 
