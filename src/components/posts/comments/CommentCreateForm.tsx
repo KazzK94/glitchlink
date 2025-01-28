@@ -20,13 +20,12 @@ export function PostCommentCreateForm({ post, className }: PostCommentCreateForm
 		e.preventDefault()
 		const formData = new FormData(e.currentTarget)
 		const content = formData.get('content') as string
-
-		// TODO: Show the user a proper error explaining the minimum length
-		if (!content || content.length < 6) return
-
+		
+		if (!content || content.length < 3) return alert('A comment must be at least 3 characters long')
+		
 		await addCommentToPost({ post: post, content })
 		textareaRef.current!.value = ''
-
+		
 		router.refresh()
 	}
 

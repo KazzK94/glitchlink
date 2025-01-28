@@ -2,16 +2,16 @@
 import { acceptSocialLinkRequest, deleteSocialLink } from '@/services/socialLinks'
 import { type NextRequest } from 'next/server'
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
-	const socialLinkId = params.id
+export async function PATCH(request: NextRequest, { params }: { params: { socialLinkId: string } }) {
+	const { socialLinkId } = params
 	const body = await request.json()
 	const { status } = body
 
-	if(!status) {
+	if (!status) {
 		return Response.json({ message: 'Missing status in request body' }, { status: 400 })
 	}
 
-	if(status === 'FRIENDS') {
+	if (status === 'FRIENDS') {
 		const result = await acceptSocialLinkRequest(socialLinkId)
 		return Response.json({ message: 'SocialLink acceptance executed', result })
 	}

@@ -6,6 +6,7 @@ import { ContextOpener, ContextOption } from '@/components/common/ContextOpener'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { EditIcon, TrashIcon } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 
 interface CommentProps {
@@ -16,6 +17,27 @@ interface CommentProps {
 }
 
 export function PostComment({ comment, loggedUserId }: CommentProps) {
+
+	const router = useRouter()
+	
+	// Confirm delete post
+	const handleDeleteComment = async () => {
+		if (!confirm('Are you sure you want to delete this comment?')) {
+			// If not confirmed, stop here
+			return
+		}
+		const response = await fetch(`/api/posts/${comment.postId}/comments/${comment.id}`, {
+			method: 'DELETE'
+		})
+		if (!response.ok) {
+			alert('Error: Failed to delete comment')
+			return
+		}
+		alert('Comment deleted correctly')
+		router.refresh()
+	}
+
+
 	return (
 		<div className='bg-gray-700/70 p-3 rounded-lg'>
 			<div className='flex justify-between'>
@@ -33,7 +55,7 @@ export function PostComment({ comment, loggedUserId }: CommentProps) {
 								<ContextOption onClick={() => alert('Editing comments is Not Implemented Yet')}>
 									<EditIcon className='size-4' />Edit Comment
 								</ContextOption>
-								<ContextOption className='text-red-500' onClick={() => alert('Deleting comments is Not Implemented Yet')}>
+								<ContextOption className='text-red-500' onClick={handleDeleteComment}>
 									<TrashIcon className='size-4' />Delete Comment
 								</ContextOption>
 							</>

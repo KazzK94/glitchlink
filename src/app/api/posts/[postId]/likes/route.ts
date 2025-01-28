@@ -3,11 +3,11 @@ import { addLikeToPost, getPostById, removeLikeFromPost } from '@/services/posts
 import { getUserFromSession } from '@/services/auth'
 import { NextRequest } from 'next/server'
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(_request: NextRequest, { params }: { params: { postId: string } }) {
 
 	const user = await getUserFromSession()
 
-	const postId = params.id
+	const {postId} = params
 	const post = await getPostById(postId)
 	// Check if the post exists
 	if (!post) {
