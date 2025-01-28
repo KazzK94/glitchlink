@@ -47,7 +47,8 @@ function NotificationWrapper({ href, notification, children }: { href: string, n
 	}
 
 	const handleDelete = async () => {
-		alert('Not implemented yet')
+		await fetch(`/api/notifications/${notification.id}`, { method: 'DELETE' })
+		router.refresh()
 	}
 
 	return (

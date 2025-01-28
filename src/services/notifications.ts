@@ -60,3 +60,12 @@ export async function markNotificationAsRead(notificationId: string) {
 		data: { read: true }
 	})
 }
+
+export async function deleteNotification(notificationId: string) {
+	const user = await getUserFromSession()
+	if (!user) return null
+
+	return await prisma.notification.delete({
+		where: { id: notificationId, targetUserId: user.id }
+	})
+}
