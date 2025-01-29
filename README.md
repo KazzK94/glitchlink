@@ -27,19 +27,23 @@ These are the sections we have implemented so far.
 
 ## Landing Page
 The landing page (/) shows an introduction to what GlitchLink offers.
-In the future, this will change to show a different content (something more useful/interactive) when user is logged in.
+If the user is logged in, this shows the Home page instead, with the list of the last posts.
+
+### Posts
+Now posts can be created, updated and deleted (they can only be manipulated by the author).
 
 ## Authentication
 Both Login (/login) and Register (/register) should be functioning correctly.
 Some sections will show differently based on the user's session (like the top-right icon's behavior, being a link to /login when there is no session, or a link to /profile when session is stored).
 
 ## Profile
-The profile route (/profile) is a protected route via middleware. If user is not logged in, this will redirect to /login.
-It contains the user's Video Games, Posts and Friends.
+The profile route (/profile) shows the logged user's profile, and it's protected via middleware, meaning that if a user is not logged in, they will be redirected to /login.
+The profile contains the user's Video Games, Posts and Friends.
 
 ## Games
 The games section (/games) shows a list of games (obtained from an external API), and a search bar to find the games you want.
-If the user is logged in, hovering over a GameCard shows a button to "Add to my collection". 
+If the user is logged in, hovering over a GameCard shows a button to "Add to my collection".
+Sadly, this API is not as precise as we'd like so some searches might get a lot of filler before finding the game you actually want.
 
 ## Admin Panel
 This panel was created for testing purposes only, but it's open for anyone to see at /admin. Yes, anyone can play admin in GlitchLink right now.
@@ -51,6 +55,5 @@ However, this is not being maintained for now.
 When browsing games, the owned games still show the button "Add to my collection".
 We will replace this button with something that indicates that you already own that game, and an option to remove it from your collection.
 
-## Other users' profiles
-We want to use the same template we have for the logged user to show the information of other users too.
-Of course the options will be different than the ones showed for the logged user.
+## Update your profile
+You'll have a form to update all the info of your profile. Hopefully soon! :P
