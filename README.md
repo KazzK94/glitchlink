@@ -11,15 +11,13 @@ We use TailwindCSS to make styling faster and more easily scalable.
 As for components we use shadcn, as well as our own custom built components.
 
 ## Authentication
-We handle authentication with next-auth, keeping the user's information in a postgresql database.
+We handle authentication with next-auth, keeping the user's information in a postgres database.
 
 ## Data (Database)
-Our database is a postgresql database. Connections to the database are made using Prisma.
-We use Neon as a database provider.
+Our database is a postgres database. Connections to the database are made using Prisma.
 
 ## Deployment
 The production version of the site is deployed in Vercel.
-
 
 
 # Sections
@@ -46,8 +44,10 @@ If the user is logged in, hovering over a GameCard shows a button to "Add to my 
 Sadly, this API is not as precise as we'd like so some searches might get a lot of filler before finding the game you actually want.
 
 ## Admin Panel
-This panel was created for testing purposes only, but it's open for anyone to see at /admin. Yes, anyone can play admin in GlitchLink right now.
-However, this is not being maintained for now.
+This panel (/admin) is currently being used for testing purposes only.
+This can only be viewed and used by an admin so it's not publicly visible on production.
+It's not too special, but if you want to test it you can clone the repo, set up the environment variables and link it to a postgres db.
+However, this panel is not being maintained for now.
 
 # Implementing soon
 
