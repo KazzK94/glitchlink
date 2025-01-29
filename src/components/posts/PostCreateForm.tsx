@@ -18,7 +18,6 @@ export function PostCreateForm() {
 		const formData = new FormData(e.currentTarget)
 		const content = (formData.get('content') as string).trim()
 
-		// TODO: Show the user a proper error explaining the minimum length
 		if (!content || content.length < 6) return toast.error('A valid post must contain at least 6 characters.')
 
 		await createPost({ content: content })
@@ -28,7 +27,7 @@ export function PostCreateForm() {
 		router.refresh()
 	}
 
-	// TODO: Control submit on Ctrl+Enter
+	// TODO: Enable submit on Ctrl+Enter
 
 	return (
 		<form onSubmit={handleSubmit} className="bg-gray-800 px-6 py-5 rounded-lg shadow-sm shadow-gray-400">
@@ -36,7 +35,7 @@ export function PostCreateForm() {
 			<textarea
 				name='content'
 				ref={textareaRef}
-				className="w-full min-h-20 max-h-[50vh] bg-gray-700 text-white rounded-md p-3 mb-2"
+				className="w-full min-h-20 max-h-[50vh] [field-sizing:content] bg-gray-700 text-white rounded-md p-3 mb-2 resize-none"
 				placeholder="Tell everyone about your gaming..."
 				rows={3}
 			></textarea>

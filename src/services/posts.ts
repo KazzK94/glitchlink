@@ -149,6 +149,25 @@ export async function getPostsByUser(userId: string) {
 	})
 }
 
+export async function updatePost({ id, content }: { id: string, content: string }) {
+	const loggedUser = await getUserFromSession()
+	if (!loggedUser) return null
+
+	const post = await prisma.post.findUnique({
+		where: {
+			id,
+			authorId: (loggedUser.id !== ADMIN_ID) ? loggedUser.id : undefined
+		}
+	})
+
+	if (!post) return null
+
+	return await prisma.post.update({
+		where: { id },
+		data: { content }
+	})
+}
+
 export async function deletePost(id: string) {
 	const loggedUser = await getUserFromSession()
 	if (!loggedUser) return null
@@ -217,6 +236,26 @@ export async function addCommentToPost({ post, content }: { post: { id: string, 
 		console.error('Failed to create the comment:', error)
 		throw error
 	}
+}
+
+
+export async function updateComment({ id, content }: { id: string, content: string }) {
+	const loggedUser = await getUserFromSession()
+	if (!loggedUser) return null
+
+	const comment = await prisma.comment.findUnique({
+		where: {
+			id,
+			authorId: (loggedUser.id !== ADMIN_ID) ? loggedUser.id : undefined
+		}
+	})
+
+	if (!comment) return null
+
+	return await prisma.comment.update({
+		where: { id },
+		data: { content }
+	})
 }
 
 export async function deleteComment({ postId, commentId } : { postId: string, commentId: string }) {

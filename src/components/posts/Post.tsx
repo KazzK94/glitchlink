@@ -13,23 +13,25 @@ import { EditIcon, TrashIcon } from 'lucide-react'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { Button } from '../ui/button'
+import { updatePost } from '@/services/posts'
 
 interface PostProps {
 	post: CompletePost
-	loggedUserId: string
+	loggedUserId?: string
 }
 
 export function Post({ post, loggedUserId }: PostProps) {
 
-	const router = useRouter()
-
 	const loggedUserIsAuthor = post.authorId === loggedUserId
+	const router = useRouter()
 
 	const [likesData, setLikesData] = useState({
 		likes: post.likedBy.length,
 		isLikedByUser: post.likedBy.some(like => like.id === loggedUserId)
 	})
 	const [showComments, setShowComments] = useState(false)
+	const [mode, setMode] = useState<'view' | 'edit'>('view')
 
 	// Add or remove a like to the post (against DB)
 	const toggleLike = async () => {
@@ -54,8 +56,8 @@ export function Post({ post, loggedUserId }: PostProps) {
 		setShowComments(!showComments)
 	}
 
-	const handleEditPost = () => {
-		toast.warning('Editing posts is Not Implemented Yet')
+	const handleEnableEditPost = () => {
+		setMode('edit')
 	}
 
 	// Confirm delete post
@@ -90,64 +92,121 @@ export function Post({ post, loggedUserId }: PostProps) {
 						<p className="text-sm text-gray-400 italic cursor-pointer">@{post.author.username}</p>
 					</div>
 				</Link>
-				<div className='flex justify-end items-start -mr-2 -mt-0.5 min-w-8'>
-					<ContextOpener>
-						{loggedUserIsAuthor && (
-							<>
-								<ContextOption onClick={handleEditPost}>
-									<EditIcon className='size-4' />
-									Edit Post
+				{mode === 'view' && (
+					<div className='flex justify-end items-start -mr-2 -mt-0.5 min-w-8'>
+						<ContextOpener>
+							{loggedUserIsAuthor && (
+								<>
+									<ContextOption onClick={handleEnableEditPost}>
+										<EditIcon className='size-4' />
+										Edit Post
+									</ContextOption>
+									<ContextOption onClick={handleDeletePost} className='text-red-500'>
+										<TrashIcon className='size-4' />
+										Delete Post
+									</ContextOption>
+								</>
+							)}
+							{!loggedUserIsAuthor && (
+								<ContextOption
+									className='text-red-500'
+									onClick={handleReportPost}
+								>
+									<ExclamationTriangleIcon className='size-4' />
+									Report Post
 								</ContextOption>
-								<ContextOption onClick={handleDeletePost} className='text-red-500'>
-									<TrashIcon className='size-4' />
-									Delete Post
-								</ContextOption>
-							</>
-						)}
-						{!loggedUserIsAuthor && (
-							<ContextOption
-								className='text-red-500'
-								onClick={handleReportPost}
-							>
-								<ExclamationTriangleIcon className='size-4' />
-								Report Post
-							</ContextOption>
-						)}
-					</ContextOpener>
-				</div>
+							)}
+						</ContextOpener>
+					</div>
+				)}
 			</div>
 			{/* Post Content */}
-			<PostParsedContent content={post.content} />
-
-			{/* Buttons */}
-			<div className='px-4 sm:px-6 flex justify-evenly sm:justify-between items-center'>
-				<div className="flex gap-x-4 flex-grow justify-evenly">
-					<ToggleLikeButton onClick={toggleLike} likesCount={likesData.likes} isLikedByUser={likesData.isLikedByUser} />
-					<ToggleCommentsButton onClick={toggleComments} commentsCount={post.comments.length} />
-					<ShareButton postId={post.id} />
-				</div>
-				<div className='hidden sm:block'>
-					<p className="text-sm text-muted opacity-60 italic">{new Date(post.createdAt).toDateString()}</p>
-				</div>
-			</div>
-
-			{/* Comments (conditionally rendered) */}
-			{showComments && (
-				<div className='my-1 pt-2 border-t border-gray-600 space-y-3'>
-					{post.comments.length > 0 && <>
-						<div className='flex flex-col gap-2 mx-2'>
-							{
-								post.comments.map((comment) => (
-									<PostComment key={comment.id} comment={comment} loggedUserId={loggedUserId} />
-								))
-							}
+			{
+				mode === 'edit' ? (
+					<UpdatePost post={post} onUpdated={() => { router.refresh(); setMode('view') }} onCancel={() => setMode('view')} />
+				) : (
+					<>
+						<PostParsedContent content={post.content} />
+						{/* Buttons */}
+						<div className='px-4 sm:px-6 flex justify-evenly sm:justify-between items-center'>
+							<div className="flex gap-x-4 flex-grow justify-evenly">
+								<ToggleLikeButton onClick={toggleLike} likesCount={likesData.likes} isLikedByUser={likesData.isLikedByUser} />
+								<ToggleCommentsButton onClick={toggleComments} commentsCount={post.comments.length} />
+								<ShareButton postId={post.id} />
+							</div>
+							<div className='hidden sm:block'>
+								<p className="text-sm text-muted opacity-60 italic">{new Date(post.createdAt).toDateString()}</p>
+							</div>
 						</div>
-						<hr className='opacity-40 mx-1' />
-					</>}
-					<PostCommentCreateForm post={post} className='mx-2' />
-				</div>
-			)}
+
+						{/* Comments (conditionally rendered) */}
+						{showComments && (
+							<div className='my-1 pt-2 border-t border-gray-600 space-y-3'>
+								{post.comments.length > 0 && <>
+									<div className='flex flex-col gap-2 mx-2'>
+										{
+											post.comments.map((comment) => (
+												<PostComment key={comment.id} comment={comment} loggedUserId={loggedUserId} />
+											))
+										}
+									</div>
+									<hr className='opacity-40 mx-1' />
+								</>}
+								<PostCommentCreateForm post={post} className='mx-2' />
+							</div>
+						)}
+					</>
+				)
+			}
 		</article>
 	)
 }
 
+interface UpdatePostProps {
+	post: CompletePost,
+	onUpdated: () => void
+	onCancel: () => void
+}
+
+function UpdatePost({ post, onUpdated, onCancel }: UpdatePostProps) {
+
+	const [postContent, setPostContent] = useState(post.content)
+
+	const handleUpdate = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault()
+		const response = await updatePost({ id: post.id, content: postContent })
+		if (!response) {
+			toast.error('Error: Failed to update post')
+			return
+		}
+		toast.success('Post updated correctly!')
+		onUpdated()
+	}
+
+	const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault()
+		onCancel()
+	}
+
+	return (
+		<form className="px-3 py-1">
+			<textarea
+				name='content'
+				placeholder="Update your post here..."
+				className="w-full min-h-20 max-h-[50vh] [field-sizing:content] bg-gray-700 text-white rounded-md p-3 mb-2 resize-none"
+				rows={3}
+				onChange={(e) => setPostContent(e.target.value)}
+			>
+				{postContent}
+			</textarea>
+			<div className='flex gap-2 w-full mb-3'>
+				<Button onClick={handleUpdate} className="w-full px-4 py-2 text-base bg-gradient-to-r from-cyan-500 to-purple-500 text-white rounded-md hover:from-cyan-600 hover:to-purple-600">
+					Update post
+				</Button>
+				<Button onClick={handleCancel} className="w-full px-4 py-2 text-base bg-gray-700 text-white rounded-md hover:bg-gray-800">
+					Cancel
+				</Button>
+			</div>
+		</form>
+	)
+}
