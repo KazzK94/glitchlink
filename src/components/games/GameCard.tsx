@@ -22,7 +22,7 @@ export function GameCard({ externalId, title, imageUrl, isOwned = false, userIsL
 			<img
 				src={croppedImageUrl}
 				alt={title}
-				className="transition h-full min-w-full object-cover duration-300 ease-in-out group-hover:opacity-95 group-hover:saturate-150"
+				className="transition h-full min-w-full object-cover duration-300 ease-in-out group-hover:opacity-95 group-hover:saturate-150 bg-black"
 			/>
 			<CardContent className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black to-transparent">
 				{/* TODO: Make it be maximum 2 lines (add ellipsis on overflow instead of 3rd line) */}
