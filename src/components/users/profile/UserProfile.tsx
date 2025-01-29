@@ -27,7 +27,7 @@ export async function UserProfile({ username }: { username?: string }) {
 	const isSelf = loggedUser?.id === user.id
 
 	return (
-		<Container className='mt-4'>
+		<Container className='mt-4 pb-4'>
 			{/* Top Right Buttons */}
 			{
 				isSelf ? (

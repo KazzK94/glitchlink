@@ -7,7 +7,7 @@ export async function ProfilePosts({ posts, loggedUserId }: { posts: CompletePos
 		<div className='px-3 py-1'>
 			{posts.length === 0 && <p>No posts created yet...</p>}
 
-			<div className="mt-1 flex flex-col gap-3">
+			<div className="mt-2 flex flex-col gap-5 max-w-3xl mx-auto">
 				{posts.map((post) => (
 					<Post key={post.id} post={post} loggedUserId={loggedUserId} />
 				))}

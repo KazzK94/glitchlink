@@ -7,7 +7,7 @@ export async function ProfileVideoGames({ videoGames }: { videoGames: VideoGame[
 		<div className='px-3 py-1'>
 			{videoGames.length === 0 && <p>No games added yet...</p>}
 
-			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly mb-8 gap-4'>
+			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly gap-4'>
 				{
 					videoGames.map((game: VideoGame) => (
 						<VideoGameCard
