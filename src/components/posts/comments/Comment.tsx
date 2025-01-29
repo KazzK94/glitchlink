@@ -37,6 +37,7 @@ export function PostComment({ comment, loggedUserId }: CommentProps) {
 			toast.error('Error: Failed to delete comment')
 			return
 		}
+		toast.success('Comment deleted successfully!')
 		router.refresh()
 	}
 
@@ -133,9 +134,8 @@ function UpdateComment({ comment, onUpdated, onCancel }: UpdateCommentProps) {
 				placeholder="Update your comment here..."
 				className="w-full max-h-[30vh] [field-sizing:content] bg-gray-700 text-white rounded-md p-3 mb-2 resize-none"
 				onChange={(e) => setCommentContent(e.target.value)}
-			>
-				{commentContent}
-			</textarea>
+				value={commentContent}
+			></textarea>
 			<div className='flex gap-2 w-full mb-3'>
 				<Button onClick={handleUpdate} className="w-full px-4 py-2 text-base bg-gradient-to-r from-cyan-500 to-purple-500 text-white rounded-md hover:from-cyan-600 hover:to-purple-600">
 					Update comment
