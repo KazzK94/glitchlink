@@ -1,6 +1,6 @@
 'use client'
 
-import { registerSchema, type RegisterSchema } from '@/schemas/registerSchema'
+import { registerSchema, type RegisterSchema } from '@/schemas/userSchema'
 import { getUser } from '@/services/users'
 import { zodResolver } from '@hookform/resolvers/zod'
 

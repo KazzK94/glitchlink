@@ -1,6 +1,6 @@
 
 import { type VideoGame } from '@prisma/client'
-import { GameCard } from '../../games/GameCard'
+import { VideoGameCard } from '../../games/GameCard'
 
 export async function ProfileVideoGames({ videoGames }: { videoGames: VideoGame[] }) {
 	return (
@@ -10,7 +10,7 @@ export async function ProfileVideoGames({ videoGames }: { videoGames: VideoGame[
 			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly mb-8 gap-4'>
 				{
 					videoGames.map((game: VideoGame) => (
-						<GameCard
+						<VideoGameCard
 							key={game.id}
 							externalId={game.externalId}
 							title={game.title}

@@ -32,7 +32,7 @@ export async function UserProfile({ username }: { username?: string }) {
 			{
 				isSelf ? (
 					<div className='float-right flex items-center gap-3'>
-						<Link href='#' className='flex items-center border-2 rounded-lg p-3 z-10 text-slate-300 border-slate-300'>
+						<Link href='/profile/edit' className='flex items-center border-2 rounded-lg p-3 z-10 text-slate-300 border-slate-300'>
 							<EditIcon size={20} />
 						</Link>
 						<LogoutButton formClassName='z-10' className='flex items-center border-2 rounded-lg p-3 z-10 text-red-400 border-red-400'>
@@ -52,7 +52,7 @@ export async function UserProfile({ username }: { username?: string }) {
 			{/* Heading Content */}
 			<div className="flex gap-4 items-center ml-2">
 				<div>
-					<Avatar src={user.avatar} className='size-16' editable={isSelf} />
+					<Avatar src={user.avatar} className='size-16' />
 				</div>
 				<div>
 					<h1 className='text-2xl md:text-3xl font-semibold text-blue-200'>

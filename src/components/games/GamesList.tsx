@@ -1,6 +1,6 @@
 'use client'
 
-import { GameCard } from '@/components/games/GameCard'
+import { VideoGameCard } from '@/components/games/GameCard'
 import { Button } from '@/components/ui/button'
 
 import { type Game } from '@/types'
@@ -68,7 +68,7 @@ export function GamesList() {
 					<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly mx-2 mb-8 gap-4'>
 						{
 							games.map(game => (
-								<GameCard
+								<VideoGameCard
 									key={game.id}
 									externalId={game.id}
 									title={game.name}

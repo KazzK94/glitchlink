@@ -54,6 +54,17 @@ export async function updateUser({ data }: { data: Prisma.UserUpdateInput }) {
 
 }
 
+export async function changePassword({ username, password, newPassword }: { username: string, password: string, newPassword: string }) {
+	const user = await attemptLogin(username, password)
+	if (!user) throw new Error('Incorrect username or password.')
+
+	const hashedPassword = await bcrypt.hash(newPassword, 10)
+	return await prisma.user.update({
+		where: { id: user.id },
+		data: { password: hashedPassword }
+	})
+}
+
 /** Get the basic information of a user (name, username and avatar) */
 export async function getUser({ username, where }: { username: string, where?: Prisma.UserWhereInput } | { username?: string, where: Prisma.UserWhereInput }) {
 	if (!username && !where) return null
@@ -73,7 +84,7 @@ export async function getUsers({ where }: { where?: Prisma.UserWhereInput | null
 }
 
 /** Get the Profile information of a user (basic information + posts, games, friends...) */
-export async function getUserProfile({ userId, username }: { userId: string, username?: undefined } | { username: string, userId?: undefined }) {
+export async function getUserProfile({ userId, username }: { userId?: string, username?: string } = {}) {
 
 	const loggedUser = await getUserFromSession()
 	if (!userId && !username) {
