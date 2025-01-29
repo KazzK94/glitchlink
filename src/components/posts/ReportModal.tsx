@@ -119,7 +119,7 @@ function GenericReportModal({ title, isOpen, onClose, onSubmit }: GenericReportM
 						value={reason}
 						onChange={(event) => setReason(event.target.value)}
 					></textarea>
-					<button type="submit" className="w-full font-semibold py-2 rounded text-red-600 border-2 bg-red-800/10 hover:bg-red-800/20 border-red-800">
+					<button type="submit" className="w-full font-semibold py-2 rounded text-red-600 border-2 border-red-700 bg-gray-700/35 hover:bg-gray-700/25">
 						Send Report
 					</button>
 				</form>
