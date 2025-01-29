@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { MenuIcon, XIcon, BarChart3Icon, UsersIcon, MessageSquareIcon } from "lucide-react"
 import { usePathname } from 'next/navigation'
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 
 export default function DashboardMenu() {
 
@@ -25,13 +26,13 @@ export default function DashboardMenu() {
 
 			{/* Sidebar */}
 			<div className={`lg:bg-gray-600/10 shadow-md lg:w-64 lg:flex lg:flex-col ${isSidebarOpen ? 'fixed inset-0 z-50' : 'hidden'}`}>
-				<div className="p-4 flex justify-between items-center lg:justify-start opacity-0 lg:opacity-100">
+				<div className="px-4 py-4 flex justify-between items-center lg:justify-start opacity-0 lg:opacity-100">
 					<h1 className="text-2xl font-bold">GlitchLink Admin</h1>
 					<Button variant="ghost" size="icon" onClick={toggleSidebar} className="lg:hidden">
 						<XIcon className="h-6 w-6" />
 					</Button>
 				</div>
-				<nav className="mt-2 flex flex-col gap-0.5 bg-gray-900 lg:bg-transparent pb-2 fixed top-16 w-full lg:static px-2">
+				<nav className="mt-2  md:mt-0.5 pb-2 flex flex-col gap-0.5 bg-gray-900 lg:bg-transparent fixed top-16 w-full lg:static px-2">
 					<DashboardMenuLink
 						href="/admin"
 						isActive={pathname === '/admin'}
@@ -52,6 +53,13 @@ export default function DashboardMenu() {
 					>
 						<MessageSquareIcon className="mr-2 size-5" />
 						Posts
+					</DashboardMenuLink>
+					<DashboardMenuLink
+						href="/admin/reports"
+						isActive={pathname === '/admin/reports'}
+					>
+						<ExclamationTriangleIcon className="mr-2 size-5" />
+						Reports
 					</DashboardMenuLink>
 				</nav>
 			</div>

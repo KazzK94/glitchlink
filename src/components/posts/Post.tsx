@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Button } from '../ui/button'
 import { updatePost } from '@/services/posts'
+import { ReportPostModal } from './ReportModal'
 
 interface PostProps {
 	post: CompletePost
@@ -32,6 +33,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 	})
 	const [showComments, setShowComments] = useState(false)
 	const [mode, setMode] = useState<'view' | 'edit'>('view')
+	const [isReportModalOpen, setIsReportModalOpen] = useState(false)
 
 	// Add or remove a like to the post (against DB)
 	const toggleLike = async () => {
@@ -77,8 +79,8 @@ export function Post({ post, loggedUserId }: PostProps) {
 		router.refresh()
 	}
 
-	const handleReportPost = () => {
-		toast.warning('Reporting posts is Not Implemented Yet')
+	const handleOpenReportModal = () => {
+		setIsReportModalOpen(true)
 	}
 
 	return (
@@ -110,7 +112,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 							{!loggedUserIsAuthor && (
 								<ContextOption
 									className='text-red-500'
-									onClick={handleReportPost}
+									onClick={handleOpenReportModal}
 								>
 									<ExclamationTriangleIcon className='size-4' />
 									Report Post
@@ -158,6 +160,8 @@ export function Post({ post, loggedUserId }: PostProps) {
 					</>
 				)
 			}
+
+			<ReportPostModal post={post} isOpen={isReportModalOpen} onClose={() => setIsReportModalOpen(false)} />
 		</article>
 	)
 }
@@ -196,9 +200,8 @@ function UpdatePost({ post, onUpdated, onCancel }: UpdatePostProps) {
 				className="w-full min-h-20 max-h-[50vh] [field-sizing:content] bg-gray-700 text-white rounded-md p-3 mb-2 resize-none"
 				rows={3}
 				onChange={(e) => setPostContent(e.target.value)}
-			>
-				{postContent}
-			</textarea>
+				value={postContent}
+			></textarea>
 			<div className='flex gap-2 w-full mb-3'>
 				<Button onClick={handleUpdate} className="w-full px-4 py-2 text-base bg-gradient-to-r from-cyan-500 to-purple-500 text-white rounded-md hover:from-cyan-600 hover:to-purple-600">
 					Update post

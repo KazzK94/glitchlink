@@ -238,6 +238,13 @@ export async function addCommentToPost({ post, content }: { post: { id: string, 
 	}
 }
 
+export async function getCommentById(id: string) {
+	return await prisma.comment.findUnique({
+		where: { id },
+		include: { author: true }
+	})
+}
+
 
 export async function updateComment({ id, content }: { id: string, content: string }) {
 	const loggedUser = await getUserFromSession()

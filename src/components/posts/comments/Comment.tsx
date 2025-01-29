@@ -11,6 +11,7 @@ import { toast } from 'sonner'
 import { useState } from 'react'
 import { updateComment } from '@/services/posts'
 import { Button } from '@/components/ui/button'
+import { ReportCommentModal } from '../ReportModal'
 
 interface CommentProps {
 	comment: Comment & {
@@ -23,6 +24,7 @@ export function PostComment({ comment, loggedUserId }: CommentProps) {
 
 	const router = useRouter()
 	const [mode, setMode] = useState<'view' | 'edit'>('view')
+	const [isReportModalOpen, setIsReportModalOpen] = useState(false)
 
 	// Confirm delete post
 	const handleDeleteComment = async () => {
@@ -46,7 +48,7 @@ export function PostComment({ comment, loggedUserId }: CommentProps) {
 	}
 
 	const handleReportComment = () => {
-		toast.warning('Reporting comments is Not Implemented Yet')
+		setIsReportModalOpen(true)
 	}
 
 
@@ -96,6 +98,8 @@ export function PostComment({ comment, loggedUserId }: CommentProps) {
 					<CommentParsedContent content={comment.content} />
 				)
 			}
+
+			<ReportCommentModal isOpen={isReportModalOpen} onClose={() => setIsReportModalOpen(false)} comment={comment} />
 		</div>
 	)
 }

@@ -27,6 +27,7 @@ model User {
     comments             Comment[]
     notifications        Notification[] @relation("NotificationTargetUser")
     notifierOf           Notification[] @relation("NotificationGeneratedBy")
+    reports              Report[]
 }
 
 model SocialLink {
@@ -136,4 +137,21 @@ model Message {
     authorId       String
     createdAt      DateTime     @default(now())
     updatedAt      DateTime     @updatedAt
+}
+
+model Report {
+    id            String           @id @default(uuid())
+    generatedBy   User             @relation(fields: [generatedById], references: [id])
+    generatedById String
+    entityType    ReportEntityType
+    entityId      String // ID of the affected entity (post, comment, etc.)
+    reason        String
+    createdAt     DateTime         @default(now())
+	updatedAt     DateTime         @updatedAt
+}
+
+enum ReportEntityType {
+    POST
+    COMMENT
+    OTHER
 }
