@@ -37,7 +37,7 @@ export default async function RootLayout({
 					</div>
 					<SessionValidator session={session} />
 				</Providers>
-				<Toaster position='bottom-right' richColors closeButton pauseWhenPageIsHidden />
+				<Toaster position='bottom-right' richColors closeButton pauseWhenPageIsHidden toastOptions={{ className: 'text-sm' }} />
 			</body>
 		</html>
 	)
