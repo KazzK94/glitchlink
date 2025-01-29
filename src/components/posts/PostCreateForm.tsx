@@ -5,6 +5,7 @@ import { Button } from '../ui/button'
 import { useRef } from 'react'
 
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 
 export function PostCreateForm() {
@@ -18,11 +19,12 @@ export function PostCreateForm() {
 		const content = (formData.get('content') as string).trim()
 
 		// TODO: Show the user a proper error explaining the minimum length
-		if (!content || content.length < 6) return
+		if (!content || content.length < 6) return toast('A post must be at least 6 characters long')
 
 		await createPost({ content: content })
 		textareaRef.current!.value = ''
 
+		toast.success('Post created!')
 		router.refresh()
 	}
 

@@ -71,6 +71,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 			toast.error('Error: Failed to delete post')
 			return
 		}
+		toast.success('Post deleted correctly!')
 		router.refresh()
 	}
 
