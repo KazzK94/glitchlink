@@ -19,7 +19,7 @@ export function PostCreateForm() {
 		const content = (formData.get('content') as string).trim()
 
 		// TODO: Show the user a proper error explaining the minimum length
-		if (!content || content.length < 6) return toast('A post must be at least 6 characters long')
+		if (!content || content.length < 6) return toast.error('A valid post must contain at least 6 characters.')
 
 		await createPost({ content: content })
 		textareaRef.current!.value = ''
