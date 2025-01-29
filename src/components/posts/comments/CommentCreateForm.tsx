@@ -20,9 +20,10 @@ export function PostCommentCreateForm({ post, className }: PostCommentCreateForm
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		const formData = new FormData(e.currentTarget)
-		const content = formData.get('content') as string
+		const content = (formData.get('content') as string).trim()
 		
-		if (!content || content.length < 3) return toast.warning('A comment must be at least 3 characters long')
+		if(!content) return
+		if (content.length < 3) return toast.warning('A comment must be at least 3 characters long')
 		
 		await addCommentToPost({ post: post, content })
 		textareaRef.current!.value = ''
