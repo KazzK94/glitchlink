@@ -47,12 +47,12 @@ async function TrendingGames() {
 			<h2 className="text-2xl font-semibold mb-4">Trending Games</h2>
 			<ul className="space-y-3">
 				{popularGames.map((game) => (
-					<li key={game.id} className="relative h-20 rounded border overflow-hidden cursor-pointer hover:saturate-150 transition-all duration-300">
+					<li key={game.id} className="relative h-20 rounded border overflow-hidden cursor-pointer hover:saturate-200 transition-all duration-300">
 						<img className='w-full h-full object-cover' src={game.image.replace('media/', 'media/crop/600/400/')} alt={game.title} />
 						<div className='absolute inset-0 flex justify-center items-end pb-2 bg-gradient-to-t from-black to-transparent'>
 							<p className='font-bold text-xl !select-none cursor-pointer'>
 								<Gamepad2Icon className="h-5 w-5 mr-2 inline-block" />
-								{game.title}
+								{game.title.length > 20 ? game.title.slice(0, 20) + '...' : game.title}
 							</p>
 						</div>
 					</li>
