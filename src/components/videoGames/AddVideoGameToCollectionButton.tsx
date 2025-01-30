@@ -4,12 +4,14 @@ import { ModalOpener } from '@/components/common/Modal'
 import { Button } from '../ui/button'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 export function AddGameToCollectionButton({ externalId, title, className }: { externalId: number, title: string, className?: string }) {
 
 	// externalId is the ID of the game in the rawg.io API
 
 	const [isGameAdded, setIsGameAdded] = useState(false)
+	const router = useRouter()
 
 	const handleSubmit = async () => {
 		if (isGameAdded) return
@@ -31,6 +33,8 @@ export function AddGameToCollectionButton({ externalId, title, className }: { ex
 		})
 
 		setIsGameAdded(true)
+		router.refresh()
+		toast.success(`"${title}" has been added to your collection!`)
 	}
 
 	return (
@@ -42,9 +46,9 @@ export function AddGameToCollectionButton({ externalId, title, className }: { ex
 					: `"${title}" is now in your collection!`
 			}
 			onConfirm={handleSubmit}
-			closeOnConfirm={isGameAdded}
-			confirmText={isGameAdded ? 'Okay' : 'Add to collection'}
-			showCancelButton={!isGameAdded}
+			closeOnConfirm
+			confirmText='Add to collection'
+			showCancelButton
 		>
 			<Button
 				variant='secondary'
