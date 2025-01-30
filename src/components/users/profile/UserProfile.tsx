@@ -20,7 +20,7 @@ import { UserContextOpener } from './UserContextOpener'
 export async function UserProfile({ username }: { username?: string }) {
 
 	const loggedUser = await getUserFromSession()
-	if(!username && !loggedUser) return <UserNotFound />
+	if (!username && !loggedUser) return <UserNotFound />
 	const user = await getUserProfile({ username: username || loggedUser!.username })
 	if (!user) return <UserNotFound />
 
@@ -28,44 +28,46 @@ export async function UserProfile({ username }: { username?: string }) {
 
 	return (
 		<Container className='mt-4 pb-4'>
-			{/* Top Right Buttons */}
-			{
-				isSelf ? (
-					<div className='float-right flex items-center gap-3'>
-						<Link href='/profile/edit' className='flex items-center border-2 rounded-lg p-3 z-10 text-slate-300 border-slate-300'>
-							<EditIcon size={20} />
-						</Link>
-						<LogoutButton formClassName='z-10' className='flex items-center border-2 rounded-lg p-3 z-10 text-red-400 border-red-400'>
-							<LogOutIcon size={20} />
-						</LogoutButton>
-					</div>
-				) : (
-					<div className='float-right flex items-center gap-2'>
-						<Link href={`/dm/${user.username}`} className='flex items-center rounded-lg p-2.5 z-10 text-purple-300 border-purple-300/80 hover:text-purple-300 hover:border-purple-400'>
-							<MailIcon className='size-7' />
-						</Link>
-						<UserContextOpener user={user} />
-					</div>
-				)
-			}
+			<div className='px-2 pt-2'>
+				{/* Top Right Buttons */}
+				{
+					isSelf ? (
+						<div className='float-right flex items-center gap-3'>
+							<Link href='/profile/edit' className='flex items-center border-2 rounded-lg p-3 z-10 text-slate-300 border-slate-300'>
+								<EditIcon size={20} />
+							</Link>
+							<LogoutButton formClassName='z-10' className='flex items-center border-2 rounded-lg p-3 z-10 text-red-400 border-red-400'>
+								<LogOutIcon size={20} />
+							</LogoutButton>
+						</div>
+					) : (
+						<div className='float-right flex items-center gap-2'>
+							<Link href={`/dm/${user.username}`} className='flex items-center rounded-lg p-2.5 z-10 text-purple-300 border-purple-300/80 hover:text-purple-300 hover:border-purple-400'>
+								<MailIcon className='size-7' />
+							</Link>
+							<UserContextOpener user={user} />
+						</div>
+					)
+				}
 
-			{/* Heading Content */}
-			<div className="flex gap-4 items-center ml-2">
-				<div>
-					<Avatar src={user.avatar} className='size-16' />
-				</div>
-				<div>
-					<h1 className='text-2xl md:text-3xl font-semibold text-blue-200'>
-						{user.name}
-					</h1>
-					<p className='text-sm opacity-80 mt-0 ml-1'>
-						@{user.username}
-					</p>
+				{/* Heading Content */}
+				<div className="flex gap-4 items-center ml-2">
+					<div>
+						<Avatar src={user.avatar} className='size-16' />
+					</div>
+					<div>
+						<h1 className='text-2xl md:text-3xl font-semibold text-blue-200'>
+							{user.name}
+						</h1>
+						<p className='text-sm opacity-80 mt-0 ml-1'>
+							@{user.username}
+						</p>
+					</div>
 				</div>
 			</div>
 
 			{/* Tabs */}
-			<Tabs defaultValue='games' className='mt-6'>
+			<Tabs defaultValue='games' className='mt-5'>
 				<TabsList className='p-1 h-12 grid grid-cols-3 gap-0.5 bg-white/5'>
 					<TabsTrigger value='games' className='flex gap-1 items-center h-full'>
 						<Gamepad2Icon size={24} />
