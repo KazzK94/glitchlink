@@ -15,7 +15,7 @@ export function AddGameToCollectionButton({ externalId, title, className }: { ex
 		if (isGameAdded) return
 
 		// Make a request to your API to add the game to the user's collection
-		const gameData = await fetch('/api/external/games/' + externalId).then(res => res.json())
+		const gameData = await fetch('/api/external/videoGames/' + externalId).then(res => res.json())
 
 		if (!gameData) return toast.error('Error adding game to collection. If this error persists please contact an administrator.')
 

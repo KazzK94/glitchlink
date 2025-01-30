@@ -1,8 +1,8 @@
 
-import { createOrGetVideoGame, getVideoGamesByUser } from '@/services/games'
+import { createOrGetVideoGame, getVideoGamesByUser } from '@/services/videoGames'
 import { type VideoGame } from '@prisma/client'
 import { type NextRequest } from 'next/server'
-import { addVideoGameToUser } from '../../../../services/games'
+import { addVideoGameToUser } from '../../../../services/videoGames'
 
 import { getServerSession, User } from 'next-auth'
 import { authOptions } from '@/services/nextAuthConfig'

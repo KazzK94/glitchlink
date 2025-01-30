@@ -1,6 +1,6 @@
 'use client'
 
-import { VideoGameCard } from '@/components/games/GameCard'
+import { VideoGameCard } from '@/components/videoGames/VideoGameCard'
 import { Button } from '@/components/ui/button'
 
 import { type Game } from '@/types'
@@ -23,7 +23,7 @@ export function GamesList() {
 	// On initial render, get first games (no search)
 	useEffect(() => {
 		async function fetchGames() {
-			const response = await fetch('/api/external/games')
+			const response = await fetch('/api/external/videoGames')
 			const { games : newGames, isLastPage } = await response.json()
 			setGames(newGames.map(getRelevantGameInfo))
 			setLoading(false)
@@ -39,7 +39,7 @@ export function GamesList() {
 		setLoading(true)
 		setPage(1)
 		const searchUri = search ? `&search=${encodeURIComponent(search)}` : ''
-		const response = await fetch('/api/external/games?page=1' + searchUri)
+		const response = await fetch('/api/external/videoGames?page=1' + searchUri)
 		const { games : newGames, isLastPage } = await response.json()
 		setGames(newGames.map(getRelevantGameInfo))
 		setLoading(false)
@@ -51,7 +51,7 @@ export function GamesList() {
 		setLoading(true)
 		// Get the next page of games
 		const searchUri = search ? `&search=${encodeURIComponent(search)}` : ''
-		const response = await fetch('/api/external/games?page=' + (page + 1) + searchUri)
+		const response = await fetch('/api/external/videoGames?page=' + (page + 1) + searchUri)
 		const { games : newGames, isLastPage } = await response.json()
 		setPage((prevPage) => prevPage + 1)
 		setGames((prev) => [...prev, ...newGames.map(getRelevantGameInfo)])

@@ -1,5 +1,5 @@
 import { Container } from '@/components/common/Container'
-import { GamesList } from '@/components/games/VideoGamesList'
+import { GamesList } from '@/components/videoGames/VideoGamesList'
 
 
 export default function GamesPage() {
