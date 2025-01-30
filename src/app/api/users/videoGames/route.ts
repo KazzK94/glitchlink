@@ -2,7 +2,7 @@
 import { createOrGetVideoGame, getVideoGamesByUser } from '@/services/videoGames'
 import { type VideoGame } from '@prisma/client'
 import { type NextRequest } from 'next/server'
-import { addVideoGameToUser } from '../../../../services/videoGames'
+import { addVideoGameToCollection } from '../../../../services/videoGames'
 
 import { getServerSession, User } from 'next-auth'
 import { authOptions } from '@/services/nextAuthConfig'
@@ -27,7 +27,6 @@ export async function POST(request: NextRequest) {
 	if (!session) {
 		return Response.json({ ok: false, message: 'No user logged in.' })
 	}
-	const user: User = session.user
 
 	const body = await request.json()
 	const { externalId, title, description, image, genres, developers, platforms } = body
@@ -36,7 +35,7 @@ export async function POST(request: NextRequest) {
 		{ externalId, title, description, image, genres, developers, platforms }
 	)
 
-	await addVideoGameToUser({ videoGameId: game.id, userId: user.id })
+	await addVideoGameToCollection({ videoGameId: game.id })
 
 	return Response.json(game)
 }

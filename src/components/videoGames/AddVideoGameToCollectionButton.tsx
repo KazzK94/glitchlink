@@ -22,7 +22,7 @@ export function AddGameToCollectionButton({ externalId, title, className }: { ex
 		const parsedGameData = parseGameData(gameData)
 
 		// make a request to  API to add the game to the user's collection
-		await fetch('/api/users/games', {
+		await fetch('/api/users/videoGames', {
 			method: 'POST',
 			body: JSON.stringify(parsedGameData),
 			headers: {

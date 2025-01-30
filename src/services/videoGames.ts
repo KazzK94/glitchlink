@@ -28,12 +28,31 @@ export async function createOrGetVideoGame({ externalId, title, description, ima
 	}
 }
 
-export async function addVideoGameToUser({ videoGameId, userId }: { videoGameId: string, userId: string }) {
+export async function addVideoGameToCollection({ videoGameId }: { videoGameId: string }) {
+	const user = await getUserFromSession()
+	if (!user) return null
+
 	return await prisma.user.update({
-		where: { id: userId },
+		where: { id: user.id },
 		data: {
 			videoGames: {
 				connect: { id: videoGameId }
+			}
+		}
+	})
+}
+
+export async function removeVideoGameFromUser({ videoGameId }: { videoGameId: string }) {
+	const user = await getUserFromSession()
+	if (!user) return null
+
+	console.log('\n\nREMOVED GAME\n\n')
+
+	return await prisma.user.update({
+		where: { id: user.id },
+		data: {
+			videoGames: {
+				disconnect: { id: videoGameId }
 			}
 		}
 	})

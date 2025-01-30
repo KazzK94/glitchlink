@@ -1,11 +1,15 @@
 import { Container } from '@/components/common/Container'
 import { GamesList } from '@/components/videoGames/VideoGamesList'
+import { getUserProfile } from '@/services/users'
 
 
-export default function GamesPage() {
+export default async function GamesPage() {
+
+	const user = await getUserProfile()
+
 	return (
 		<Container asSection>
-			<GamesList />
+			<GamesList userVideoGames={user?.videoGames} />
 		</Container>
 	)
 }

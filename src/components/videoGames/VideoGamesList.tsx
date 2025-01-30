@@ -3,15 +3,21 @@
 import { VideoGameCard } from '@/components/videoGames/VideoGameCard'
 import { Button } from '@/components/ui/button'
 
-import { type Game } from '@/types'
+import { type ExternalVideoGame } from '@/types'
 
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { GameSearchBar } from './VideoGamesSearchBar'
 
-export function GamesList() {
+interface UserVideoGame {
+	id: string
+	externalId: number
+	title: string
+}
 
-	const [games, setGames] = useState<Game[]>([])
+export function GamesList({ userVideoGames = [] }: { userVideoGames?: UserVideoGame[] }) {
+
+	const [games, setGames] = useState<ExternalVideoGame[]>([])
 	const [isLastPageReached, setIsLastPageReached] = useState(false)
 	const [page, setPage] = useState(1)
 	const [loading, setLoading] = useState(true)
@@ -24,7 +30,7 @@ export function GamesList() {
 	useEffect(() => {
 		async function fetchGames() {
 			const response = await fetch('/api/external/videoGames')
-			const { games : newGames, isLastPage } = await response.json()
+			const { games: newGames, isLastPage } = await response.json()
 			setGames(newGames.map(getRelevantGameInfo))
 			setLoading(false)
 			setIsLastPageReached(isLastPage)
@@ -40,7 +46,7 @@ export function GamesList() {
 		setPage(1)
 		const searchUri = search ? `&search=${encodeURIComponent(search)}` : ''
 		const response = await fetch('/api/external/videoGames?page=1' + searchUri)
-		const { games : newGames, isLastPage } = await response.json()
+		const { games: newGames, isLastPage } = await response.json()
 		setGames(newGames.map(getRelevantGameInfo))
 		setLoading(false)
 		setIsLastPageReached(isLastPage)
@@ -52,7 +58,7 @@ export function GamesList() {
 		// Get the next page of games
 		const searchUri = search ? `&search=${encodeURIComponent(search)}` : ''
 		const response = await fetch('/api/external/videoGames?page=' + (page + 1) + searchUri)
-		const { games : newGames, isLastPage } = await response.json()
+		const { games: newGames, isLastPage } = await response.json()
 		setPage((prevPage) => prevPage + 1)
 		setGames((prev) => [...prev, ...newGames.map(getRelevantGameInfo)])
 		setLoading(false)
@@ -67,15 +73,20 @@ export function GamesList() {
 				games.length > 0 && (
 					<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly mx-2 mb-8 gap-4'>
 						{
-							games.map(game => (
-								<VideoGameCard
-									key={game.id}
-									externalId={game.id}
-									title={game.name}
-									imageUrl={game.background_image}
-									userIsLogged={userIsLogged}
-								/>
-							))
+							games.map(game => {
+								const isOwned = userVideoGames.some(vg => vg.externalId === game.id)
+								return (
+									<VideoGameCard
+										key={game.id}
+										className={isOwned ? 'border-2 border-green-600' : ''}
+										externalId={game.id}
+										title={game.name}
+										imageUrl={game.background_image}
+										userIsLogged={userIsLogged}
+										isOwned={isOwned}
+									/>
+								)
+							})
 						}
 					</div>
 				)
@@ -115,7 +126,7 @@ function ButtonShowMoreGames({ onClick }: { onClick: () => void }) {
 	)
 }
 
-function getRelevantGameInfo(game: Game) {
+function getRelevantGameInfo(game: ExternalVideoGame) {
 	return {
 		id: game.id,
 		name: game.name,

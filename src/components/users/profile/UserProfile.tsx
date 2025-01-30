@@ -4,7 +4,6 @@ import { EditIcon, LogOutIcon, MailIcon } from 'lucide-react'
 import Link from 'next/link'
 import { LogoutButton } from '../../auth/LogoutButton'
 
-import { getUserFromSession } from '@/services/auth'
 import { getUserProfile } from '@/services/users'
 
 import { BookUserIcon, Gamepad2Icon, MessageSquareIcon } from 'lucide-react'
@@ -19,7 +18,7 @@ import { UserContextOpener } from './UserContextOpener'
 
 export async function UserProfile({ username }: { username?: string }) {
 
-	const loggedUser = await getUserFromSession()
+	const loggedUser = await getUserProfile()
 	if (!username && !loggedUser) return <UserNotFound />
 	const user = await getUserProfile({ username: username || loggedUser!.username })
 	if (!user) return <UserNotFound />
@@ -83,7 +82,7 @@ export async function UserProfile({ username }: { username?: string }) {
 					</TabsTrigger>
 				</TabsList>
 				<TabsContent value='games'>
-					<ProfileVideoGames videoGames={user.videoGames} />
+					<ProfileVideoGames videoGames={user.videoGames} loggedUserVideoGames={loggedUser?.videoGames} isSelf={isSelf} />
 				</TabsContent>
 				<TabsContent value='posts'>
 					<ProfilePosts posts={user.posts} loggedUserId={user.id} />

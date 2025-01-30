@@ -1,6 +1,6 @@
 import type { Comment, Post, User, Notification, VideoGame } from '@prisma/client'
 
-export interface Game {
+export interface ExternalVideoGame {
 	id: number
 	name: string
 	background_image: string
