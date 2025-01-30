@@ -7,7 +7,7 @@ import { type Game } from '@/types'
 
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import { GameSearchBar } from './GameSearchBar'
+import { GameSearchBar } from './VideoGamesSearchBar'
 
 export function GamesList() {
 

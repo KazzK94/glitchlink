@@ -1,6 +1,6 @@
 
 import { type VideoGame } from '@prisma/client'
-import { VideoGameCard } from '../../games/GameCard'
+import { VideoGameCard } from '../../games/VideoGameCard'
 
 export async function ProfileVideoGames({ videoGames }: { videoGames: VideoGame[] }) {
 	return (

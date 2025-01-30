@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardContent } from "@/components/ui/card"
-import { AddGameToCollectionButton } from './AddGameToCollectionButton'
+import { AddGameToCollectionButton } from './AddVideoGameToCollectionButton'
 
 interface VideoGameCardProps {
 	externalId: number
