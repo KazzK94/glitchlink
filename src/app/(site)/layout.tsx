@@ -31,7 +31,7 @@ export default async function RootLayout({
 				<Providers>
 					<div className='grid grid-rows-[auto_1fr] h-full'>
 						<TopNavbar loggedUserId={session?.user?.id} />
-						<main className='overflow-y-scroll [scrollbar-color:rgb(65_120_160)_rgb(40_55_80)]'>
+						<main className='overflow-y-auto [scrollbar-color:rgb(65_120_160)_rgb(40_55_80)]'>
 							{children}
 						</main>
 					</div>

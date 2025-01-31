@@ -41,7 +41,7 @@ export async function UserProfile({ username }: { username?: string }) {
 						</div>
 					) : (
 						<div className='float-right flex items-center gap-2'>
-							<Link href={`/dm/${user.username}`} className='flex items-center rounded-lg p-2.5 z-10 text-purple-300 border-purple-300/80 hover:text-purple-300 hover:border-purple-400'>
+							<Link href={`/messages/${user.username}`} className='flex items-center rounded-lg p-2.5 z-10 text-purple-300 border-purple-300/80 hover:text-purple-300 hover:border-purple-400'>
 								<MailIcon className='size-7' />
 							</Link>
 							<UserContextOpener user={user} />
