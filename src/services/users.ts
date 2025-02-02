@@ -88,7 +88,7 @@ export async function getUserProfile({ userId, username }: { userId?: string, us
 
 	const loggedUser = await getUserFromSession()
 	if (!userId && !username) {
-		if (!loggedUser) throw new Error('No user logged.')
+		if (!loggedUser) return null
 		userId = loggedUser.id
 	}
 
