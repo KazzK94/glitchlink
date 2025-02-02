@@ -9,6 +9,8 @@ import { ChangePasswordForm } from '@/components/users/profile/forms/ChangePassw
 export default async function EditProfilePage() {
 	const user = await getUserProfile()
 
+	if (!user) return <p className='text-red-500 text-lg'>ERROR: Cannot load logged user data. Please make sure you logged in correctly.</p>
+
 	return (
 		<Container className='py-4 px-6'>
 			<h1 className='text-3xl mb-4'>Edit Profile</h1>
