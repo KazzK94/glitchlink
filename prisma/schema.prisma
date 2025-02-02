@@ -119,22 +119,25 @@ enum NotificationActionType {
 }
 
 model Conversation {
-    id        String    @id @default(uuid())
-    messages  Message[]
-    userA     User      @relation("ConversationUserA", fields: [userAId], references: [id], onDelete: Cascade)
-    userAId   String
-    userB     User      @relation("ConversationUserB", fields: [userBId], references: [id], onDelete: Cascade)
-    userBId   String
-    createdAt DateTime  @default(now())
+    id            String    @id @default(uuid())
+    userA         User      @relation("ConversationUserA", fields: [userAId], references: [id], onDelete: Cascade)
+    userAId       String
+    userB         User      @relation("ConversationUserB", fields: [userBId], references: [id], onDelete: Cascade)
+    userBId       String
+    messages      Message[]
+    lastMessageAt DateTime  @default(now())
+    createdAt     DateTime  @default(now())
+
+    @@unique([userAId, userBId])
 }
 
 model Message {
     id             String       @id @default(uuid())
-    content        String
-    conversation   Conversation @relation(fields: [conversationId], references: [id])
-    conversationId String
     author         User         @relation(fields: [authorId], references: [id])
     authorId       String
+    content        String
+    conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+    conversationId String
     createdAt      DateTime     @default(now())
     updatedAt      DateTime     @updatedAt
 }
@@ -147,7 +150,7 @@ model Report {
     entityId      String // ID of the affected entity (post, comment, etc.)
     reason        String
     createdAt     DateTime         @default(now())
-	updatedAt     DateTime         @updatedAt
+    updatedAt     DateTime         @updatedAt
 }
 
 enum ReportEntityType {
