@@ -2,8 +2,11 @@
 
 import prisma from '@/lib/db'
 import { getUserFromSession } from './auth'
-import { } from '@prisma/client'
 import { getUser } from './users'
+
+import { Message as MessageType } from '@prisma/client'
+
+import { pusherServer } from '@/lib/pusher'
 
 
 /**
@@ -41,7 +44,7 @@ export async function createConversation({ targetUserId, message }: { targetUser
 	if (existingConversation) {
 		if (message) {
 			const response = await sendMessage({ conversationId: existingConversation.id, message })
-			if(!response) throw new Error('Failed to send the message')
+			if (!response) throw new Error('Failed to send the message')
 			return response
 		}
 		return existingConversation
@@ -114,7 +117,7 @@ export async function sendMessage({ conversationId, message }: { conversationId:
 
 	// Create the message and update the lastMessageAt field of the conversation
 	try {
-		return await prisma.conversation.update({
+		const result = await prisma.conversation.update({
 			where: { id: conversationId },
 			data: {
 				lastMessageAt: new Date(),
@@ -134,8 +137,34 @@ export async function sendMessage({ conversationId, message }: { conversationId:
 				userB: { select: { id: true, username: true, name: true, avatar: true } }
 			}
 		})
+		// Get inserted message
+		const insertedMessage = result.messages[0]
+		await sendMessageToPusher({ conversationId, message: insertedMessage })
+		return result
 	} catch (error) {
 		console.error('Failed to send the message:', error)
+		throw error
+	}
+}
+
+
+interface SendMessageToPusherProps {
+	conversationId: string
+	message: MessageType
+}
+
+export async function sendMessageToPusher({ conversationId, message }: SendMessageToPusherProps) {
+	try {
+		const result = await pusherServer.trigger(
+			`conversation-${conversationId}`,
+			"new-message",
+			{ message }
+		)
+		return {
+			success: (result.status === 200)
+		}
+	} catch (error) {
+		console.error('Failed to send the message to Pusher:', error)
 		throw error
 	}
 }

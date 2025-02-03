@@ -10,9 +10,8 @@ import { Avatar } from '@/components/users/Avatar'
 import { Message } from './Message'
 import { Conversation as ConversationType, Message as MessageType } from '@prisma/client'
 import { UserPublicInfo } from '@/types'
-import { toast } from 'sonner'
-import { createConversation, sendMessage } from '@/services/conversations'
 import { useRouter } from 'next/navigation'
+import { useMessages } from '@/hooks/useMessages'
 
 interface ConversationWithUsersAndMessages extends ConversationType {
 	messages: MessageType[]
@@ -20,43 +19,17 @@ interface ConversationWithUsersAndMessages extends ConversationType {
 	userB: UserPublicInfo
 }
 
-const CONVERSATION_NO_ID = 'NO_ID'
-
 export function MessagesContainer({ conversations: conversationsBase, loggedUser, targetUser, className }: { conversations: ConversationWithUsersAndMessages[], loggedUser: UserPublicInfo, targetUser: UserPublicInfo, className?: string }) {
 
-	let conversationIndex = conversationsBase.findIndex((conversation) => {
-		return (
-			conversation.userA.username === targetUser.username ||
-			conversation.userB.username === targetUser.username
-		)
-	})
-
-	if (conversationIndex === -1) {
-		conversationsBase.unshift({
-			id: CONVERSATION_NO_ID,
-			userA: loggedUser,
-			userAId: loggedUser.id,
-			userB: {
-				username: targetUser.username,
-				name: targetUser.name,
-				avatar: targetUser.avatar,
-				id: targetUser.id
-			},
-			userBId: targetUser.id,
-			createdAt: new Date(),
-			lastMessageAt: new Date(),
-			messages: []
-		})
-		conversationIndex = 0
-	}
-
-	const [conversations, setConversations] = useState(conversationsBase)
-	/* TODO: Consider if we need conversation index to be a state or just a const */
-	//const [selectedConversationIndex, setSelectedConversationIndex] = useState(conversationIndex)
-	const selectedConversationIndex = conversationIndex
-	const [messageInput, setMessageInput] = useState("")
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-	const [isSendingMessage, setIsSendingMessage] = useState(false)
+
+	const {
+		conversations,
+		conversationIndex,
+		messageInput,
+		handleChangeMessageInput,
+		handleSendMessage
+	} = useMessages({ conversations: conversationsBase, loggedUser, targetUser })
 
 	const router = useRouter()
 	const messageEndRef = useRef<HTMLDivElement>(null)
@@ -70,44 +43,13 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 		router.replace(`/messages/${otherUser.username}`)
 	}
 
-	const handleSendMessage = async (e: React.FormEvent) => {
-		e.preventDefault()
-		if (messageInput.trim() !== "") {
-			if (isSendingMessage) return
-			setIsSendingMessage(true)
-			try {
-				if (selectedConversationIndex === 0 && conversations[0].id === CONVERSATION_NO_ID) {
-					toast.info('You started a conversation with ' + targetUser.name)
-					const newConversation = await createConversation({ targetUserId: targetUser.id, message: messageInput })
-					setConversations((conversations) => [newConversation, ...conversations.slice(1)])
-					setMessageInput("")
-					setIsSendingMessage(false)
-				} else {
-					const updatedConversation = await sendMessage({ conversationId: conversations[selectedConversationIndex].id, message: messageInput })
-					setConversations((conversations) => conversations.map((conversation) => {
-						if (conversation.id === updatedConversation.id) {
-							return updatedConversation
-						}
-						return conversation
-					}))
-					setMessageInput("")
-					setIsSendingMessage(false)
-				}
-			} catch (error) {
-				console.error(error)
-				toast.error('Failed to send message')
-				setIsSendingMessage(false)
-			}
-		}
-	}
-
-	const toggleMobileMenu = () => {
+	const handleToggleMobileMenu = () => {
 		setIsMobileMenuOpen(!isMobileMenuOpen)
 	}
 
 	useEffect(() => {
 		scrollToBottom()
-	}, [selectedConversationIndex])
+	}, [conversations, conversationIndex])
 
 	return (
 		<div className={`flex h-full bg-gray-900 text-white ${className}`}>
@@ -123,7 +65,7 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 						return (
 							<div
 								key={conversation.id}
-								className={`flex items-center p-4 cursor-pointer ${conversations[selectedConversationIndex].id === conversation.id ? "bg-gray-700" : "hover:bg-gray-700/40"
+								className={`flex items-center p-4 cursor-pointer ${conversations[conversationIndex].id === conversation.id ? "bg-gray-700" : "hover:bg-gray-700/40"
 									}`}
 								onClick={() => { handleChangeConversation(conversation); setIsMobileMenuOpen(false) }}
 							>
@@ -151,7 +93,7 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 							<p className='text-sm italic opacity-80'>@{targetUser.username}</p>
 						</div>
 					</div>
-					<button className='md:hidden border bg-slate-700/30 rounded p-2' onClick={toggleMobileMenu}>
+					<button className='md:hidden border bg-slate-700/30 rounded p-2' onClick={handleToggleMobileMenu}>
 						<MenuIcon className='size-6' />
 					</button>
 				</div>
@@ -159,7 +101,7 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 				{/* Messages */}
 				<ScrollArea className="flex-1 px-4 bg-gray-800/40">
 					<div className='flex flex-col-reverse gap-3 pb-3'>
-						{conversations[selectedConversationIndex].messages.map((message) => (
+						{conversations[conversationIndex].messages.map((message) => (
 							<Message key={message.id} className='last:mt-6' message={message} loggedUser={loggedUser} />
 						))}
 					</div>
@@ -173,7 +115,7 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 							type="text"
 							placeholder="Type a message..."
 							value={messageInput}
-							onChange={(e) => setMessageInput(e.target.value)}
+							onChange={handleChangeMessageInput}
 							className="flex-1 bg-gray-800 text-white border-gray-600 placeholder:text-white/60"
 						/>
 						<Button type="submit" className="ml-2 border border-gray-400/80">
