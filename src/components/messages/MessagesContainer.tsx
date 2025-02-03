@@ -12,6 +12,7 @@ import { Conversation as ConversationType, Message as MessageType } from '@prism
 import { UserPublicInfo } from '@/types'
 import { toast } from 'sonner'
 import { createConversation, sendMessage } from '@/services/conversations'
+import { useRouter } from 'next/navigation'
 
 interface ConversationWithUsersAndMessages extends ConversationType {
 	messages: MessageType[]
@@ -21,9 +22,9 @@ interface ConversationWithUsersAndMessages extends ConversationType {
 
 const CONVERSATION_NO_ID = 'NO_ID'
 
-export function MessagesContainer({ conversations, loggedUser, targetUser, className }: { conversations: ConversationWithUsersAndMessages[], loggedUser: UserPublicInfo, targetUser: UserPublicInfo, className?: string }) {
+export function MessagesContainer({ conversations: conversationsBase, loggedUser, targetUser, className }: { conversations: ConversationWithUsersAndMessages[], loggedUser: UserPublicInfo, targetUser: UserPublicInfo, className?: string }) {
 
-	let conversationIndex = conversations.findIndex((conversation) => {
+	let conversationIndex = conversationsBase.findIndex((conversation) => {
 		return (
 			conversation.userA.username === targetUser.username ||
 			conversation.userB.username === targetUser.username
@@ -31,7 +32,7 @@ export function MessagesContainer({ conversations, loggedUser, targetUser, class
 	})
 
 	if (conversationIndex === -1) {
-		conversations.unshift({
+		conversationsBase.unshift({
 			id: CONVERSATION_NO_ID,
 			userA: loggedUser,
 			userAId: loggedUser.id,
@@ -49,34 +50,53 @@ export function MessagesContainer({ conversations, loggedUser, targetUser, class
 		conversationIndex = 0
 	}
 
-	const [selectedConversation, setSelectedConversation] = useState(conversations[conversationIndex])
+	const [conversations, setConversations] = useState(conversationsBase)
+	/* TODO: Consider if we need conversation index to be a state or just a const */
+	//const [selectedConversationIndex, setSelectedConversationIndex] = useState(conversationIndex)
+	const selectedConversationIndex = conversationIndex
 	const [messageInput, setMessageInput] = useState("")
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+	const [isSendingMessage, setIsSendingMessage] = useState(false)
 
+	const router = useRouter()
 	const messageEndRef = useRef<HTMLDivElement>(null)
 
 	const scrollToBottom = () => {
 		messageEndRef.current?.scrollIntoView({ behavior: "smooth" })
 	}
 
+	const handleChangeConversation = (clickedConversation: ConversationWithUsersAndMessages) => {
+		const otherUser = clickedConversation.userA.id === loggedUser.id ? clickedConversation.userB : clickedConversation.userA
+		router.replace(`/messages/${otherUser.username}`)
+	}
+
 	const handleSendMessage = async (e: React.FormEvent) => {
 		e.preventDefault()
 		if (messageInput.trim() !== "") {
+			if (isSendingMessage) return
+			setIsSendingMessage(true)
 			try {
-
-				if (selectedConversation.id === CONVERSATION_NO_ID) {
+				if (selectedConversationIndex === 0 && conversations[0].id === CONVERSATION_NO_ID) {
 					toast.info('You started a conversation with ' + targetUser.name)
-					const result = await createConversation({ targetUserId: targetUser.id, message: messageInput })
-					setSelectedConversation(result)
+					const newConversation = await createConversation({ targetUserId: targetUser.id, message: messageInput })
+					setConversations((conversations) => [newConversation, ...conversations.slice(1)])
 					setMessageInput("")
+					setIsSendingMessage(false)
 				} else {
-					const updatedConversation = await sendMessage({ conversationId: selectedConversation.id, message: messageInput })
-					setSelectedConversation(updatedConversation)
+					const updatedConversation = await sendMessage({ conversationId: conversations[selectedConversationIndex].id, message: messageInput })
+					setConversations((conversations) => conversations.map((conversation) => {
+						if (conversation.id === updatedConversation.id) {
+							return updatedConversation
+						}
+						return conversation
+					}))
 					setMessageInput("")
+					setIsSendingMessage(false)
 				}
 			} catch (error) {
 				console.error(error)
 				toast.error('Failed to send message')
+				setIsSendingMessage(false)
 			}
 		}
 	}
@@ -87,7 +107,7 @@ export function MessagesContainer({ conversations, loggedUser, targetUser, class
 
 	useEffect(() => {
 		scrollToBottom()
-	}, [selectedConversation])
+	}, [selectedConversationIndex])
 
 	return (
 		<div className={`flex h-full bg-gray-900 text-white ${className}`}>
@@ -98,14 +118,14 @@ export function MessagesContainer({ conversations, loggedUser, targetUser, class
 			>
 				<ScrollArea className='h-full'>
 					{conversations.map((conversation) => {
-						const lastMessage = conversation.messages.length > 0 ? conversation.messages[conversation.messages.length - 1].content : 'No messages yet.'
+						const lastMessage = conversation.messages.length > 0 ? conversation.messages[0].content : 'No messages yet.'
 						const otherUser = conversation.userA.id === loggedUser.id ? conversation.userB : conversation.userA
 						return (
 							<div
 								key={conversation.id}
-								className={`flex items-center p-4 cursor-pointer ${selectedConversation.id === conversation.id ? "bg-gray-700" : "hover:bg-gray-700/40"
+								className={`flex items-center p-4 cursor-pointer ${conversations[selectedConversationIndex].id === conversation.id ? "bg-gray-700" : "hover:bg-gray-700/40"
 									}`}
-								onClick={() => { setSelectedConversation(conversation); setIsMobileMenuOpen(false) }}
+								onClick={() => { handleChangeConversation(conversation); setIsMobileMenuOpen(false) }}
 							>
 								<Avatar src={otherUser.avatar} className='size-12 flex-grow-0 flex-shrink-0' />
 								<div className="ml-4">
@@ -138,8 +158,8 @@ export function MessagesContainer({ conversations, loggedUser, targetUser, class
 
 				{/* Messages */}
 				<ScrollArea className="flex-1 px-4 bg-gray-800/40">
-					<div className='flex flex-col-reverse gap-3'>
-						{selectedConversation.messages.map((message) => (
+					<div className='flex flex-col-reverse gap-3 pb-3'>
+						{conversations[selectedConversationIndex].messages.map((message) => (
 							<Message key={message.id} className='last:mt-6' message={message} loggedUser={loggedUser} />
 						))}
 					</div>
