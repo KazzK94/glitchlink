@@ -5,12 +5,21 @@ import { getUserFromSession } from './auth'
 import { } from '@prisma/client'
 import { getUser } from './users'
 
+
+/**
+ * Checks if a conversation between these two users already exists. 
+ *  - If it exists, it returns the conversation (adding the message if it was included).
+ *  - If it doesn't exist, it creates a new conversation and returns it (also adding the message if it was included).
+ * @param targetUserId The id of the user to start a conversation with.
+ * @param message (optional) The initial message to send in the conversation.
+ * @returns The conversation between the logged user and the target user.
+ * */
 export async function createConversation({ targetUserId, message }: { targetUserId: string, message?: string }) {
 	const loggedUser = await getUserFromSession()
-	if (!loggedUser || !loggedUser.id) return null
+	if (!loggedUser || !loggedUser.id) throw new Error('User not logged in')
 
 	const targetUser = await getUser({ where: { id: targetUserId } })
-	if (!targetUser) return null
+	if (!targetUser) throw new Error('Target user not found')
 
 	const existingConversation = await prisma.conversation.findFirst({
 		where: {
@@ -31,7 +40,9 @@ export async function createConversation({ targetUserId, message }: { targetUser
 
 	if (existingConversation) {
 		if (message) {
-			return await sendMessage({ conversationId: existingConversation.id, message })
+			const response = await sendMessage({ conversationId: existingConversation.id, message })
+			if(!response) throw new Error('Failed to send the message')
+			return response
 		}
 		return existingConversation
 	}
@@ -63,6 +74,10 @@ export async function createConversation({ targetUserId, message }: { targetUser
 	}
 }
 
+/**
+ * Obtains all the conversations of the logged user, with the last 20 messages of each conversation.
+ * @returns An array with all the conversations of the logged user.
+ */
 export async function getConversations() {
 	const loggedUser = await getUserFromSession()
 	if (!loggedUser || !loggedUser.id) return null
@@ -87,10 +102,15 @@ export async function getConversations() {
 	})
 }
 
-/** Sends a message in a conversation. Returns the conversation */
+/** 
+ * Sends a message in an existing conversation.
+ * @param conversationId The id of the conversation where the message will be sent.
+ * @param message The content of the message to send.
+ * @returns The conversation with the new message included.
+ */
 export async function sendMessage({ conversationId, message }: { conversationId: string, message: string }) {
 	const loggedUser = await getUserFromSession()
-	if (!loggedUser || !loggedUser.id) return null
+	if (!loggedUser || !loggedUser.id) throw new Error('User not logged in')
 
 	// Create the message and update the lastMessageAt field of the conversation
 	try {

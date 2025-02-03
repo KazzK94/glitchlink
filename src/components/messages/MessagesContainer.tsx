@@ -10,6 +10,8 @@ import { Avatar } from '@/components/users/Avatar'
 import { Message } from './Message'
 import { Conversation as ConversationType, Message as MessageType } from '@prisma/client'
 import { UserPublicInfo } from '@/types'
+import { toast } from 'sonner'
+import { createConversation, sendMessage } from '@/services/conversations'
 
 interface ConversationWithUsersAndMessages extends ConversationType {
 	messages: MessageType[]
@@ -21,7 +23,6 @@ const CONVERSATION_NO_ID = 'NO_ID'
 
 export function MessagesContainer({ conversations, loggedUser, targetUser, className }: { conversations: ConversationWithUsersAndMessages[], loggedUser: UserPublicInfo, targetUser: UserPublicInfo, className?: string }) {
 
-	// TODO: Adjust this to fit the real data syntax in db
 	let conversationIndex = conversations.findIndex((conversation) => {
 		return (
 			conversation.userA.username === targetUser.username ||
@@ -58,23 +59,25 @@ export function MessagesContainer({ conversations, loggedUser, targetUser, class
 		messageEndRef.current?.scrollIntoView({ behavior: "smooth" })
 	}
 
-	const handleSendMessage = (e: React.FormEvent) => {
+	const handleSendMessage = async (e: React.FormEvent) => {
 		e.preventDefault()
 		if (messageInput.trim() !== "") {
-			// Add the new message to the list
-			const newMsg: MessageType = {
-				id: '#a1b2' + Math.random().toString() + 'c3d4' + (new Date().getTime().toString()) + 'e5',
-				authorId: loggedUser.id,
-				content: messageInput,
-				conversationId: selectedConversation.id,
-				updatedAt: new Date(),
-				createdAt: new Date()
+			try {
+
+				if (selectedConversation.id === CONVERSATION_NO_ID) {
+					toast.info('You started a conversation with ' + targetUser.name)
+					const result = await createConversation({ targetUserId: targetUser.id, message: messageInput })
+					setSelectedConversation(result)
+					setMessageInput("")
+				} else {
+					const updatedConversation = await sendMessage({ conversationId: selectedConversation.id, message: messageInput })
+					setSelectedConversation(updatedConversation)
+					setMessageInput("")
+				}
+			} catch (error) {
+				console.error(error)
+				toast.error('Failed to send message')
 			}
-			setSelectedConversation({
-				...selectedConversation,
-				messages: [...selectedConversation.messages, newMsg]
-			})
-			setMessageInput("")
 		}
 	}
 
@@ -96,6 +99,7 @@ export function MessagesContainer({ conversations, loggedUser, targetUser, class
 				<ScrollArea className='h-full'>
 					{conversations.map((conversation) => {
 						const lastMessage = conversation.messages.length > 0 ? conversation.messages[conversation.messages.length - 1].content : 'No messages yet.'
+						const otherUser = conversation.userA.id === loggedUser.id ? conversation.userB : conversation.userA
 						return (
 							<div
 								key={conversation.id}
@@ -103,9 +107,9 @@ export function MessagesContainer({ conversations, loggedUser, targetUser, class
 									}`}
 								onClick={() => { setSelectedConversation(conversation); setIsMobileMenuOpen(false) }}
 							>
-								<Avatar src={targetUser.avatar} className='size-12 flex-grow-0 flex-shrink-0' />
+								<Avatar src={otherUser.avatar} className='size-12 flex-grow-0 flex-shrink-0' />
 								<div className="ml-4">
-									<div className="font-semibold">{targetUser.name}</div>
+									<div className="font-semibold">{otherUser.name}</div>
 									<div className="text-xs text-gray-400">
 										{(lastMessage.length < 40) ? lastMessage : lastMessage.slice(0, 40).trim() + '...'}
 									</div>
@@ -134,9 +138,11 @@ export function MessagesContainer({ conversations, loggedUser, targetUser, class
 
 				{/* Messages */}
 				<ScrollArea className="flex-1 px-4 bg-gray-800/40">
-					{selectedConversation.messages.map((message) => (
-						<Message key={message.id} message={message} loggedUser={loggedUser} />
-					))}
+					<div className='flex flex-col-reverse gap-3'>
+						{selectedConversation.messages.map((message) => (
+							<Message key={message.id} className='last:mt-6' message={message} loggedUser={loggedUser} />
+						))}
+					</div>
 					<div ref={messageEndRef} />
 				</ScrollArea>
 
