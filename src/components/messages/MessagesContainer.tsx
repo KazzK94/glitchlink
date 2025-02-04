@@ -1,17 +1,23 @@
 'use client'
 
+// Hooks
 import { useEffect, useRef, useState } from "react"
+import { useRouter } from 'next/navigation'
+import { useMessages } from '@/hooks/useMessages'
+
+// Icons
 import { SendIcon, LucideMessagesSquare as MenuIcon } from "lucide-react"
 
+// Components
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar } from '@/components/users/Avatar'
 import { Message } from './Message'
+
+// Types
 import { Conversation as ConversationType, Message as MessageType } from '@prisma/client'
 import { UserPublicInfo } from '@/types'
-import { useRouter } from 'next/navigation'
-import { useMessages } from '@/hooks/useMessages'
 
 interface ConversationWithUsersAndMessages extends ConversationType {
 	messages: MessageType[]
@@ -40,7 +46,7 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 
 	const handleChangeConversation = (clickedConversation: ConversationWithUsersAndMessages) => {
 		const otherUser = clickedConversation.userA.id === loggedUser.id ? clickedConversation.userB : clickedConversation.userA
-		router.replace(`/messages/${otherUser.username}`)
+		router.push(`/messages/${otherUser.username}`)
 	}
 
 	const handleToggleMobileMenu = () => {
@@ -49,7 +55,7 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 
 	useEffect(() => {
 		scrollToBottom()
-	}, [conversations, conversationIndex])
+	}, [conversations])
 
 	return (
 		<div className={`flex h-full bg-gray-900 text-white ${className}`}>
@@ -63,11 +69,10 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 						const lastMessage = conversation.messages.length > 0 ? conversation.messages[0].content : 'No messages yet.'
 						const otherUser = conversation.userA.id === loggedUser.id ? conversation.userB : conversation.userA
 						return (
-							<a
+							<div
 								key={conversation.id}
-								className={`flex items-center p-4 ${conversationIndex !== -1 && conversations[conversationIndex].id === conversation.id ? "bg-gray-700" : "hover:bg-gray-700/40"}`}
-								onClick={() => { setIsMobileMenuOpen(false) }}
-								href={`/messages/${otherUser.username}`}
+								className={`flex items-center p-4 cursor-pointer ${conversationIndex !== -1 && conversations[conversationIndex].id === conversation.id ? "bg-gray-700" : "hover:bg-gray-700/40"}`}
+								onClick={() => { setIsMobileMenuOpen(false); handleChangeConversation(conversation) }}
 							>
 								<Avatar src={otherUser.avatar} className='size-12 flex-grow-0 flex-shrink-0' />
 								<div className="ml-4">
@@ -76,7 +81,7 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 										{(lastMessage.length < 40) ? lastMessage : lastMessage.slice(0, 40).trim() + '...'}
 									</div>
 								</div>
-							</a>
+							</div>
 						)
 					})}
 				</ScrollArea>
