@@ -63,11 +63,11 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 						const lastMessage = conversation.messages.length > 0 ? conversation.messages[0].content : 'No messages yet.'
 						const otherUser = conversation.userA.id === loggedUser.id ? conversation.userB : conversation.userA
 						return (
-							<div
+							<a
 								key={conversation.id}
-								className={`flex items-center p-4 cursor-pointer ${conversationIndex !== -1 && conversations[conversationIndex].id === conversation.id ? "bg-gray-700" : "hover:bg-gray-700/40"
-									}`}
-								onClick={() => { handleChangeConversation(conversation); setIsMobileMenuOpen(false) }}
+								className={`flex items-center p-4 ${conversationIndex !== -1 && conversations[conversationIndex].id === conversation.id ? "bg-gray-700" : "hover:bg-gray-700/40"}`}
+								onClick={() => { setIsMobileMenuOpen(false) }}
+								href={`/messages/${otherUser.username}`}
 							>
 								<Avatar src={otherUser.avatar} className='size-12 flex-grow-0 flex-shrink-0' />
 								<div className="ml-4">
@@ -76,7 +76,7 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 										{(lastMessage.length < 40) ? lastMessage : lastMessage.slice(0, 40).trim() + '...'}
 									</div>
 								</div>
-							</div>
+							</a>
 						)
 					})}
 				</ScrollArea>
