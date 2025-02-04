@@ -51,7 +51,7 @@ export async function createConversation({ targetUserId, message }: { targetUser
 	}
 
 	try {
-		return await prisma.conversation.create({
+		const createdConversation = await prisma.conversation.create({
 			data: {
 				userAId: loggedUser.id,
 				userBId: targetUser.id,
@@ -71,6 +71,7 @@ export async function createConversation({ targetUserId, message }: { targetUser
 				userB: { select: { id: true, username: true, name: true, avatar: true } }
 			}
 		})
+		return createdConversation
 	} catch (error) {
 		console.error('Failed to create the conversation:', error)
 		throw error

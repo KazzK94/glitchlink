@@ -65,7 +65,7 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 						return (
 							<div
 								key={conversation.id}
-								className={`flex items-center p-4 cursor-pointer ${conversations[conversationIndex].id === conversation.id ? "bg-gray-700" : "hover:bg-gray-700/40"
+								className={`flex items-center p-4 cursor-pointer ${conversationIndex !== -1 && conversations[conversationIndex].id === conversation.id ? "bg-gray-700" : "hover:bg-gray-700/40"
 									}`}
 								onClick={() => { handleChangeConversation(conversation); setIsMobileMenuOpen(false) }}
 							>
@@ -101,7 +101,7 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 				{/* Messages */}
 				<ScrollArea className="flex-1 px-4 bg-gray-800/40">
 					<div className='flex flex-col-reverse gap-3 pb-3'>
-						{conversations[conversationIndex].messages.map((message) => (
+						{conversationIndex !== -1 && conversations[conversationIndex].messages.map((message) => (
 							<Message key={message.id} className='last:mt-6' message={message} loggedUser={loggedUser} />
 						))}
 					</div>
@@ -116,10 +116,10 @@ export function MessagesContainer({ conversations: conversationsBase, loggedUser
 							placeholder="Type a message..."
 							value={messageInput}
 							onChange={handleChangeMessageInput}
-							className="flex-1 bg-gray-800 text-white border-gray-600 placeholder:text-white/60"
+							className="flex-1 text-lg md:text-sm py-5 md:py-4 bg-gray-800 text-white border-gray-600 placeholder:text-white/60"
 						/>
-						<Button type="submit" className="ml-2 border border-gray-400/80">
-							<SendIcon className="size-5" />
+						<Button type="submit" className="ml-2 h-full border border-gray-400/80">
+							<SendIcon className="size-5 md:size-4" />
 						</Button>
 					</div>
 				</form>
