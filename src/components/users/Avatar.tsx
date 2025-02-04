@@ -35,8 +35,8 @@ export function Avatar({ src, className, editable = false }: { src: string | nul
 	}
 
 	return (
-		<div onClick={handleOpenFileSelector} className={`rounded-full border-2 overflow-hidden ${editable ? 'cursor-pointer hover:opacity-60 transition' : ''} ${className || ''}`}>
-			<img className={'object-cover aspect-square ' + className} alt='User avatar' src={uploadedImageUrl ? uploadedImageUrl : AVATAR_PLACEHOLDER_URL} />
+		<div onClick={handleOpenFileSelector} className={`rounded-full border-2 overflow-hidden aspect-square ${editable ? 'cursor-pointer hover:opacity-60 transition ' : ''} ${className || ''}`}>
+			<img className={'object-cover size-full aspect-square ' + className} alt='User avatar' src={uploadedImageUrl ? uploadedImageUrl : AVATAR_PLACEHOLDER_URL} />
 			<input type='file' className='hidden' ref={inputRef} onChange={handleSubmit} accept='.jpg,.jpeg,.png,.avif,.webp' />
 		</div>
 	)
