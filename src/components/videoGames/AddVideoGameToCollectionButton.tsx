@@ -11,30 +11,37 @@ export function AddGameToCollectionButton({ externalId, title, className }: { ex
 	// externalId is the ID of the game in the rawg.io API
 
 	const [isGameAdded, setIsGameAdded] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
 	const router = useRouter()
 
 	const handleSubmit = async () => {
 		if (isGameAdded) return
 
-		// Make a request to your API to add the game to the user's collection
-		const gameData = await fetch('/api/external/videoGames/' + externalId).then(res => res.json())
+		try {
+			setIsLoading(true)
+			// Make a request to your API to add the game to the user's collection
+			const gameData = await fetch('/api/external/videoGames/' + externalId).then(res => res.json())
+			if (!gameData) { throw new Error('Error adding game to collection.') }
 
-		if (!gameData) return toast.error('Error adding game to collection. If this error persists please contact an administrator.')
+			const parsedGameData = parseGameData(gameData)
 
-		const parsedGameData = parseGameData(gameData)
-
-		// make a request to  API to add the game to the user's collection
-		await fetch('/api/users/videoGames', {
-			method: 'POST',
-			body: JSON.stringify(parsedGameData),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-
-		setIsGameAdded(true)
-		router.refresh()
-		toast.success(`"${title}" has been added to your collection!`)
+			// make a request to  API to add the game to the user's collection
+			await fetch('/api/users/videoGames', {
+				method: 'POST',
+				body: JSON.stringify(parsedGameData),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			setIsGameAdded(true)
+			router.refresh()
+			toast.success(`"${title}" has been added to your collection!`)
+		} catch (error) {
+			console.error(error)
+			toast.error('Error adding game to collection. If this error persists please contact an administrator.')
+		} finally {
+			setIsLoading(false)
+		}
 	}
 
 	return (
@@ -47,8 +54,10 @@ export function AddGameToCollectionButton({ externalId, title, className }: { ex
 			}
 			onConfirm={handleSubmit}
 			closeOnConfirm
-			confirmText='Add to collection'
+			confirmText={isLoading ? 'Adding to collection...' : 'Add game to collection'}
 			showCancelButton
+			disableConfirmButton={isLoading}
+			disableCancelButton={isLoading}
 		>
 			<Button
 				variant='secondary'
@@ -57,14 +66,14 @@ export function AddGameToCollectionButton({ externalId, title, className }: { ex
 					transition-all duration-300 ease-in-out ${className}
 				`}
 			>
-				Add to my games
+				Add to my collection
 			</Button>
 		</ModalOpener>
 	)
 }
 
 function parseGameData(gameData: {
-	id: number, 
+	id: number,
 	name: string,
 	background_image: string,
 	released: string,
