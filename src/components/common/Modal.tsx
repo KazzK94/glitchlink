@@ -24,11 +24,14 @@ interface ModalOpenerProps {
 	onCancel?: () => Promise<void> | void
 	showCancelButton?: boolean
 	cancelText?: string
+	disableConfirmButton?: boolean
+	disableCancelButton?: boolean
 }
 
 export function ModalOpener({
 	dialogTrigger, className, modalTitle, modalContent, children,
-	onConfirm, closeOnConfirm = true, confirmText, onCancel, showCancelButton, cancelText
+	onConfirm, closeOnConfirm = true, confirmText, onCancel, showCancelButton, cancelText,
+	disableConfirmButton = false, disableCancelButton = false
 }: ModalOpenerProps) {
 
 	const [isOpen, setIsOpen] = useState(false)
@@ -46,7 +49,7 @@ export function ModalOpener({
 	const handleCancel = async () => {
 		if (onCancel) {
 			// Run function passed as prop
-			await onCancel()
+			onCancel()
 		}
 		setIsOpen(false)
 	}
@@ -70,12 +73,12 @@ export function ModalOpener({
 				<DialogFooter>
 					<div className='flex justify-end gap-2'>
 						{(onCancel || showCancelButton) && (
-							<Button variant='ghost' className='text-black/90 hover:text-black/80 hover:bg-inherit' onClick={handleCancel}>
+							<Button variant='ghost' className='text-black/90 hover:text-black/80 hover:bg-inherit disabled:opacity-60' onClick={handleCancel} disabled={disableCancelButton}>
 								{cancelText || 'Cancel'}
 							</Button>
 						)}
 						{(onConfirm || closeOnConfirm) && (
-							<Button onClick={handleConfirm}>
+							<Button onClick={handleConfirm} disabled={disableConfirmButton} className='disabled:opacity-60'>
 								{confirmText || 'Confirm'}
 							</Button>
 						)}
