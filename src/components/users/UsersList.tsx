@@ -31,7 +31,6 @@ export async function UsersList({ users, className, cardClassName }: UserListsPr
 		<ul className={className}>
 			{users.map(foundUser => {
 				// Check if user is already a friend
-				console.log({ target: foundUser.username, socialLink: foundUser.socialLink })
 				return (
 					<li key={foundUser.id}>
 						<UserCard user={foundUser}

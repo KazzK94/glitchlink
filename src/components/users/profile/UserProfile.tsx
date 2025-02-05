@@ -28,10 +28,6 @@ export async function UserProfile({ username }: { username?: string }) {
 	const socialLink = isSelf ? null : loggedUser?.socialLinks.find(targetUser => targetUser.id === user.id)
 	const isFriend = socialLink?.status === 'FRIENDS'
 
-	if(!isSelf && !isFriend) {
-		console.log(socialLink)
-	}
-
 	return (
 		<Container className='mt-4 pb-4'>
 			<div className='px-2 pt-2'>

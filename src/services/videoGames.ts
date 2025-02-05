@@ -46,8 +46,6 @@ export async function removeVideoGameFromUser({ videoGameId }: { videoGameId: st
 	const user = await getUserFromSession()
 	if (!user) return null
 
-	console.log('\n\nREMOVED GAME\n\n')
-
 	return await prisma.user.update({
 		where: { id: user.id },
 		data: {
