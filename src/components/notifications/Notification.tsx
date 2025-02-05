@@ -23,6 +23,10 @@ export function Notification({ notification }: { notification: CompleteNotificat
 		return <SocialLinkRequestReceivedNotification notification={notification} />
 	}
 
+	if (notification.actionType === 'SOCIAL_LINK_ACCEPTED') {
+		return <SocialLinkRequestAcceptedNotification notification={notification} />
+	}
+
 	return (
 		<p className='p-4 bg-gray-800 text-red-400 rounded-lg text-lg select-none italic cursor-pointer'>
 			[ ! ] Error: Unknown notification... (please contact an admin or file a ticket)
@@ -110,6 +114,15 @@ function SocialLinkRequestReceivedNotification({ notification }: { notification:
 	return (
 		<NotificationWrapper href={`/u/${username}`} notification={notification}>
 			<span className='text-blue-200'>{name} <small className='italic'>(@{username})</small></span> sent you a friend request
+		</NotificationWrapper>
+	)
+}
+
+function SocialLinkRequestAcceptedNotification({ notification }: { notification: CompleteNotification }) {
+	const { name, username } = notification.generatedBy
+	return (
+		<NotificationWrapper href={`/u/${username}`} notification={notification}>
+			<span className='text-blue-200'>{name} <small className='italic'>(@{username})</small></span> has accepted your friend request
 		</NotificationWrapper>
 	)
 }
