@@ -118,13 +118,13 @@ export async function getUserProfile({ userId, username }: { userId?: string, us
 			userAInSocialLinks: {
 				where: { OR: [{ status: 'FRIENDS' }, { userAId: loggedUser?.id }] },
 				select: {
-					status: true, userB: { select: { id: true, username: true, name: true, avatar: true } }
+					id: true, status: true, userB: { select: { id: true, username: true, name: true, avatar: true } }
 				}
 			},
 			userBInSocialLinks: {
 				where: { OR: [{ status: 'FRIENDS' }, { userBId: loggedUser?.id }] },
 				select: {
-					status: true, userA: { select: { id: true, username: true, name: true, avatar: true } }
+					id: true, status: true, userA: { select: { id: true, username: true, name: true, avatar: true } }
 				}
 			}
 		}
@@ -133,8 +133,8 @@ export async function getUserProfile({ userId, username }: { userId?: string, us
 	if (!user) throw new Error('User not found.')
 
 	const socialLinks = [
-		...user.userAInSocialLinks.map(data => ({ ...data.userB, status: parseSocialLinkStatus(data.status, 'A') })),
-		...user.userBInSocialLinks.map(data => ({ ...data.userA, status: parseSocialLinkStatus(data.status, 'B') }))
+		...user.userAInSocialLinks.map(data => ({ user: data.userB, id: data.id, status: parseSocialLinkStatus(data.status, 'A') })),
+		...user.userBInSocialLinks.map(data => ({ user: data.userA, id: data.id, status: parseSocialLinkStatus(data.status, 'B') }))
 	]
 
 	return {
@@ -155,13 +155,13 @@ export async function getActiveUsers(amount: number = 3) {
 			userAInSocialLinks: {
 				where: { userBId: loggedUser?.id },
 				select: {
-					status: true, userB: { select: { id: true, username: true, name: true, avatar: true } }
+					id: true, status: true, userB: { select: { id: true, username: true, name: true, avatar: true } }
 				}
 			},
 			userBInSocialLinks: {
 				where: { userAId: loggedUser?.id },
 				select: {
-					status: true, userA: { select: { id: true, username: true, name: true, avatar: true } }
+					id: true, status: true, userA: { select: { id: true, username: true, name: true, avatar: true } }
 				}
 			}
 		}
@@ -170,8 +170,8 @@ export async function getActiveUsers(amount: number = 3) {
 
 	return users.map(user => {
 		const socialLinks = [
-			...user.userAInSocialLinks.map(data => ({ ...user, status: parseSocialLinkStatus(data.status, 'B') })),
-			...user.userBInSocialLinks.map(data => ({ ...user, status: parseSocialLinkStatus(data.status, 'A') })),
+			...user.userAInSocialLinks.map(data => ({ user, id: data.id, status: parseSocialLinkStatus(data.status, 'B') })),
+			...user.userBInSocialLinks.map(data => ({ user, id: data.id, status: parseSocialLinkStatus(data.status, 'A') })),
 		]
 		return {
 			...user,
