@@ -1,18 +1,6 @@
 
-import { SendIcon } from "lucide-react"
-
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Conversation as ConversationType, Message as MessageType } from '@prisma/client'
-import { UserPublicInfo } from '@/types'
 import { Skeleton } from '@/components/ui/skeleton'
-
-interface ConversationWithUsersAndMessages extends ConversationType {
-	messages: MessageType[]
-	userA: UserPublicInfo,
-	userB: UserPublicInfo
-}
 
 export default function LoadingMessagesContainer({ className }: { className?: string }) {
 	return (
@@ -24,7 +12,7 @@ export default function LoadingMessagesContainer({ className }: { className?: st
 				<ScrollArea className='h-full'>
 					{
 						[1,2,3].map((_, i) => (
-							<div className="flex items-center p-4 cursor-pointer">
+							<div key={i} className="flex items-center p-4 cursor-pointer">
 								<div className='size-12 flex-grow-0 flex-shrink-0 bg-gray-400/20 rounded-full' />
 								<div className="ml-4 flex flex-col gap-2">
 									<Skeleton className='w-28 h-4 bg-white/10' />
