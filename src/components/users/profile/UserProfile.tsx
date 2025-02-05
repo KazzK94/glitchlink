@@ -21,12 +21,14 @@ export async function UserProfile({ username }: { username?: string }) {
 
 	const loggedUser = await getUserProfile()
 	if (!username && !loggedUser) return <UserNotFound />
-	const user = await getUserProfile({ username: username || loggedUser!.username })
-	if (!user) return <UserNotFound />
+	const targetUser = await getUserProfile({ username: username || loggedUser!.username })
+	if (!targetUser) return <UserNotFound />
 
-	const isSelf = loggedUser?.id === user.id
-	const socialLink = isSelf ? null : loggedUser?.socialLinks.find(targetUser => targetUser.id === user.id)
-	const isFriend = socialLink?.status === 'FRIENDS'
+	const isSelf = loggedUser?.id === targetUser.id
+	const socialLink = isSelf ? null : loggedUser?.socialLinks.find(socialLink => {
+		return socialLink.user.id === targetUser.id
+	})
+	const isFriend = socialLink && socialLink.status === 'FRIENDS'
 
 	return (
 		<Container className='mt-4 pb-4'>
@@ -46,14 +48,14 @@ export async function UserProfile({ username }: { username?: string }) {
 						<div className='float-right flex items-center gap-1'>
 							{
 								isFriend ? (
-									<Link href={`/messages/${user.username}`} className='flex items-center rounded-lg p-2.5 z-10 text-purple-300 border-purple-300/80 hover:text-purple-300 hover:border-purple-400'>
+									<Link href={`/messages/${targetUser.username}`} className='flex items-center rounded-lg p-2.5 z-10 text-purple-300 border-purple-300/80 hover:text-purple-300 hover:border-purple-400'>
 										<MailIcon className='size-7' />
 									</Link>
 								) : (
-									<UserSocialLinkInteractions user={user} socialLink={socialLink} />
+									<UserSocialLinkInteractions user={targetUser} socialLink={socialLink} />
 								)
 							}
-							<UserContextOpener user={user} />
+							<UserContextOpener user={targetUser} />
 						</div>
 					)
 				}
@@ -61,14 +63,14 @@ export async function UserProfile({ username }: { username?: string }) {
 				{/* Heading Content */}
 				<div className="flex gap-4 items-center ml-2">
 					<div>
-						<Avatar src={user.avatar} className='size-16' />
+						<Avatar src={targetUser.avatar} className='size-16' />
 					</div>
 					<div>
 						<h1 className='text-2xl md:text-3xl font-semibold text-blue-200'>
-							{user.name}
+							{targetUser.name}
 						</h1>
 						<p className='text-sm opacity-80 mt-0 ml-1'>
-							@{user.username}
+							@{targetUser.username}
 						</p>
 					</div>
 				</div>
@@ -91,13 +93,13 @@ export async function UserProfile({ username }: { username?: string }) {
 					</TabsTrigger>
 				</TabsList>
 				<TabsContent value='games'>
-					<ProfileVideoGames videoGames={user.videoGames} loggedUserVideoGames={loggedUser?.videoGames} isSelf={isSelf} />
+					<ProfileVideoGames videoGames={targetUser.videoGames} loggedUserVideoGames={loggedUser?.videoGames} isSelf={isSelf} />
 				</TabsContent>
 				<TabsContent value='posts'>
-					<ProfilePosts posts={user.posts} loggedUserId={user.id} />
+					<ProfilePosts posts={targetUser.posts} loggedUserId={targetUser.id} />
 				</TabsContent>
 				<TabsContent value='friends'>
-					<ProfileFriendsList friends={user.socialLinks} loggedUserId={loggedUser?.id} />
+					<ProfileFriendsList friends={targetUser.socialLinks.map(socialLink => socialLink.user)} loggedUserId={loggedUser?.id} />
 				</TabsContent>
 			</Tabs>
 		</Container>

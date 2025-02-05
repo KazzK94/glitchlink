@@ -1,6 +1,6 @@
 
 import { getActiveUsers } from '@/services/users'
-import { UserCard } from './UserCard'
+import { UserSmallCard } from './UserCard'
 import { SocialLinkDetailedStatus, UserPublicInfo } from '@/types'
 import { getUserFromSession } from '@/services/auth'
 
@@ -33,7 +33,7 @@ export async function UsersList({ users, className, cardClassName }: UserListsPr
 				// Check if user is already a friend
 				return (
 					<li key={foundUser.id}>
-						<UserCard user={foundUser}
+						<UserSmallCard user={foundUser}
 							socialLink={foundUser.socialLink}
 							className={cardClassName}
 							isSelf={foundUser.id === loggedUser?.id}

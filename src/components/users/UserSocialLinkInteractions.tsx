@@ -17,8 +17,6 @@ interface UserCardProps {
 
 export function UserSocialLinkInteractions({ user, socialLink, isSelf = false }: UserCardProps) {
 
-	console.log({socialLink})
-
 	const router = useRouter()
 
 	// Skip Card if blocked (in any direction)

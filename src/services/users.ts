@@ -4,7 +4,7 @@ import prisma from '@/lib/db'
 import { Prisma, SocialLinkStatus } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import { getUserFromSession } from './auth'
-import { SocialLinkDetailedStatus } from '@/types'
+import { SocialLinkDetailedStatus, UserPublicInfo } from '@/types'
 
 /** Attempts to create a user in the DB, or throws an error in case it cannot create it */
 export async function createUser({ username, password, name, email }: Prisma.UserCreateInput) {
@@ -66,7 +66,7 @@ export async function changePassword({ username, password, newPassword }: { user
 	})
 }
 
-/** Get the basic information of a user (name, username and avatar) */
+/** Get the basic information of a user (id, name, username and avatar) */
 export async function getUser({ username, where }: { username: string, where?: Prisma.UserWhereInput } | { username?: string, where: Prisma.UserWhereInput }) {
 	if (!username && !where) return null
 	if (!where) where = {}
@@ -100,7 +100,7 @@ export async function getUserProfile({ userId, username }: { userId?: string, us
 		[key]: userId || username
 	} as { id: string } | { username: string }
 
-	const user = await prisma.user.findUnique({
+	const foundUser = await prisma.user.findUnique({
 		where: whereOptions,
 		select: {
 			id: true, username: true, name: true, avatar: true, email: isSelf,
@@ -116,29 +116,53 @@ export async function getUserProfile({ userId, username }: { userId?: string, us
 				orderBy: { createdAt: 'desc' }
 			},
 			userAInSocialLinks: {
-				where: { OR: [{ status: 'FRIENDS' }, { userAId: loggedUser?.id }] },
+				// Where it's the logged user (regardless of status) or any user, only show FRIENDS
+				where: { OR: [{ status: 'FRIENDS' }, { userAId: loggedUser?.id }, { userBId: loggedUser?.id }] },
 				select: {
-					id: true, status: true, userB: { select: { id: true, username: true, name: true, avatar: true } }
+					id: true, status: true,
+					userA: { select: { id: true, username: true, name: true, avatar: true } },
+					userB: { select: { id: true, username: true, name: true, avatar: true } }
 				}
 			},
 			userBInSocialLinks: {
-				where: { OR: [{ status: 'FRIENDS' }, { userBId: loggedUser?.id }] },
+				// Where it's the logged user (regardless of status) or any user, only show FRIENDS
+				where: { OR: [{ status: 'FRIENDS' }, { userAId: loggedUser?.id }, { userBId: loggedUser?.id }] },
 				select: {
-					id: true, status: true, userA: { select: { id: true, username: true, name: true, avatar: true } }
+					id: true, status: true,
+					userA: { select: { id: true, username: true, name: true, avatar: true } },
+					userB: { select: { id: true, username: true, name: true, avatar: true } }
 				}
 			}
 		}
 	})
 
-	if (!user) throw new Error('User not found.')
+	if (!foundUser) throw new Error('User not found.')
 
 	const socialLinks = [
-		...user.userAInSocialLinks.map(data => ({ user: data.userB, id: data.id, status: parseSocialLinkStatus(data.status, 'A') })),
-		...user.userBInSocialLinks.map(data => ({ user: data.userA, id: data.id, status: parseSocialLinkStatus(data.status, 'B') }))
+		...foundUser.userAInSocialLinks.map(data => {
+			return parseSocialLink({ data, targetUserId: foundUser?.id })
+			/* const { userA, userB } = data
+			const loggedUserLetter: 'A' | 'B' = userA.id === loggedUser?.id ? 'A' : 'B'
+			return {
+				user: (loggedUserLetter === 'A' ? userB : userA),
+				id: data.id,
+				status: parseSocialLinkStatus(data.status, loggedUserLetter)
+			} */
+		}),
+		...foundUser.userBInSocialLinks.map(data => {
+			return parseSocialLink({ data, targetUserId: foundUser?.id })
+			/* const { userA, userB } = data
+			const loggedUserLetter: 'A' | 'B' = userA.id === loggedUser?.id ? 'A' : 'B'
+			return {
+				user: (loggedUserLetter === 'A' ? userB : userA),
+				id: data.id,
+				status: parseSocialLinkStatus(data.status, loggedUserLetter)
+			} */
+		})
 	]
 
 	return {
-		...user,
+		...foundUser,
 		socialLinks
 	}
 }
@@ -183,9 +207,19 @@ export async function getActiveUsers(amount: number = 3) {
 
 // Helpers:
 
+function parseSocialLink({ data, targetUserId }: { data: { id: string, status: SocialLinkStatus, userA: UserPublicInfo, userB: UserPublicInfo }, targetUserId?: string }) {
+	const { userA, userB } = data
+	const loggedUserLetter: 'A' | 'B' = userA.id === targetUserId ? 'A' : 'B'
+	return {
+		user: (loggedUserLetter === 'A' ? userB : userA),
+		id: data.id,
+		status: parseSocialLinkStatus(data.status, loggedUserLetter)
+	}
+}
+
 /** Parse the SocialLinkStatus of a social link to SocialLinkDetailedStatus */
-function parseSocialLinkStatus(status: SocialLinkStatus, loggedUserIs: 'A' | 'B'): SocialLinkDetailedStatus {
+function parseSocialLinkStatus(status: SocialLinkStatus, loggedUserLetter: 'A' | 'B'): SocialLinkDetailedStatus {
 	return status === 'PENDING'
-		? loggedUserIs === 'A' ? 'SENT_PENDING' : 'RECEIVED_PENDING'
+		? loggedUserLetter === 'A' ? 'SENT_PENDING' : 'RECEIVED_PENDING'
 		: status
 }
