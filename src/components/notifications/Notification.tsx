@@ -19,6 +19,10 @@ export function Notification({ notification }: { notification: CompleteNotificat
 		return <MentionInCommentNotification notification={notification} />
 	}
 
+	if (notification.actionType === 'SOCIAL_LINK_REQUEST') {
+		return <SocialLinkRequestReceivedNotification notification={notification} />
+	}
+
 	return (
 		<p className='p-4 bg-gray-800 text-red-400 rounded-lg text-lg select-none italic cursor-pointer'>
 			[ ! ] Error: Unknown notification... (please contact an admin or file a ticket)
@@ -97,6 +101,15 @@ function MentionInCommentNotification({ notification }: { notification: Complete
 	return (
 		<NotificationWrapper href={`/posts/${notification.entityId}`} notification={notification}>
 			<span className='text-blue-200'>@{notification.generatedBy.username}</span> mentioned you in a comment
+		</NotificationWrapper>
+	)
+}
+
+function SocialLinkRequestReceivedNotification({ notification }: { notification: CompleteNotification }) {
+	const { name, username } = notification.generatedBy
+	return (
+		<NotificationWrapper href={`/u/${username}`} notification={notification}>
+			<span className='text-blue-200'>{name} <small className='italic'>(@{username})</small></span> sent you a friend request
 		</NotificationWrapper>
 	)
 }

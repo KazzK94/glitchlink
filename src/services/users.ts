@@ -1,9 +1,10 @@
 'use server'
 
 import prisma from '@/lib/db'
-import { Prisma } from '@prisma/client'
+import { Prisma, SocialLinkStatus } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import { getUserFromSession } from './auth'
+import { SocialLinkDetailedStatus } from '@/types'
 
 /** Attempts to create a user in the DB, or throws an error in case it cannot create it */
 export async function createUser({ username, password, name, email }: Prisma.UserCreateInput) {
@@ -114,16 +115,26 @@ export async function getUserProfile({ userId, username }: { userId?: string, us
 				},
 				orderBy: { createdAt: 'desc' }
 			},
-			userAInSocialLinks: { where: { status: 'FRIENDS' }, select: { userB: { select: { id: true, username: true, name: true, avatar: true } } } },
-			userBInSocialLinks: { where: { status: 'FRIENDS' }, select: { userA: { select: { id: true, username: true, name: true, avatar: true } } } }
+			userAInSocialLinks: {
+				where: { OR: [{ status: 'FRIENDS' }, { userAId: loggedUser?.id }] },
+				select: {
+					status: true, userB: { select: { id: true, username: true, name: true, avatar: true } }
+				}
+			},
+			userBInSocialLinks: {
+				where: { OR: [{ status: 'FRIENDS' }, { userBId: loggedUser?.id }] },
+				select: {
+					status: true, userA: { select: { id: true, username: true, name: true, avatar: true } }
+				}
+			}
 		}
 	})
 
 	if (!user) throw new Error('User not found.')
 
 	const socialLinks = [
-		...user.userAInSocialLinks.map(data => data.userB),
-		...user.userBInSocialLinks.map(data => data.userA)
+		...user.userAInSocialLinks.map(data => ({ ...data.userB, status: parseSocialLinkStatus(data.status, 'A') })),
+		...user.userBInSocialLinks.map(data => ({ ...data.userA, status: parseSocialLinkStatus(data.status, 'B') }))
 	]
 
 	return {
@@ -134,11 +145,47 @@ export async function getUserProfile({ userId, username }: { userId?: string, us
 
 /** Get the `amount` most active users (not including self) */
 export async function getActiveUsers(amount: number = 3) {
-	const user = await getUserFromSession()
-	return await prisma.user.findMany({
-		where: { id: { not: user?.id } },
+	const loggedUser = await getUserFromSession()
+	const users = await prisma.user.findMany({
+		where: { id: { not: loggedUser?.id } },
 		take: amount,
 		orderBy: { updatedAt: 'desc' },
-		select: { id: true, username: true, name: true, avatar: true }
+		select: {
+			id: true, username: true, name: true, avatar: true,
+			userAInSocialLinks: {
+				where: { userBId: loggedUser?.id },
+				select: {
+					status: true, userB: { select: { id: true, username: true, name: true, avatar: true } }
+				}
+			},
+			userBInSocialLinks: {
+				where: { userAId: loggedUser?.id },
+				select: {
+					status: true, userA: { select: { id: true, username: true, name: true, avatar: true } }
+				}
+			}
+		}
 	})
+
+
+	return users.map(user => {
+		const socialLinks = [
+			...user.userAInSocialLinks.map(data => ({ ...user, status: parseSocialLinkStatus(data.status, 'B') })),
+			...user.userBInSocialLinks.map(data => ({ ...user, status: parseSocialLinkStatus(data.status, 'A') })),
+		]
+		return {
+			...user,
+			socialLink: socialLinks[0]
+		}
+	})
+}
+
+
+// Helpers:
+
+/** Parse the SocialLinkStatus of a social link to SocialLinkDetailedStatus */
+function parseSocialLinkStatus(status: SocialLinkStatus, loggedUserIs: 'A' | 'B'): SocialLinkDetailedStatus {
+	return status === 'PENDING'
+		? loggedUserIs === 'A' ? 'SENT_PENDING' : 'RECEIVED_PENDING'
+		: status
 }

@@ -2,18 +2,27 @@
 
 import prisma from '@/lib/db'
 import { getUserFromSession } from './auth'
+import { createNotification, undoNotification } from './notifications'
 
 export async function sendSocialLinkRequest({ targetUserId }: { targetUserId: string }) {
 	const user = await getUserFromSession()
 	if (!user) return null
 	try {
 		// Status defaults to PENDING
-		return await prisma.socialLink.create({
+		const result = await prisma.socialLink.create({
 			data: {
 				userAId: user.id,
 				userBId: targetUserId
 			}
 		})
+		await createNotification({
+			generatedById: user.id,
+			targetUserId,
+			entityType: 'SOCIAL_LINK',
+			entityId: result.id,
+			actionType: 'SOCIAL_LINK_REQUEST'
+		})
+		return result
 	} catch (error) {
 		console.error('Failed to send social link request:', error)
 		throw error
@@ -25,22 +34,30 @@ export async function acceptSocialLinkRequest(socialLinkId: string) {
 	if (!user) return null
 
 	try {
-		return await prisma.socialLink.update({
+		const result = await prisma.socialLink.update({
 			where: { id: socialLinkId, userBId: user.id },
 			data: { status: 'FRIENDS' }
 		})
+		await createNotification({
+			generatedById: user.id,
+			targetUserId: result.userAId,
+			entityType: 'SOCIAL_LINK',
+			entityId: result.id,
+			actionType: 'SOCIAL_LINK_ACCEPTED'
+		})
+		return result
 	} catch (error) {
 		console.error('Failed to accept social link request:', error)
 		throw error
 	}
 }
 
-/** Get self's Social Links */
+/** Get logged user's Social Links (either friends or pending requests) */
 export async function getSelfSocialLinks() {
 	const user = await getUserFromSession()
 	if (!user) return null
 	try {
-		return await prisma.socialLink.findMany({
+		const result = await prisma.socialLink.findMany({
 			where: {
 				OR: [
 					{ userAId: user.id },
@@ -48,13 +65,14 @@ export async function getSelfSocialLinks() {
 				]
 			}
 		})
+		return result
 	} catch (error) {
 		console.error('Failed to get social links:', error)
 		throw error
 	}
 }
 
-/** Get self's friends list */
+/** Get logged user's friends list */
 export async function getFriends(userId: string = '') {
 	if (!userId) {
 		const user = await getUserFromSession()
@@ -96,17 +114,29 @@ export async function deleteSocialLink(id: string) {
 	const user = await getUserFromSession()
 	if (!user) return null
 	try {
-		return await prisma.socialLink.delete({
+		const result = await prisma.socialLink.delete({
 			where: {
 				id,
-				NOT: { status: 'BLOCKED' }, // Prevent deleting when it's a BLOCK (TODO: Check if logged user is blocker, then allow)
-				// Can only delete links that you're a part of
+				// Make sure you're a part of the link:
 				OR: [
 					{ userAId: user.id },
 					{ userBId: user.id }
-				]
+				],
+				// Only userA (the blocker) can delete a BLOCKED link:
+				NOT: {
+					AND: [
+						{ userAId: { not: user.id } },
+						{ status: 'BLOCKED' }
+					]
+				},
 			}
 		})
+		undoNotification({
+			entityType: 'SOCIAL_LINK',
+			entityId: id,
+			targetUserId: result.userBId
+		})
+		return result
 	} catch (error) {
 		console.error('Failed to delete social link:', error)
 		throw error

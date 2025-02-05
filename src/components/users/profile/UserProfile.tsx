@@ -15,6 +15,7 @@ import { ProfileVideoGames } from './ProfileVideogames'
 import { ProfilePosts } from './ProfilePosts'
 import { ProfileFriendsList } from './ProfileFriendsList'
 import { UserContextOpener } from './UserContextOpener'
+import { UserSocialLinkInteractions } from '../UserSocialLinkInteractions'
 
 export async function UserProfile({ username }: { username?: string }) {
 
@@ -24,6 +25,12 @@ export async function UserProfile({ username }: { username?: string }) {
 	if (!user) return <UserNotFound />
 
 	const isSelf = loggedUser?.id === user.id
+	const socialLink = isSelf ? null : loggedUser?.socialLinks.find(targetUser => targetUser.id === user.id)
+	const isFriend = socialLink?.status === 'FRIENDS'
+
+	if(!isSelf && !isFriend) {
+		console.log(socialLink)
+	}
 
 	return (
 		<Container className='mt-4 pb-4'>
@@ -40,10 +47,16 @@ export async function UserProfile({ username }: { username?: string }) {
 							</LogoutButton>
 						</div>
 					) : (
-						<div className='float-right flex items-center gap-2'>
-							<Link href={`/messages/${user.username}`} className='flex items-center rounded-lg p-2.5 z-10 text-purple-300 border-purple-300/80 hover:text-purple-300 hover:border-purple-400'>
-								<MailIcon className='size-7' />
-							</Link>
+						<div className='float-right flex items-center gap-1'>
+							{
+								isFriend ? (
+									<Link href={`/messages/${user.username}`} className='flex items-center rounded-lg p-2.5 z-10 text-purple-300 border-purple-300/80 hover:text-purple-300 hover:border-purple-400'>
+										<MailIcon className='size-7' />
+									</Link>
+								) : (
+									<UserSocialLinkInteractions user={user} socialLink={socialLink} />
+								)
+							}
 							<UserContextOpener user={user} />
 						</div>
 					)

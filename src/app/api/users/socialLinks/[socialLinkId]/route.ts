@@ -19,8 +19,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { social
 	return Response.json({ message: 'This status cant be set in the current version of GlitchLink.' }, { status: 501 })
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-	const socialLinkId = params.id
+export async function DELETE(request: NextRequest, { params }: { params: { socialLinkId: string } }) {
+	const socialLinkId = params.socialLinkId
 	const result = await deleteSocialLink(socialLinkId)
 	return Response.json({ message: 'SocialLink deletion executed', result })
 }

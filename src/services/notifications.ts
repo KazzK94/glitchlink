@@ -64,8 +64,23 @@ export async function markNotificationAsRead(notificationId: string) {
 export async function deleteNotification(notificationId: string) {
 	const user = await getUserFromSession()
 	if (!user) return null
+	try {
+		return await prisma.notification.delete({
+			where: { id: notificationId, targetUserId: user.id }
+		})
+	} catch (error) {
+		console.error('Failed to delete the notification:', error)
+		throw error
+	}
+}
 
-	return await prisma.notification.delete({
-		where: { id: notificationId, targetUserId: user.id }
+export async function undoNotification(where: { targetUserId: string, entityType: NotificationEntityType, entityId: string }) {
+	if (!where.targetUserId || !where.entityType || !where.entityId) return null
+	const user = await getUserFromSession()
+	if (!user) return null
+	// (We use deleteMany due to Notification format in Prisma, but we intend to delete only one notification)
+	// TODO: Consider if we should find the notification first, then delete it with the ID
+	return await prisma.notification.deleteMany({
+		where: { generatedById: user.id, ...where }
 	})
 }
