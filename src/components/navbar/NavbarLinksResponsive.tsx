@@ -40,7 +40,7 @@ export default function NavbarLinksResponsive() {
 				>
 					<MenuIcon size={32} />
 				</button>
-				<Link href='/' className="flex items-center gap-1.5">
+				<Link href='/' className="flex items-center gap-1.5 hover:text-violet-100 hover:scale-105 transition">
 					<Logo />
 					<span className="text-2xl font-bold pt-0.5 sm:pt-0">GlitchLink</span>
 				</Link>
@@ -48,7 +48,7 @@ export default function NavbarLinksResponsive() {
 			<nav className={`flex lg:static w-full absolute top-16 ${isMenuOpen ? 'left-0' : '-left-[100vw] opacity-30'} transition-all duration-200 bg-gray-800 lg:bg-transparent z-50 shadow-sm shadow-white/40 md:shadow-none md:opacity-100`}>
 				<div className="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:gap-x-6 p-4 lg:p-0">
 					{links.map(link => (
-						<Link key={link.href} href={link.href} className="text-lg flex items-center gap-2 hover:text-cyan-400 transition-colors" onClick={() => setIsMenuOpen(false)}>
+						<Link key={link.href} href={link.href} className="text-lg flex items-center gap-2 hover:text-violet-300 transition-colors" onClick={() => setIsMenuOpen(false)}>
 							<span>{link.icon}</span>
 							{link.label}
 						</Link>
