@@ -66,7 +66,10 @@ export async function changePassword({ username, password, newPassword }: { user
 	})
 }
 
-/** Get the basic information of a user (id, name, username and avatar) */
+/** 
+ * Get the basic information of a user (id, name, username and avatar) 
+ * @returns UserPublicInfo (id, name, username, avatar) | null
+ * */
 export async function getUser({ username, where }: { username: string, where?: Prisma.UserWhereInput } | { username?: string, where: Prisma.UserWhereInput }) {
 	if (!username && !where) return null
 	if (!where) where = {}
