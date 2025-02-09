@@ -8,7 +8,7 @@ export function TopNavbar({ loggedUserId }: { loggedUserId?: string }) {
 		<header className="h-16 bg-gray-900 shadow-md shadow-black/20 z-50">
 			<Container className='py-3 lg:px-2'>
 				<div className="flex justify-between items-center">
-					<NavbarLinksResponsive />
+					<NavbarLinksResponsive loggedUserId={loggedUserId} />
 					<UserMenu loggedUserId={loggedUserId} />
 				</div>
 			</Container>
