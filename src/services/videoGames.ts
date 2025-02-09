@@ -56,12 +56,33 @@ export async function removeVideoGameFromUser({ videoGameId }: { videoGameId: st
 	})
 }
 
-export async function getVideoGameById(id: string) {
+export async function getVideoGameById(id: string, includePlayers: boolean = false) {
 	return await prisma.videoGame.findUnique({
-		where: { id }
+		where: { id },
+		select: {
+			id: true, title: true, description: true, image: true, genres: true, developers: true, platforms: true,
+			users: includePlayers ? {
+				select: {
+					id: true, username: true, name: true, avatar: true
+				}
+			} : false
+		}
 	})
 }
 
+export async function getVideoGameByExternalId(externalId: number, includePlayers: boolean = false) {
+	return await prisma.videoGame.findUnique({
+		where: { externalId: externalId },
+		select: {
+			id: true, title: true, description: true, image: true, genres: true, developers: true, platforms: true,
+			users: includePlayers ? {
+				select: {
+					id: true, username: true, name: true, avatar: true
+				}
+			} : false
+		}
+	})
+}
 export async function getOwnedVideoGames(userId: string = '') {
 	if (!userId) {
 		const user = await getUserFromSession()

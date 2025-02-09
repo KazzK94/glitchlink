@@ -74,16 +74,17 @@ export function GamesList({ userVideoGames = [] }: { userVideoGames?: UserVideoG
 					<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-evenly mx-2 mb-8 gap-4'>
 						{
 							games.map(game => {
-								const isOwned = userVideoGames.some(vg => vg.externalId === game.id)
+								const gameFromUser = userVideoGames.find(vg => vg.externalId === game.id)
 								return (
 									<VideoGameCard
 										key={game.id}
-										className={isOwned ? 'border-2 border-green-600' : ''}
+										className={(!!gameFromUser) ? 'border-2 border-green-600' : ''}
 										externalId={game.id}
+										localId={gameFromUser?.id}
 										title={game.name}
 										imageUrl={game.background_image}
 										userIsLogged={userIsLogged}
-										isOwned={isOwned}
+										isOwned={(!!gameFromUser)}
 									/>
 								)
 							})

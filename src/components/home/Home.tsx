@@ -12,6 +12,7 @@ import { getUserFromSession } from '@/services/auth'
 import { Suspense } from 'react'
 import { PostsListFallback } from '../posts/PostsListFallback'
 import { UsersList } from '../users/UsersList'
+import Link from 'next/link'
 
 export async function Home() {
 
@@ -43,19 +44,21 @@ async function TrendingGames() {
 	const popularGames = await getPopularVideoGames(3)
 
 	return (
-		<div className="bg-gray-800 p-6 pt-5 rounded-lg shadow shadow-gray-400">
-			<h2 className="text-2xl font-semibold mb-4">Trending Games</h2>
-			<ul className="space-y-3">
+		<div className="bg-gray-800 p-6 pt-4 rounded-lg shadow shadow-gray-400">
+			<h2 className="text-2xl font-semibold mb-2.5">Trending Games</h2>
+			<ul className="flex flex-col gap-y-2">
 				{popularGames.map((game) => (
-					<li key={game.id} className="relative h-20 rounded border overflow-hidden cursor-pointer hover:saturate-200 transition-all duration-300">
-						<img className='w-full h-full object-cover' src={game.image.replace('media/', 'media/crop/600/400/')} alt={game.title} />
-						<div className='absolute inset-0 flex justify-center items-end pb-2 bg-gradient-to-t from-black to-transparent'>
-							<p className='font-bold text-xl !select-none cursor-pointer'>
-								<Gamepad2Icon className="h-5 w-5 mr-2 inline-block" />
-								{game.title.length > 20 ? game.title.slice(0, 20) + '...' : game.title}
-							</p>
-						</div>
-					</li>
+					<Link key={game.id} href={`/games/${game.id}`} passHref>
+						<li key={game.id} className="relative h-20 rounded border overflow-hidden cursor-pointer hover:saturate-200 transition-all duration-300">
+							<img className='w-full h-full object-cover' src={game.image.replace('media/', 'media/crop/600/400/')} alt={game.title} />
+							<div className='absolute inset-0 flex justify-center items-end pb-2 bg-gradient-to-t from-black to-transparent'>
+								<p className='font-bold text-xl !select-none cursor-pointer'>
+									<Gamepad2Icon className="h-5 w-5 mr-2 inline-block" />
+									{game.title.length > 20 ? game.title.slice(0, 20) + '...' : game.title}
+								</p>
+							</div>
+						</li>
+					</Link>
 				))}
 			</ul>
 		</div>

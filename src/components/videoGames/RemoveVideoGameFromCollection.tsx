@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { Button } from '../ui/button'
 import { removeVideoGameFromUser } from '@/services/videoGames'
 import { useRouter } from 'next/navigation'
+import { TrashIcon } from 'lucide-react'
 
 export function RemoveGameFromCollectionButton({ title, localId, className }: { title: string, localId: string, className?: string }) {
 
@@ -27,12 +28,12 @@ export function RemoveGameFromCollectionButton({ title, localId, className }: { 
 			onClick={handleSubmit}
 			variant='secondary'
 			className={`w-full text-sm overflow-hidden invisible h-0 p-0 select-none
-					bg-red-200 hover:bg-red-300 text-red-800 hover:text-red-900
 					group-hover:h-9 group-hover:visible group-hover:p-2 group-hover:mt-1
-					transition-all duration-300 ease-in-out ${className}
+					transition-all duration-300 ease-in-out 
+					border-2 border-red-500 bg-red-300 hover:bg-red-400 text-red-900 hover:text-red-950 ${className}
 				`}
 		>
-			Remove from collection
+			<TrashIcon className='size-5' />
 		</Button>
 	)
 }

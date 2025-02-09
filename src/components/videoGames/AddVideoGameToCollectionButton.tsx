@@ -5,6 +5,9 @@ import { Button } from '../ui/button'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { CopyPlusIcon } from 'lucide-react'
+
+import { parseExternalGameData } from '@/services/videoGamesExternalApi'
 
 export function AddGameToCollectionButton({ externalId, title, className }: { externalId: number, title: string, className?: string }) {
 
@@ -23,7 +26,7 @@ export function AddGameToCollectionButton({ externalId, title, className }: { ex
 			const gameData = await fetch('/api/external/videoGames/' + externalId).then(res => res.json())
 			if (!gameData) { throw new Error('Error adding game to collection.') }
 
-			const parsedGameData = parseGameData(gameData)
+			const parsedGameData = parseExternalGameData(gameData)
 
 			// make a request to  API to add the game to the user's collection
 			await fetch('/api/users/videoGames', {
@@ -63,32 +66,13 @@ export function AddGameToCollectionButton({ externalId, title, className }: { ex
 				variant='secondary'
 				className={`w-full text-sm overflow-hidden invisible h-0 p-0 select-none
 					group-hover:h-9 group-hover:visible group-hover:p-2 group-hover:mt-1
-					transition-all duration-300 ease-in-out ${className}
+					transition-all duration-300 ease-in-out
+					border-2 border-green-500 bg-green-200 text-green-800 hover:bg-green-300 hover:text-green-900
+					${className}
 				`}
 			>
-				Add to my collection
+				<CopyPlusIcon className='size-5 -scale-x-100' />
 			</Button>
 		</ModalOpener>
 	)
-}
-
-function parseGameData(gameData: {
-	id: number,
-	name: string,
-	background_image: string,
-	released: string,
-	genres: { name: string }[],
-	parent_platforms: { platform: { name: string } }[],
-	description_raw: string,
-	developers: { name: string }[]
-}) {
-	return {
-		externalId: gameData.id,
-		title: gameData.name,
-		image: gameData.background_image || '/images/game-placeholder.jpg',
-		genres: gameData.genres.map((genre: { name: string }) => genre.name),
-		platforms: gameData.parent_platforms.map((platform: { platform: { name: string } }) => platform.platform.name),
-		description: gameData.description_raw.split('\n\n')[0],
-		developers: gameData.developers.map((developer: { name: string }) => developer.name)
-	}
 }
