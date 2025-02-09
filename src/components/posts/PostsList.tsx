@@ -1,11 +1,11 @@
 
-import { getPosts } from '@/services/posts'
+import { getPosts, getPostsContainingHashtag } from '@/services/posts'
 import { Post } from './Post'
 
-export async function PostsList({ loggedUserId }: { loggedUserId: string }) {
+export async function PostsList({ loggedUserId, hashtag }: { loggedUserId: string, hashtag?: string }) {
 
-	// TODO: If url contains a 'hashtag' query param, filter posts by hashtag (e.g. /posts?hashtag=javascript -> search #javascript)
-	const posts = await getPosts()
+	// If url contains a 'hashtag' query param, filter posts by hashtag (e.g. /posts?hashtag=javascript -> search #javascript)
+	const posts = await (hashtag ?  getPostsContainingHashtag(hashtag) : getPosts())
 
 	return (
 		<div className="space-y-6 lg:space-y-5 pb-10">

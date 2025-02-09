@@ -151,32 +151,23 @@ export async function getPostsByUser(userId: string) {
 	})
 }
 
-export async function getPostsContainingHashtag(word: string) {
-	if (word[0] !== '#') word = '#' + word
+export async function getPostsContainingHashtag(hashtag: string) {
+	if (hashtag[0] !== '#') hashtag = '#' + hashtag
 
 	const posts = await prisma.post.findMany({
 		where: {
-			OR: [
-				{
-					content: {
-						contains: word,
-						mode: 'insensitive'
-					}
-				},
-				{
-					comments: {
-						some: {
-							content: {
-								contains: word,
-								mode: 'insensitive'
-							}
-						}
-					}
-				}
-			]
+			content: {
+				contains: hashtag,
+				mode: 'insensitive'
+			}
 		},
 		include: {
-			comments: true
+			author: true,
+			likedBy: true,
+			comments: {
+				include: { author: true },
+				orderBy: { createdAt: 'asc' }
+			}
 		}
 	})
 
