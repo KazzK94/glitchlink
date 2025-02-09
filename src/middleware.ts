@@ -6,6 +6,7 @@ export const config = {
 	matcher: [
 		// sintaxis del middleware de NextJS
 		'/profile/:path*',
+		'/messages/:path*',
 		'/admin/:path*'
 	]
 }
