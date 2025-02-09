@@ -108,14 +108,16 @@ export async function getOwnedPosts(userId: string = '') {
 	return userWithPosts?.posts || []
 }
 
-export async function getPosts() {
+export async function getPosts(options?: { page: number, postsPerPage: number }) {
 	return await prisma.post.findMany({
 		include: {
 			author: true,
 			likedBy: true,
 			comments: { include: { author: true }, orderBy: { createdAt: 'asc' } }
 		},
-		orderBy: { createdAt: 'desc' } // Newest first
+		orderBy: { createdAt: 'desc' }, // Newest first
+		skip: options && ((options.page - 1) * options.postsPerPage),
+		take: options?.postsPerPage
 	})
 }
 
@@ -147,6 +149,38 @@ export async function getPostsByUser(userId: string) {
 			}
 		},
 	})
+}
+
+export async function getPostsContainingHashtag(word: string) {
+	if (word[0] !== '#') word = '#' + word
+
+	const posts = await prisma.post.findMany({
+		where: {
+			OR: [
+				{
+					content: {
+						contains: word,
+						mode: 'insensitive'
+					}
+				},
+				{
+					comments: {
+						some: {
+							content: {
+								contains: word,
+								mode: 'insensitive'
+							}
+						}
+					}
+				},
+			]
+		},
+		include: {
+			comments: true
+		}
+	})
+
+	return posts
 }
 
 export async function updatePost({ id, content }: { id: string, content: string }) {
@@ -265,7 +299,7 @@ export async function updateComment({ id, content }: { id: string, content: stri
 	})
 }
 
-export async function deleteComment({ postId, commentId } : { postId: string, commentId: string }) {
+export async function deleteComment({ postId, commentId }: { postId: string, commentId: string }) {
 	const loggedUser = await getUserFromSession()
 	if (!loggedUser) return null
 
