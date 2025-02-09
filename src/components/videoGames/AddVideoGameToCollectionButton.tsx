@@ -65,9 +65,9 @@ export function AddGameToCollectionButton({ externalId, title, className }: { ex
 			<Button
 				variant='secondary'
 				className={`w-full text-sm overflow-hidden invisible h-0 p-0 select-none
-					group-hover:h-9 group-hover:visible group-hover:p-2 group-hover:mt-1
+					group-hover:h-9 group-hover:visible group-hover:p-2 group-hover:mt-2
 					transition-all duration-300 ease-in-out
-					border-2 border-green-500 bg-green-200 text-green-800 hover:bg-green-300 hover:text-green-900
+					border-2 border-green-400 bg-green-200 text-green-800 hover:bg-green-300 hover:text-green-900
 					${className}
 				`}
 			>

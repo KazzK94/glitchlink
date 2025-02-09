@@ -28,7 +28,7 @@ export function RemoveGameFromCollectionButton({ title, localId, className }: { 
 			onClick={handleSubmit}
 			variant='secondary'
 			className={`w-full text-sm overflow-hidden invisible h-0 p-0 select-none
-					group-hover:h-9 group-hover:visible group-hover:p-2 group-hover:mt-1
+					group-hover:h-9 group-hover:visible group-hover:p-2 group-hover:mt-2
 					transition-all duration-300 ease-in-out 
 					border-2 border-red-500 bg-red-300 hover:bg-red-400 text-red-900 hover:text-red-950 ${className}
 				`}

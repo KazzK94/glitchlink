@@ -37,7 +37,8 @@ export async function addVideoGameToCollection({ videoGameId }: { videoGameId: s
 		data: {
 			videoGames: {
 				connect: { id: videoGameId }
-			}
+			},
+			updatedAt: new Date()
 		}
 	})
 }

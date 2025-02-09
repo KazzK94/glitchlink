@@ -42,8 +42,9 @@ export function VideoGameCard({ localId, externalId, title, imageUrl, isOwned = 
 						userIsLogged && isOwned && localId && <RemoveGameFromCollectionButton localId={localId} title={title} className='col-span-2' />
 					}
 					<Button asChild variant='secondary' className='w-full text-sm overflow-hidden invisible h-0 p-0 select-none
-					group-hover:h-9 group-hover:visible group-hover:p-2 group-hover:mt-1
-					transition-all duration-300 ease-in-out bg-black hover:bg-slate-900 border border-white/80 text-white'>
+					group-hover:h-9 group-hover:visible group-hover:p-2 group-hover:mt-2
+					transition-all duration-300 ease-in-out bg-black hover:bg-slate-900 border border-white/80 text-white
+					first:col-span-3'>
 						<Link href={detailUrl}>
 							<EyeIcon className='size-6' />
 						</Link>
