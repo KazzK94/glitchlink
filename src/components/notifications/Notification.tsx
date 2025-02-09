@@ -28,7 +28,7 @@ export function Notification({ notification }: { notification: CompleteNotificat
 	}
 
 	return (
-		<p className='p-4 bg-gray-800 text-red-400 rounded-lg text-lg select-none italic cursor-pointer'>
+		<p className='p-4 bg-gray-800 hover:bg-gray-700 text-red-400 rounded-lg text-lg select-none italic cursor-pointer'>
 			[ ! ] Error: Unknown notification... (please contact an admin or file a ticket)
 		</p>
 	)
@@ -60,7 +60,7 @@ function NotificationWrapper({ href, notification, children }: { href: string, n
 	}
 
 	return (
-		<div className='px-4 bg-gray-800 rounded-lg'>
+		<div className='px-4 bg-gray-800 hover:bg-gray-700 rounded-lg'>
 			<div className='text-lg select-none flex justify-between items-center gap-4'>
 				{/* Content */}
 				<Link href={href} onClick={handleLinkClick} className='flex-grow py-4 flex items-center gap-3 hover:opacity-90'>
