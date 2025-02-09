@@ -198,7 +198,7 @@ export async function getActiveUsers(amount: number = 3) {
 	return users.map(user => {
 		const socialLinks = [
 			...user.userAInSocialLinks.map(data => ({ user, id: data.id, status: parseSocialLinkStatus(data.status, 'B') })),
-			...user.userBInSocialLinks.map(data => ({ user, id: data.id, status: parseSocialLinkStatus(data.status, 'A') })),
+			...user.userBInSocialLinks.map(data => ({ user, id: data.id, status: parseSocialLinkStatus(data.status, 'A') }))
 		]
 		return {
 			...user,

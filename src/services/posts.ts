@@ -131,7 +131,7 @@ export async function getPostById(id: string) {
 				include: { author: true },
 				orderBy: { createdAt: 'asc' }
 			}
-		},
+		}
 	})
 }
 
@@ -147,7 +147,7 @@ export async function getPostsByUser(userId: string) {
 				},
 				orderBy: { createdAt: 'desc' } // Newest first
 			}
-		},
+		}
 	})
 }
 
@@ -172,7 +172,7 @@ export async function getPostsContainingHashtag(word: string) {
 							}
 						}
 					}
-				},
+				}
 			]
 		},
 		include: {

@@ -14,7 +14,7 @@ export default function NavbarLinksResponsive() {
 	const links = [
 		{ href: '/', label: 'Home', icon: <HomeIcon size={20} /> },
 		{ href: '/games', label: 'Games', icon: <Gamepad2Icon size={20} /> },
-		{ href: '/users', label: 'Find Gamers', icon: <UserSearch size={20} /> },
+		{ href: '/users', label: 'Find Gamers', icon: <UserSearch size={20} /> }
 	]
 
 	useEffect(() => {

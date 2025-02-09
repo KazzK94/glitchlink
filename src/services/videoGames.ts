@@ -9,7 +9,7 @@ export async function createOrGetVideoGame({ externalId, title, description, ima
 	try {
 		return await prisma.videoGame.upsert({
 			where: {
-				externalId: externalId,
+				externalId: externalId
 			},
 			update: {},
 			create: {
@@ -114,8 +114,8 @@ export async function getPopularVideoGames(amount: number = 3) {
 	return await prisma.videoGame.findMany({
 		orderBy: {
 			users: {
-				_count: 'desc',
-			},
+				_count: 'desc'
+			}
 		},
 		take: amount
 	})

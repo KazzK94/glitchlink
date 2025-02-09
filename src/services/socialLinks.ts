@@ -128,7 +128,7 @@ export async function deleteSocialLink(id: string) {
 						{ userAId: { not: user.id } },
 						{ status: 'BLOCKED' }
 					]
-				},
+				}
 			}
 		})
 		undoNotification({

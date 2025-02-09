@@ -13,11 +13,11 @@ import { authOptions } from '@/services/nextAuthConfig'
 
 export const metadata: Metadata = {
 	title: "GlitchLink - The Social Network for Gamers",
-	description: "Find gamers to play with, share your gaming moments, and more!",
+	description: "Find gamers to play with, share your gaming moments, and more!"
 }
 
 export default async function RootLayout({
-	children,
+	children
 }: Readonly<{
 	children: React.ReactNode
 }>) {

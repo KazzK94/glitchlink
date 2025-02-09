@@ -163,7 +163,7 @@ function createTempMessage({ authorId, content }: { authorId: string, content: s
 		authorId,
 		content,
 		createdAt: new Date(),
-		updatedAt: new Date(),
+		updatedAt: new Date()
 	}
 }
 
