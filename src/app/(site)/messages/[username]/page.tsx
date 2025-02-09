@@ -1,5 +1,5 @@
 
-import { MessagesContainer } from '@/components/messages/MessagesContainer'
+import { ConversationsContainer } from '@/components/messages/ConversationsContainer'
 import { getUserFromSession } from '@/services/auth'
 import { getConversations } from '@/services/conversations'
 import { getUser } from '@/services/users'
@@ -19,6 +19,6 @@ export default async function ConversationPage({ params }: { params: { username:
 	}
 
 	return (
-		<MessagesContainer targetUser={targetUser} loggedUser={loggedUser} conversations={conversations} />
+		<ConversationsContainer targetUser={targetUser} loggedUser={loggedUser} conversations={conversations} />
 	)
 }

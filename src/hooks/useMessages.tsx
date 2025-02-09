@@ -23,21 +23,45 @@ interface ConversationWithUsersAndMessages extends ConversationType {
 }
 
 const CONVERSATION_NO_ID = 'NO_ID'
+const NO_CONVERSATIONS_FOUND_INDEX = -2
 
-export function useMessages({ conversations: conversationsBase, loggedUser, targetUser }: { conversations: ConversationWithUsersAndMessages[], loggedUser: UserPublicInfo, targetUser: UserPublicInfo }) {
+interface UseMessagesProps {
+	conversations: ConversationWithUsersAndMessages[]
+	loggedUser: UserPublicInfo
+	targetUser?: UserPublicInfo
+}
 
-	const conversationIndexRef = useRef(findConversationIndex(conversationsBase, targetUser))
+export function useMessages({ conversations: conversationsBase, loggedUser, targetUser: targetUserBase }: UseMessagesProps) {
+
+	const conversationIndexRef = useRef(
+		targetUserBase
+			? findConversationIndex(conversationsBase, targetUserBase)
+			: (conversationsBase.length > 0 ? 0 : NO_CONVERSATIONS_FOUND_INDEX)
+	)
 
 	const [conversations, setConversations] = useState(() => {
-		if (conversationIndexRef.current === -1) {
+		if (conversationIndexRef.current === NO_CONVERSATIONS_FOUND_INDEX) {
+			return []
+		}
+		if (targetUserBase && conversationIndexRef.current === -1) {
 			conversationIndexRef.current = 0
 			return [
-				createEmptyConversation(loggedUser, targetUser),
+				createEmptyConversation(loggedUser, targetUserBase),
 				...conversationsBase
 			]
 		}
 		return conversationsBase
 	})
+
+	const targetUser = useRef(
+		targetUserBase || (
+			conversationIndexRef.current < 0 
+				? null
+				: (conversations[conversationIndexRef.current].userAId === loggedUser.id)
+					? conversations[conversationIndexRef.current].userB
+					: conversations[conversationIndexRef.current].userA
+		)
+	)
 
 	const [messageInput, setMessageInput] = useState("")
 	const [isSendingMessage, setIsSendingMessage] = useState(false)
@@ -45,7 +69,7 @@ export function useMessages({ conversations: conversationsBase, loggedUser, targ
 	const channelRef = useRef<Channel | null>(null)
 
 	const subscribeToChannel = (conversationId: string) => {
-		if (conversationId === CONVERSATION_NO_ID) return
+		if (!conversationId || conversationId === CONVERSATION_NO_ID) return
 		channelRef.current = pusherClient.subscribe(`conversation-${conversationId}`)
 		channelRef.current.bind('new-message', function (data: { message: MessageType }) {
 			setConversations((conversations) => conversations.map((conversation) => {
@@ -70,7 +94,7 @@ export function useMessages({ conversations: conversationsBase, loggedUser, targ
 	}
 
 	const unsubscribeFromChannel = (conversationId: string) => {
-		if (conversationId === CONVERSATION_NO_ID) return
+		if (!conversationId || conversationId === CONVERSATION_NO_ID) return
 		channelRef.current?.unbind('new-message')
 		pusherClient.unsubscribe(`conversation-${conversationId}`)
 	}
@@ -81,7 +105,7 @@ export function useMessages({ conversations: conversationsBase, loggedUser, targ
 
 	const handleSendMessage = async (e: React.FormEvent) => {
 		e.preventDefault()
-		if (messageInput.trim() === "" || isSendingMessage) return
+		if (!targetUser || messageInput.trim() === "" || isSendingMessage) return
 
 		setIsSendingMessage(true)
 
@@ -103,10 +127,10 @@ export function useMessages({ conversations: conversationsBase, loggedUser, targ
 
 		try {
 			setMessageInput("")
-			if (conversationIndexRef.current === 0 && conversations[0].id === CONVERSATION_NO_ID) {
+			if (targetUser?.current && conversationIndexRef.current === 0 && conversations[0].id === CONVERSATION_NO_ID) {
 				// CREATE NEW CONVERSATION
-				toast.info('You started a conversation with ' + targetUser.name)
-				const newConversation = await createConversation({ targetUserId: targetUser.id, message: messageInput })
+				toast.info('You started a conversation with ' + targetUser.current.name)
+				const newConversation = await createConversation({ targetUserId: targetUser.current.id, message: messageInput })
 				setConversations([newConversation, ...conversations.slice(1)])
 				// And subscribe to changes in that conversation
 				subscribeToChannel(newConversation.id)
@@ -126,7 +150,7 @@ export function useMessages({ conversations: conversationsBase, loggedUser, targ
 
 	// Subscribe to new messages of current conversation
 	useEffect(() => {
-		if (conversationIndexRef.current === -1) return
+		if (conversationIndexRef.current < 0) return
 		const conversationId = conversations[conversationIndexRef.current].id
 		subscribeToChannel(conversationId)
 		return () => unsubscribeFromChannel(conversationId)
@@ -135,6 +159,7 @@ export function useMessages({ conversations: conversationsBase, loggedUser, targ
 	return {
 		conversations,
 		conversationIndex: conversationIndexRef.current,
+		targetUser: targetUser.current,
 		messageInput,
 		isSendingMessage,
 		handleChangeMessageInput,
