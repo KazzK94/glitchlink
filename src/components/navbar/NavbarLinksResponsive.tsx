@@ -1,20 +1,21 @@
 'use client'
 
 import { Logo } from '@/components/common/Logo'
-import { MenuIcon, HomeIcon, Gamepad2Icon, UserSearch } from 'lucide-react'
+import { MenuIcon, HomeIcon, Gamepad2Icon, UserSearchIcon, MessageSquareIcon } from 'lucide-react'
 
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
-export default function NavbarLinksResponsive() {
+export default function NavbarLinksResponsive({ loggedUserId }: { loggedUserId?: string }) {
 
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const rootRef = useRef<HTMLDivElement>(null)
 
 	const links = [
-		{ href: '/', label: 'Home', icon: <HomeIcon size={20} /> },
-		{ href: '/games', label: 'Games', icon: <Gamepad2Icon size={20} /> },
-		{ href: '/users', label: 'Find Gamers', icon: <UserSearch size={20} /> }
+		{ href: '/', label: 'Home', icon: <HomeIcon size={20} />, public: true },
+		{ href: '/games', label: 'Games', icon: <Gamepad2Icon size={20} />, public: true },
+		{ href: '/users', label: 'Find Gamers', icon: <UserSearchIcon size={20} />, public: false },
+		{ href: '/messages', label: 'Conversations', icon: <MessageSquareIcon size={20} />, public: false }
 	]
 
 	useEffect(() => {
@@ -47,12 +48,15 @@ export default function NavbarLinksResponsive() {
 			</div>
 			<nav className={`flex lg:static w-full absolute top-16 ${isMenuOpen ? 'left-0' : '-left-[100vw] opacity-30'} transition-all duration-200 bg-gray-800 lg:bg-transparent z-50 shadow-sm shadow-white/40 md:shadow-none md:opacity-100`}>
 				<div className="flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:gap-x-6 p-4 lg:p-0">
-					{links.map(link => (
-						<Link key={link.href} href={link.href} className="text-lg flex items-center gap-2 hover:text-blue-400/90 transition-colors" onClick={() => setIsMenuOpen(false)}>
-							<span>{link.icon}</span>
-							{link.label}
-						</Link>
-					))}
+					{links.map(link => {
+						if (!link.public && !loggedUserId) return null
+						return (
+							<Link key={link.href} href={link.href} className="text-lg flex items-center gap-2 hover:text-blue-400/90 transition-colors" onClick={() => setIsMenuOpen(false)}>
+								<span>{link.icon}</span>
+								{link.label}
+							</Link>
+						)
+					})}
 				</div>
 			</nav>
 		</div>
