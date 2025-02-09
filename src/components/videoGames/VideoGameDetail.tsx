@@ -18,7 +18,7 @@ export default function VideoGameDetail({ game, players }: VideoGameDetailProps)
 	return (
 		<>
 			<div className=' bg-slate-700/50 rounded-md shadow-sm overflow-hidden'>
-				<img src={game.image} className='max-h-[50svh] w-full object-cover shadow-gray-700' alt={'Image of the game ' + game.title} />
+				<img src={game.image} className='max-h-[40svh] w-full object-cover shadow-gray-700' alt={'Image of the game ' + game.title} />
 				<div className='px-4 py-3 flex flex-col gap-3'>
 					<h1 className='text-3xl'>{game.title}</h1>
 					<div className='flex gap-2 mx-0.5'>
