@@ -34,12 +34,12 @@ export function VideoGameCard({ localId, externalId, title, imageUrl, isOwned = 
 			/>
 			<CardContent className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black to-transparent">
 				<h2 className="text-xl font-bold text-white text-pretty text-center mb-1 select-none">{title}</h2>
-				<div className='flex justify-center gap-2'>
+				<div className='grid grid-cols-3 justify-center gap-2'>
 					{
-						userIsLogged && !isOwned && <AddGameToCollectionButton externalId={externalId} title={title} />
+						userIsLogged && !isOwned && <AddGameToCollectionButton externalId={externalId} title={title} className='col-span-2' />
 					}
 					{
-						userIsLogged && isOwned && localId && <RemoveGameFromCollectionButton localId={localId} title={title} />
+						userIsLogged && isOwned && localId && <RemoveGameFromCollectionButton localId={localId} title={title} className='col-span-2' />
 					}
 					<Button asChild variant='secondary' className='w-full text-sm overflow-hidden invisible h-0 p-0 select-none
 					group-hover:h-9 group-hover:visible group-hover:p-2 group-hover:mt-1
