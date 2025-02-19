@@ -13,6 +13,7 @@ model User {
     name                 String
     avatar               String?
     email                String         @unique
+    status               UserStatus?    @default(PENDING)
     password             String
     createdAt            DateTime       @default(now())
     updatedAt            DateTime       @updatedAt
@@ -28,6 +29,14 @@ model User {
     notifications        Notification[] @relation("NotificationTargetUser")
     notifierOf           Notification[] @relation("NotificationGeneratedBy")
     reports              Report[]
+}
+
+enum UserStatus {
+    PENDING
+    ACTIVE
+    PAUSED
+    BANNED
+    DELETED
 }
 
 model SocialLink {
@@ -156,6 +165,6 @@ model Report {
 enum ReportEntityType {
     POST
     COMMENT
-	USER
+    USER
     OTHER
 }
