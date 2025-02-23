@@ -40,7 +40,7 @@ The profile contains the user's Video Games, Posts and Friends.
 
 ## Games
 The games section (/games) shows a list of games (obtained from an external API), and a search bar to find the games you want.
-If the user is logged in, hovering over a GameCard shows a button to "Add to my collection".
+If the user is logged in, hovering over a GameCard shows a button to either add to collection or remove from collection, depending on whether it's already owned or not.
 Sadly, this API is not as precise as we'd like so some searches might get a lot of filler before finding the game you actually want.
 
 ## Admin Panel
@@ -48,12 +48,3 @@ This panel (/admin) is currently being used for testing purposes only.
 This can only be viewed and used by an admin so it's not publicly visible on production.
 It's not too special, but if you want to test it you can clone the repo, set up the environment variables and link it to a postgres db.
 However, this panel is not being maintained for now.
-
-# Implementing soon
-
-## Control Owned Games
-When browsing games, the owned games still show the button "Add to my collection".
-We will replace this button with something that indicates that you already own that game, and an option to remove it from your collection.
-
-## Update your profile
-You'll have a form to update all the info of your profile. Hopefully soon! :P
