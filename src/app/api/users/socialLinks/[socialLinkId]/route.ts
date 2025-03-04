@@ -1,5 +1,5 @@
 
-import { acceptSocialLinkRequest, deleteSocialLink } from '@/services/socialLinks'
+import { acceptSocialLinkRequest, deleteSocialLink } from '@/services/api/socialLinks'
 import { type NextRequest } from 'next/server'
 
 export async function PATCH(request: NextRequest, { params }: { params: { socialLinkId: string } }) {

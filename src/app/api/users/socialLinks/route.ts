@@ -1,6 +1,6 @@
 
 
-import { getSelfSocialLinks, sendSocialLinkRequest } from '@/services/socialLinks'
+import { getSelfSocialLinks, sendSocialLinkRequest } from '@/services/api/socialLinks'
 import { type NextRequest } from 'next/server'
 
 export async function GET() {
