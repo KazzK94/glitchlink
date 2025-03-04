@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 
 import { useRouter } from 'next/navigation'
-import { addCommentToPost } from '@/services/api/posts'
+import { addCommentToPost } from '@/services/api/comments'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 

@@ -1,6 +1,6 @@
 
 import { NextRequest } from 'next/server'
-import { deleteComment } from '@/services/api/posts'
+import { deleteComment } from '@/services/api/comments'
 
 // Route: /api/posts/[postId]/comments/[commentId]
 export async function DELETE(_request: NextRequest, { params }: { params: { postId: string, commentId: string } }) {
