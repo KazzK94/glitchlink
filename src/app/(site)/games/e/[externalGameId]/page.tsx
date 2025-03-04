@@ -1,7 +1,7 @@
 
 import { Container } from '@/components/common/Container'
 import VideoGameDetailError from '../../error'
-import { getGameByIdFromExternalApi, parseExternalGameData } from '@/services/api/videoGamesExternalApi'
+import { getVideoGameByIdFromExternalApi, parseExternalVideoGameData } from '@/services/api/videoGamesExternalApi'
 import VideoGameDetail from '@/components/videoGames/VideoGameDetail'
 import { getVideoGameByExternalId } from '@/services/api/videoGames'
 
@@ -9,9 +9,9 @@ export default async function ExternalGameDetailPage({ params }: { params: { ext
 	const externalGameId = Number(params.externalGameId)
 	const localGameData = await getVideoGameByExternalId(externalGameId, true)
 
-	const externalGameData = localGameData ? null : await getGameByIdFromExternalApi(externalGameId)
+	const externalGameData = localGameData ? null : await getVideoGameByIdFromExternalApi(externalGameId)
 
-	const game = localGameData || parseExternalGameData(externalGameData)
+	const game = localGameData || parseExternalVideoGameData(externalGameData)
 	if (!game) return <VideoGameDetailError />
 
 	return (

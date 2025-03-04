@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { CopyPlusIcon } from 'lucide-react'
 
-import { parseExternalGameData } from '@/services/api/videoGamesExternalApi'
+import { parseExternalVideoGameData } from '@/services/api/videoGamesExternalApi'
 
 export function AddGameToCollectionButton({ externalId, title, className }: { externalId: number, title: string, className?: string }) {
 
@@ -26,7 +26,7 @@ export function AddGameToCollectionButton({ externalId, title, className }: { ex
 			const gameData = await fetch('/api/external/videoGames/' + externalId).then(res => res.json())
 			if (!gameData) { throw new Error('Error adding game to collection.') }
 
-			const parsedGameData = parseExternalGameData(gameData)
+			const parsedGameData = parseExternalVideoGameData(gameData)
 
 			// make a request to  API to add the game to the user's collection
 			await fetch('/api/users/videoGames', {
