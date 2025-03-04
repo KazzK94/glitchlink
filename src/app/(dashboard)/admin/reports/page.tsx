@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { getReports } from '@/services/reports'
+import { getReports } from '@/services/api/reports'
 import Link from 'next/link'
 
 export default async function ReportsPage() {

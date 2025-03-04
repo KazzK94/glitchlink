@@ -2,7 +2,7 @@
 
 import prisma from '@/lib/db'
 import { getUserFromSession } from './auth'
-import { createNotification, undoNotification } from './notifications'
+import { createNotification, undoNotification } from './api/notifications'
 
 export async function sendSocialLinkRequest({ targetUserId }: { targetUserId: string }) {
 	const user = await getUserFromSession()

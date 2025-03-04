@@ -1,7 +1,7 @@
 
 import { Container } from '@/components/common/Container'
 import { Post } from '@/components/posts/Post'
-import { getPostById } from '@/services/posts'
+import { getPostById } from '@/services/api/posts'
 import { getUserFromSession } from '@/services/auth'
 
 export default async function PostDetailPage({ params }: { params: { id: string } }) {

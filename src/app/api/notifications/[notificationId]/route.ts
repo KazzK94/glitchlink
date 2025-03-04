@@ -1,6 +1,6 @@
 
 import { NextRequest } from 'next/server'
-import { deleteNotification } from '@/services/notifications'
+import { deleteNotification } from '@/services/api/notifications'
 
 export async function DELETE(_request: NextRequest, { params }: { params: { notificationId: string } }) {
 	const { notificationId } = params

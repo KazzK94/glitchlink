@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { UserIcon, LogInIcon, BellIcon } from 'lucide-react'
 
-import { getNewNotifications } from '@/services/notifications'
+import { getNewNotifications } from '@/services/api/notifications'
 
 export async function UserMenu({ loggedUserId }: { loggedUserId?: string }) {
 

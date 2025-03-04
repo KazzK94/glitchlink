@@ -1,5 +1,5 @@
 
-import { getGameByIdFromExternalApi } from '@/services/videoGamesExternalApi'
+import { getGameByIdFromExternalApi } from '@/services/api/videoGamesExternalApi'
 import { type NextRequest } from 'next/server'
 
 export async function GET(_request: NextRequest, { params }: { params: { gameId: number } }) {

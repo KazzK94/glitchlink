@@ -1,7 +1,7 @@
 'use server'
 
 import prisma from '@/lib/db'
-import { getUserFromSession } from './auth'
+import { getUserFromSession } from '../auth'
 import { getUser } from './users'
 
 import { Message as MessageType } from '@prisma/client'

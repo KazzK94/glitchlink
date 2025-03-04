@@ -3,7 +3,7 @@
 import prisma from '@/lib/db'
 import { Prisma } from '@prisma/client'
 
-import { getUserFromSession } from './auth'
+import { getUserFromSession } from '../auth'
 
 export async function createOrGetVideoGame({ externalId, title, description, image, genres, developers, platforms }: Prisma.VideoGameCreateInput) {
 	try {

@@ -1,5 +1,5 @@
 
-import { createPost, getPosts } from '@/services/posts'
+import { createPost, getPosts } from '@/services/api/posts'
 import { NextRequest } from 'next/server'
 
 export async function GET() {

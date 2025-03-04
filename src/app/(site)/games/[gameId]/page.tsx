@@ -1,5 +1,5 @@
 import { Container } from '@/components/common/Container'
-import { getVideoGameById } from '@/services/videoGames'
+import { getVideoGameById } from '@/services/api/videoGames'
 
 import VideoGameDetailError from '../error'
 import VideoGameDetail from '@/components/videoGames/VideoGameDetail'

@@ -2,7 +2,7 @@
 
 import { UserPublicInfo } from '@/types'
 import { toast } from 'sonner'
-import { createReport } from '@/services/reports'
+import { createReport } from '@/services/api/reports'
 import { GenericReportModal } from '../common/GenericReportModal'
 
 interface ReportUserModalProps {

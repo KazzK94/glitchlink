@@ -1,6 +1,6 @@
 
 import { type NextRequest } from 'next/server'
-import { getGamesFromExternalApi } from '@/services/videoGamesExternalApi'
+import { getGamesFromExternalApi } from '@/services/api/videoGamesExternalApi'
 
 export async function GET(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams

@@ -1,7 +1,7 @@
 
 import { Container } from '@/components/common/Container'
 import { Notification } from '@/components/notifications/Notification'
-import { getNotifications } from '@/services/notifications'
+import { getNotifications } from '@/services/api/notifications'
 
 export default async function NotificationsPage() {
 

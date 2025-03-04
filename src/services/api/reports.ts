@@ -1,7 +1,7 @@
 'use server'
 
 import prisma from '@/lib/db'
-import { getUserFromSession, isLoggedUserAdmin } from './auth'
+import { getUserFromSession, isLoggedUserAdmin } from '../auth'
 import { ReportEntityType } from '@prisma/client'
 
 interface ReportCreationData {

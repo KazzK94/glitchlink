@@ -1,6 +1,6 @@
 
 import { NextRequest } from 'next/server'
-import { markNotificationAsRead } from '@/services/notifications'
+import { markNotificationAsRead } from '@/services/api/notifications'
 
 export async function PATCH(_request: NextRequest, { params }: { params: { notificationId: string } }) {
 	const { notificationId } = params

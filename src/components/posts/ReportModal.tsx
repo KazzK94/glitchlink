@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { CompleteComment, CompletePost } from '@/types'
 import { toast } from 'sonner'
-import { createReport } from '@/services/reports'
+import { createReport } from '@/services/api/reports'
 
 interface ReportPostModalProps {
 	isOpen: boolean

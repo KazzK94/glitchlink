@@ -14,7 +14,7 @@ import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Button } from '../ui/button'
-import { updatePost } from '@/services/posts'
+import { updatePost } from '@/services/api/posts'
 import { ReportPostModal } from './ReportModal'
 
 interface PostProps {

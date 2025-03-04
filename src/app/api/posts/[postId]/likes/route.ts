@@ -1,5 +1,5 @@
 
-import { addLikeToPost, getPostById, removeLikeFromPost } from '@/services/posts'
+import { addLikeToPost, getPostById, removeLikeFromPost } from '@/services/api/posts'
 import { getUserFromSession } from '@/services/auth'
 import { NextRequest } from 'next/server'
 

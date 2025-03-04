@@ -9,7 +9,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { useState } from 'react'
-import { updateComment } from '@/services/posts'
+import { updateComment } from '@/services/api/posts'
 import { Button } from '@/components/ui/button'
 import { ReportCommentModal } from '../ReportModal'
 

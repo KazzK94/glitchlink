@@ -1,6 +1,6 @@
 
 import { NextRequest } from 'next/server'
-import { deletePost } from '@/services/posts'
+import { deletePost } from '@/services/api/posts'
 
 export async function DELETE(_request: NextRequest, { params }: { params: { postId: string } }) {
 	const { postId } = params

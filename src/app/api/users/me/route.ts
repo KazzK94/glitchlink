@@ -1,7 +1,7 @@
 
 import { getUserFromSession } from '@/services/auth'
 
-import { getUserProfile } from '@/services/users'
+import { getUserProfile } from '@/services/api/users'
 
 export async function GET() {
 	const loggedUser = await getUserFromSession()

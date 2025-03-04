@@ -2,7 +2,7 @@
 
 import { toast } from 'sonner'
 import { Button } from '../ui/button'
-import { removeVideoGameFromUser } from '@/services/videoGames'
+import { removeVideoGameFromUser } from '@/services/api/videoGames'
 import { useRouter } from 'next/navigation'
 import { TrashIcon } from 'lucide-react'
 

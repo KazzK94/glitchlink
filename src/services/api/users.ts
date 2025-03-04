@@ -3,7 +3,7 @@
 import prisma from '@/lib/db'
 import { Prisma, SocialLinkStatus } from '@prisma/client'
 import bcrypt from 'bcrypt'
-import { getUserFromSession } from './auth'
+import { getUserFromSession } from '../auth'
 import { SocialLinkDetailedStatus, UserPublicInfo } from '@/types'
 
 /** Attempts to create a user in the DB, or throws an error in case it cannot create it */

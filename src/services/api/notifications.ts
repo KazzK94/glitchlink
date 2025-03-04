@@ -1,7 +1,7 @@
 'use server'
 
 import prisma from '@/lib/db'
-import { getUserFromSession } from './auth'
+import { getUserFromSession } from '../auth'
 import { NotificationActionType, NotificationEntityType } from '@prisma/client'
 
 export async function createNotification(

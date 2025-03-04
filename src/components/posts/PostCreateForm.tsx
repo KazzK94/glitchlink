@@ -1,6 +1,6 @@
 'use client'
 
-import { createPost } from '@/services/posts'
+import { createPost } from '@/services/api/posts'
 import { Button } from '../ui/button'
 import { useRef } from 'react'
 

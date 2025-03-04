@@ -1,7 +1,7 @@
 'use server'
 
 import prisma from '@/lib/db'
-import { getUserFromSession } from './auth'
+import { getUserFromSession } from '../auth'
 import { createNotification } from './notifications'
 
 const ADMIN_ID = process.env.ADMIN_ID

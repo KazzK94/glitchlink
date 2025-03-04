@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { CopyPlusIcon } from 'lucide-react'
 
-import { parseExternalGameData } from '@/services/videoGamesExternalApi'
+import { parseExternalGameData } from '@/services/api/videoGamesExternalApi'
 
 export function AddGameToCollectionButton({ externalId, title, className }: { externalId: number, title: string, className?: string }) {
 

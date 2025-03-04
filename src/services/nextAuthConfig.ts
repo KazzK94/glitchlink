@@ -2,7 +2,7 @@
 import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 
-import { attemptLogin } from '@/services/users'
+import { attemptLogin } from '@/services/api/users'
 
 export const authOptions = {
 	providers: [
