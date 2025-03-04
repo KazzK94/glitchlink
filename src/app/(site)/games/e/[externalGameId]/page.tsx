@@ -1,9 +1,10 @@
 
 import { Container } from '@/components/common/Container'
 import VideoGameDetailError from '../../error'
-import { getVideoGameByIdFromExternalApi, parseExternalVideoGameData } from '@/services/api/videoGamesExternalApi'
+import { getVideoGameByIdFromExternalApi } from '@/services/api/videoGamesExternalApi'
 import VideoGameDetail from '@/components/videoGames/VideoGameDetail'
 import { getVideoGameByExternalId } from '@/services/api/videoGames'
+import { parseExternalVideoGameData } from '@/services/externalVideoGames'
 
 export default async function ExternalGameDetailPage({ params }: { params: { externalGameId: string } }) {
 	const externalGameId = Number(params.externalGameId)
