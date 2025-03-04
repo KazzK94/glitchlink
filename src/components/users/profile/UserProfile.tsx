@@ -4,7 +4,7 @@ import { EditIcon, LogOutIcon, MailIcon } from 'lucide-react'
 import Link from 'next/link'
 import { LogoutButton } from '../../auth/LogoutButton'
 
-import { getUserProfile } from '@/services/users'
+import { getUserProfile } from '@/services/api/users'
 
 import { BookUserIcon, Gamepad2Icon, MessageSquareIcon } from 'lucide-react'
 

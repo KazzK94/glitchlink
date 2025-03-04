@@ -1,7 +1,7 @@
 
 import { redirect } from 'next/navigation'
 import { getPopularVideoGames } from '@/services/api/videoGames'
-import { getActiveUsers } from '@/services/users'
+import { getActiveUsers } from '@/services/api/users'
 
 import { Gamepad2Icon } from 'lucide-react'
 import { Container } from '@/components/common/Container'

@@ -1,5 +1,5 @@
 
-import { getActiveUsers } from '@/services/users'
+import { getActiveUsers } from '@/services/api/users'
 import { UserSmallCard } from './UserCard'
 import { SocialLinkDetailedStatus, UserPublicInfo } from '@/types'
 import { getUserFromSession } from '@/services/auth'
