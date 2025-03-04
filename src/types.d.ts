@@ -1,4 +1,6 @@
-import type { Comment, Post, User, Notification, VideoGame } from '@prisma/client'
+import type {
+	Comment, Post, User, Notification, VideoGame, Conversation, Message
+} from '@prisma/client'
 
 export interface ExternalVideoGame {
 	id: number
@@ -25,8 +27,14 @@ export interface CompletePost extends Post {
 	likedBy: User[]
 }
 
-export type SocialLinkDetailedStatus = 'NONE' | 'SENT_PENDING' | 'RECEIVED_PENDING' | 'FRIENDS' | 'BLOCKED' 
+export type SocialLinkDetailedStatus = 'NONE' | 'SENT_PENDING' | 'RECEIVED_PENDING' | 'FRIENDS' | 'BLOCKED'
 
 export interface CompleteNotification extends Notification {
 	generatedBy: UserPublicInfo
+}
+
+interface ConversationWithUsersAndMessages extends Conversation {
+	messages: Message[]
+	userA: UserPublicInfo,
+	userB: UserPublicInfo
 }

@@ -9,7 +9,7 @@ import { pusherClient } from '@/lib/pusher'
 import { toast } from 'sonner'
 
 // Services
-import { createConversation, sendMessage } from '@/services/conversations'
+import { createConversation, sendMessage } from '@/services/api/conversations'
 
 // Types
 import { UserPublicInfo } from '@/types'
@@ -25,13 +25,13 @@ interface ConversationWithUsersAndMessages extends ConversationType {
 const CONVERSATION_NO_ID = 'NO_ID'
 const NO_CONVERSATIONS_FOUND_INDEX = -2
 
-interface UseMessagesProps {
+interface UseConversationsProps {
 	conversations: ConversationWithUsersAndMessages[]
 	loggedUser: UserPublicInfo
 	targetUser?: UserPublicInfo
 }
 
-export function useMessages({ conversations: conversationsBase, loggedUser, targetUser: targetUserBase }: UseMessagesProps) {
+export function useConversations({ conversations: conversationsBase, loggedUser, targetUser: targetUserBase }: UseConversationsProps) {
 
 	const conversationIndexRef = useRef(
 		targetUserBase
@@ -63,11 +63,12 @@ export function useMessages({ conversations: conversationsBase, loggedUser, targ
 		)
 	)
 
-	const [messageInput, setMessageInput] = useState("")
 	const [isSendingMessage, setIsSendingMessage] = useState(false)
 
 	const channelRef = useRef<Channel | null>(null)
 
+	// TODO: Uncomment the block below:
+	/*
 	const subscribeToChannel = (conversationId: string) => {
 		if (!conversationId || conversationId === CONVERSATION_NO_ID) return
 		channelRef.current = pusherClient.subscribe(`conversation-${conversationId}`)
@@ -92,6 +93,7 @@ export function useMessages({ conversations: conversationsBase, loggedUser, targ
 			}))
 		})
 	}
+	*/
 
 	const unsubscribeFromChannel = (conversationId: string) => {
 		if (!conversationId || conversationId === CONVERSATION_NO_ID) return
@@ -99,19 +101,14 @@ export function useMessages({ conversations: conversationsBase, loggedUser, targ
 		pusherClient.unsubscribe(`conversation-${conversationId}`)
 	}
 
-	const handleChangeMessageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setMessageInput(e.target.value)
-	}
-
-	const handleSendMessage = async (e: React.FormEvent) => {
-		e.preventDefault()
-		if (!targetUser || messageInput.trim() === "" || isSendingMessage) return
+	const handleSendMessage = async (message: string) => {
+		if (!targetUser || message.trim() === "" || isSendingMessage) return
 
 		setIsSendingMessage(true)
 
 		const tempMessage: MessageType = createTempMessage({
 			authorId: loggedUser.id,
-			content: messageInput
+			content: message
 		})
 
 		// Optimistic update
@@ -126,17 +123,17 @@ export function useMessages({ conversations: conversationsBase, loggedUser, targ
 		}))
 
 		try {
-			setMessageInput("")
 			if (targetUser?.current && conversationIndexRef.current === 0 && conversations[0].id === CONVERSATION_NO_ID) {
 				// CREATE NEW CONVERSATION
 				toast.info('You started a conversation with ' + targetUser.current.name)
-				const newConversation = await createConversation({ targetUserId: targetUser.current.id, message: messageInput })
+				const newConversation = await createConversation({ targetUserId: targetUser.current.id, message })
 				setConversations([newConversation, ...conversations.slice(1)])
 				// And subscribe to changes in that conversation
-				subscribeToChannel(newConversation.id)
+				// TODO: Uncomment the line below:
+				//subscribeToChannel(newConversation.id)
 			} else {
 				// SEND MESSAGE TO EXISTING CONVERSATION
-				await sendMessage({ conversationId: conversations[conversationIndexRef.current].id, message: messageInput })
+				await sendMessage({ conversationId: conversations[conversationIndexRef.current].id, message })
 				// This will update the conversation via Pusher (see useEffect below)
 			}
 		} catch (error) {
@@ -152,7 +149,8 @@ export function useMessages({ conversations: conversationsBase, loggedUser, targ
 	useEffect(() => {
 		if (conversationIndexRef.current < 0) return
 		const conversationId = conversations[conversationIndexRef.current].id
-		subscribeToChannel(conversationId)
+		// TODO: Uncomment the line below:
+		//subscribeToChannel(conversationId)
 		return () => unsubscribeFromChannel(conversationId)
 	}, [])
 
@@ -160,9 +158,7 @@ export function useMessages({ conversations: conversationsBase, loggedUser, targ
 		conversations,
 		conversationIndex: conversationIndexRef.current,
 		targetUser: targetUser.current,
-		messageInput,
 		isSendingMessage,
-		handleChangeMessageInput,
 		handleSendMessage
 	}
 }
@@ -192,9 +188,12 @@ function createTempMessage({ authorId, content }: { authorId: string, content: s
 	}
 }
 
+// TODO: Uncomment the block below:
+/*
 function isTempMessage({ message }: { message: { id: string } }): boolean {
 	return message.id.startsWith('TEMP-')
 }
+*/
 
 function findConversationIndex(conversations: ConversationWithUsersAndMessages[], targetUser: UserPublicInfo): number {
 	return conversations.findIndex((conversation) => {

@@ -1,8 +1,8 @@
 
-import { ConversationsContainer } from '@/components/messages/ConversationsContainer'
+import { ConversationsContainer } from '@/components/conversations/ConversationsContainer'
 import { getUserFromSession } from '@/services/auth'
-import { getConversations } from '@/services/conversations'
-import { getUser } from '@/services/users'
+import { getConversations } from '@/services/api/conversations'
+import { getUser } from '@/services/api/users'
 
 export default async function ConversationPage({ params }: { params: { username: string } }) {
 
