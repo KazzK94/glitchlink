@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
 import { toast } from 'sonner'
-import { changePassword } from '@/services/users'
+import { changePassword } from '@/services/api/users'
 
 
 export function ChangePasswordForm({ user }: { user: { username: string } }) {

@@ -1,5 +1,5 @@
 
-import { attemptLogin } from '@/services/users'
+import { attemptLogin } from '@/services/api/users'
 import { type NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {

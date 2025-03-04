@@ -1,6 +1,6 @@
 
 import { getUserFromSession } from '@/services/auth'
-import { updateUser } from '@/services/users'
+import { updateUser } from '@/services/api/users'
 
 import { v2 as cloudinary } from 'cloudinary'
 

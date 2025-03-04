@@ -1,7 +1,7 @@
 'use client'
 
 import { registerSchema, type RegisterSchema } from '@/schemas/userSchema'
-import { getUser } from '@/services/users'
+import { getUser } from '@/services/api/users'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useState } from 'react'

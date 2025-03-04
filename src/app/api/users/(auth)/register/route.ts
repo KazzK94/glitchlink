@@ -1,5 +1,5 @@
 
-import { createUser } from '@/services/users'
+import { createUser } from '@/services/api/users'
 import { type NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {

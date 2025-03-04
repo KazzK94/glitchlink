@@ -1,7 +1,7 @@
 'use client'
 
 import { basicInfoSchema, type BasicInfoSchema } from '@/schemas/userSchema'
-import { getUser, updateUser } from '@/services/users'
+import { getUser, updateUser } from '@/services/api/users'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useState } from 'react'

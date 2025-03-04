@@ -1,5 +1,5 @@
 
-import { getUsers } from '@/services/users'
+import { getUsers } from '@/services/api/users'
 
 // TODO: DELETE THIS GET
 export async function GET() {

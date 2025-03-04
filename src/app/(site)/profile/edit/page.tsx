@@ -1,5 +1,5 @@
 
-import { getUserProfile } from '@/services/users'
+import { getUserProfile } from '@/services/api/users'
 
 import { Container } from '@/components/common/Container'
 import { Avatar } from '@/components/users/Avatar'

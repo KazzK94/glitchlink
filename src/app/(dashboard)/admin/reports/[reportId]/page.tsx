@@ -1,8 +1,9 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { getCommentById, getPostById } from '@/services/api/posts'
+import { getPostById } from '@/services/api/posts'
+import { getCommentById } from '@/services/api/comments'
 import { getReportById } from '@/services/api/reports'
-import { getUser } from '@/services/users'
+import { getUser } from '@/services/api/users'
 import { User } from '@prisma/client'
 import Link from 'next/link'
 

@@ -1,6 +1,6 @@
 import { Container } from '@/components/common/Container'
 import { GamesList } from '@/components/videoGames/VideoGamesList'
-import { getUserProfile } from '@/services/users'
+import { getUserProfile } from '@/services/api/users'
 
 
 export default async function GamesPage() {
