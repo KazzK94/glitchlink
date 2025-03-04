@@ -3,11 +3,7 @@
 import prisma from '@/lib/db'
 import { getUserFromSession } from '../auth'
 import { getUser } from './users'
-
-import { Message as MessageType } from '@prisma/client'
-
-import { pusherServer } from '@/lib/pusher'
-
+import { sendMessageToPusher } from '../pusher'
 
 /**
  * Checks if a conversation between these two users already exists. 
@@ -140,32 +136,13 @@ export async function sendMessage({ conversationId, message }: { conversationId:
 		})
 		// Get inserted message
 		const insertedMessage = result.messages[0]
-		await sendMessageToPusher({ conversationId, message: insertedMessage })
+
+		const senderId = loggedUser.id
+		const targetId = result.userAId === senderId ? result.userBId : result.userAId
+		await sendMessageToPusher({ conversationId, message: insertedMessage, senderId, targetId })
 		return result
 	} catch (error) {
 		console.error('Failed to send the message:', error)
-		throw error
-	}
-}
-
-
-interface SendMessageToPusherProps {
-	conversationId: string
-	message: MessageType
-}
-
-export async function sendMessageToPusher({ conversationId, message }: SendMessageToPusherProps) {
-	try {
-		const result = await pusherServer.trigger(
-			`conversation-${conversationId}`,
-			"new-message",
-			{ message }
-		)
-		return {
-			success: (result.status === 200)
-		}
-	} catch (error) {
-		console.error('Failed to send the message to Pusher:', error)
 		throw error
 	}
 }
