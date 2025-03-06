@@ -1,20 +1,21 @@
 
 import { Message } from '@prisma/client'
 import { pusherServer } from '@/lib/pusher'
+import { UserPublicInfo } from '@/types'
 
 interface SendMessageToPusherProps {
-	conversationId: string
 	message: Message
-	senderId: string
+	author: UserPublicInfo
 	targetId: string
 }
 
-export async function sendMessageToPusher({ conversationId, message, senderId, targetId }: SendMessageToPusherProps) {
+export async function sendMessageToPusher({ message, author, targetId }: SendMessageToPusherProps) {
+	'use server'
 	try {
 		const result = await pusherServer.trigger(
-			[`user-${senderId}`, `user-${targetId}`],
+			[`user-${author.id}`, `user-${targetId}`],
 			"new-message",
-			{ message, conversationId }
+			{ message }
 		)
 		return {
 			success: (result.status === 200)
@@ -24,3 +25,4 @@ export async function sendMessageToPusher({ conversationId, message, senderId, t
 		throw error
 	}
 }
+

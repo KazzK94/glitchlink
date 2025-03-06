@@ -47,7 +47,7 @@ export async function createConversation({ targetUserId, message }: { targetUser
 	}
 
 	try {
-		const createdConversation = await prisma.conversation.create({
+		const result = await prisma.conversation.create({
 			data: {
 				userAId: loggedUser.id,
 				userBId: targetUser.id,
@@ -67,7 +67,12 @@ export async function createConversation({ targetUserId, message }: { targetUser
 				userB: { select: { id: true, username: true, name: true, avatar: true } }
 			}
 		})
-		return createdConversation
+		// - Pusher Logic -
+		const author = result.userAId === loggedUser.id ? result.userA : result.userB
+		const targetId = result.userAId === loggedUser.id ? result.userBId : result.userAId
+		await sendMessageToPusher({ message: result.messages[0], author, targetId })
+		// - End of Pusher Logic -
+		return result
 	} catch (error) {
 		console.error('Failed to create the conversation:', error)
 		throw error
@@ -108,7 +113,7 @@ export async function getConversations() {
  * @param message The content of the message to send.
  * @returns The conversation with the new message included.
  */
-export async function sendMessage({ conversationId, message }: { conversationId: string, message: string }) {
+export async function sendMessage({ conversationId, messageContent }: { conversationId: string, messageContent: string }) {
 	const loggedUser = await getUserFromSession()
 	if (!loggedUser || !loggedUser.id) throw new Error('User not logged in')
 
@@ -120,7 +125,7 @@ export async function sendMessage({ conversationId, message }: { conversationId:
 				lastMessageAt: new Date(),
 				messages: {
 					create: {
-						content: message,
+						content: messageContent,
 						authorId: loggedUser.id
 					}
 				}
@@ -134,12 +139,12 @@ export async function sendMessage({ conversationId, message }: { conversationId:
 				userB: { select: { id: true, username: true, name: true, avatar: true } }
 			}
 		})
-		// Get inserted message
-		const insertedMessage = result.messages[0]
 
-		const senderId = loggedUser.id
-		const targetId = result.userAId === senderId ? result.userBId : result.userAId
-		await sendMessageToPusher({ conversationId, message: insertedMessage, senderId, targetId })
+		// - Pusher Logic -
+		const author = result.userAId === loggedUser.id ? result.userA : result.userB
+		const targetId = result.userAId === loggedUser.id ? result.userBId : result.userAId
+		await sendMessageToPusher({ message: result.messages[0], author, targetId })
+		// - End of Pusher Logic -
 		return result
 	} catch (error) {
 		console.error('Failed to send the message:', error)
