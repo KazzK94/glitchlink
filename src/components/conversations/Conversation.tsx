@@ -31,7 +31,7 @@ export function Conversation({
 	}
 	useEffect(() => {
 		scrollToBottom()
-	}, [])
+	}, [conversation])
 
 	return <>
 		{/* Conversation View */}
