@@ -17,6 +17,8 @@ import { Button } from '../ui/button'
 import { updatePost } from '@/services/api/posts'
 import { ReportPostModal } from './ReportModal'
 
+import '@github/relative-time-element'
+
 interface PostProps {
 	post: CompletePost
 	loggedUserId?: string
@@ -137,7 +139,12 @@ export function Post({ post, loggedUserId }: PostProps) {
 								<ShareButton postId={post.id} />
 							</div>
 							<div className='hidden sm:block'>
-								<p className="text-sm text-muted opacity-60 italic">{new Date(post.createdAt).toDateString()}</p>
+								<p className="text-sm text-muted opacity-60 italic">
+									<relative-time
+										datetime={post.createdAt.toISOString()}
+										tense='past'
+									/>
+								</p>
 							</div>
 						</div>
 
