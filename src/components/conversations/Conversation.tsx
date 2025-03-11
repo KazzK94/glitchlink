@@ -1,28 +1,27 @@
 'use client'
 
 import Link from 'next/link'
-import { MenuIcon } from 'lucide-react'
 
-import { ConversationWithUsersAndMessages, UserPublicInfo } from '@/types'
+import { UserPublicInfo } from '@/types'
 
 import { Avatar } from '@/components/users/Avatar'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Message } from './Message'
 import { useEffect, useRef } from 'react'
 import { NewMessageForm } from './NewMessageForm'
+import { useConversationsStore } from '@/stores/conversationsStore'
 
 interface ConversationProps {
-	conversation: ConversationWithUsersAndMessages
 	targetUser: UserPublicInfo
-	handleToggleMobileMenu: () => void
-
 	loggedUser: UserPublicInfo
 	handleSendMessage: (message: string) => void
 }
 
 export function Conversation({
-	conversation, targetUser, handleToggleMobileMenu, loggedUser, handleSendMessage
+	targetUser, loggedUser, handleSendMessage
 }: ConversationProps) {
+
+	const conversation = useConversationsStore(state => state.selectedConversation)
 
 	const messageEndRef = useRef<HTMLDivElement>(null)
 
@@ -32,6 +31,8 @@ export function Conversation({
 	useEffect(() => {
 		scrollToBottom()
 	}, [conversation])
+
+	if (!conversation) return null
 
 	return <>
 		{/* Conversation View */}
@@ -45,9 +46,6 @@ export function Conversation({
 						<p className='text-sm italic opacity-80'>@{targetUser.username}</p>
 					</div>
 				</Link>
-				<button className='md:hidden border bg-slate-700/30 rounded p-2' onClick={handleToggleMobileMenu}>
-					<MenuIcon className='size-6' />
-				</button>
 			</div>
 
 			{/* Messages */}
@@ -61,7 +59,7 @@ export function Conversation({
 			</ScrollArea>
 
 			{/* Message Input */}
-			<NewMessageForm 
+			<NewMessageForm
 				onSendMessage={handleSendMessage}
 			/>
 		</div>
