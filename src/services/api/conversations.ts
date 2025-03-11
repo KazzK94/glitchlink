@@ -39,7 +39,7 @@ export async function createConversation({ targetUserId, message }: { targetUser
 
 	if (existingConversation) {
 		if (message) {
-			const response = await sendMessage({ conversationId: existingConversation.id, message })
+			const response = await sendMessage({ conversationId: existingConversation.id, messageContent: message })
 			if (!response) throw new Error('Failed to send the message')
 			return response
 		}
