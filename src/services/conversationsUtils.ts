@@ -2,20 +2,9 @@
 import { ConversationWithUsersAndMessages, UserPublicInfo } from '@/types'
 import { Message } from '@prisma/client'
 
-const TEMP_MESSAGE_PREFIX = 'TEMP-'
-export const CONVERSATION_NO_ID = 'NO_ID'
+const TEMP_MESSAGE_PREFIX = 'TEMP_MESSAGE_ID'
+export const CONVERSATION_NO_ID = 'NEW_CONVERSATION_ID'
 export const NO_CONVERSATION_FOUND_INDEX = -2
-
-/** A helper function to find the index of a specific conversation from a list of conversations, given the target user data */
-export function findConversationIndex(conversations: ConversationWithUsersAndMessages[], targetUser?: UserPublicInfo): number {
-	if (!targetUser) return NO_CONVERSATION_FOUND_INDEX
-	return conversations.findIndex((conversation) => {
-		return (
-			conversation.userA.username === targetUser.username ||
-			conversation.userB.username === targetUser.username
-		)
-	})
-}
 
 /** Create a temporary empty conversation with a NO ID id, so the UI can work even if the conversation does not exist yet */
 export function createTempConversation(userA: UserPublicInfo, userB: UserPublicInfo): ConversationWithUsersAndMessages {
@@ -38,7 +27,7 @@ export function isTempConversation({ conversationId }: { conversationId: string 
 /** Create a Temporary Message (for optimistic UI only) given the author id and message contents, and return it */
 export function createTempMessage({ authorId, content }: { authorId: string, content: string }): Message {
 	return {
-		id: `TEMP-${Date.now()}`, // Temporary ID
+		id: `${TEMP_MESSAGE_PREFIX}${Date.now()}`, // Temporary ID
 		conversationId: CONVERSATION_NO_ID,
 		authorId,
 		content,
@@ -50,13 +39,4 @@ export function createTempMessage({ authorId, content }: { authorId: string, con
 /** Determine if a Message is a Temporary Message (one created for optimistic UI only) */
 export function isTempMessage({ message }: { message: { id: string } }): boolean {
 	return message.id.startsWith(TEMP_MESSAGE_PREFIX)
-}
-
-interface GetTargetUserFromConversationProps {
-	conversation: ConversationWithUsersAndMessages
-	loggedUser: UserPublicInfo
-}
-
-export function getTargetUserFromConversation({conversation, loggedUser}: GetTargetUserFromConversationProps): UserPublicInfo {
-	return conversation.userA.username === loggedUser.username ? conversation.userB : conversation.userA
 }

@@ -1,20 +1,22 @@
 
-import { createTempConversation } from '@/services/conversationsUtils'
+import { createTempConversation, createTempMessage } from '@/services/conversationsUtils'
 import { ConversationWithUsersAndMessages, UserPublicInfo } from '@/types'
 import { create } from 'zustand'
 
 type ConversationsStore = {
 	conversations: ConversationWithUsersAndMessages[]
-	selectedConversation: ConversationWithUsersAndMessages | null
+	selectedConversationIndex: number | null
 	targetUser: UserPublicInfo | null
 	fetchConversations: () => Promise<void>
 	selectFirstConversation: (loggedUser: UserPublicInfo) => void
 	selectConversationByUser: (loggedUser: UserPublicInfo, targetUser: UserPublicInfo) => void
+	getSelectedConversation: () => ConversationWithUsersAndMessages | null
+	sendMessage: (messageContent: string, loggedUser: UserPublicInfo) => Promise<void>
 }
 
 const useConversationsStore = create<ConversationsStore>((set, get) => ({
 	conversations: [],
-	selectedConversation: null,
+	selectedConversationIndex: null,
 	targetUser: null,
 
 	fetchConversations: async () => {
@@ -26,14 +28,15 @@ const useConversationsStore = create<ConversationsStore>((set, get) => ({
 		const { conversations } = get()
 		if (conversations.length === 0) {
 			return set({
-				selectedConversation: null,
+				selectedConversationIndex: null,
 				targetUser: null
 			})
 		}
-		const selectedConversation = conversations[0]
-		const newTargetUser = selectedConversation.userA.id === loggedUser.id ? selectedConversation.userB : selectedConversation.userA
+		const newTargetUser = conversations[0].userA.id === loggedUser.id
+			? conversations[0].userB
+			: conversations[0].userA
 		set({
-			selectedConversation,
+			selectedConversationIndex: 0,
 			targetUser: newTargetUser
 		})
 
@@ -41,28 +44,60 @@ const useConversationsStore = create<ConversationsStore>((set, get) => ({
 	selectConversationByUser: async (loggedUser, baseTargetUser) => {
 		const { conversations } = get()
 
-		const selectedConversation = conversations.find((conversation) => {
+		const selectedConversationIndex = conversations.findIndex((conversation) => {
 			return conversation.userA.id === baseTargetUser.id || conversation.userB.id === baseTargetUser.id
-		}) || null
+		})
 
 		// If conversation is not found, create a temporary one
-		if (!selectedConversation) {
-			console.log({loggedUserId: loggedUser.id, baseTargetUserId: baseTargetUser.id})
+		if (selectedConversationIndex === -1) {
 			const tempConversation = createTempConversation(loggedUser, baseTargetUser)
 			return set({
-				selectedConversation: tempConversation,
+				selectedConversationIndex: 0,
 				targetUser: baseTargetUser,
 				conversations: [tempConversation, ...conversations]
 			})
 		}
 
-		const targetUser = selectedConversation.userA.id === baseTargetUser.id 
-			? selectedConversation.userA 
+		const selectedConversation = conversations[selectedConversationIndex]
+
+		const targetUser = selectedConversation.userA.id === baseTargetUser.id
+			? selectedConversation.userA
 			: selectedConversation.userB
 
 		set({
-			selectedConversation,
+			selectedConversationIndex,
 			targetUser
+		})
+	},
+	getSelectedConversation: () => {
+		const { conversations, selectedConversationIndex } = get()
+		if (selectedConversationIndex === null) {
+			return null
+		}
+		return conversations[selectedConversationIndex]
+	},
+	sendMessage: async (messageContent: string, loggedUser: UserPublicInfo) => {
+		const { conversations, selectedConversationIndex } = get()
+		if (selectedConversationIndex === null) {
+			return
+		}
+
+		const newMessage = createTempMessage({ authorId: loggedUser.id, content: messageContent })
+		const clonedConversations = structuredClone(conversations)
+		clonedConversations[selectedConversationIndex].messages = [
+			newMessage,
+			...clonedConversations[selectedConversationIndex].messages
+		]
+
+		// TODO: Send message to the server
+		//  - [IN SERVER] Call sendMessage() from /services/api/conversations.ts
+		//      (we need an API endpoint to send messages)
+		//  - [HERE]: Call the API endpoint to send the message
+		const conversationId = conversations[selectedConversationIndex].id
+		console.log('Sending message:', newMessage, 'in conversation with ID:', conversationId)
+
+		set({
+			conversations: clonedConversations
 		})
 	}
 }))

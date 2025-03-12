@@ -7,7 +7,7 @@ import { UserPublicInfo } from '@/types'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Message } from './Message'
 import { useEffect, useRef } from 'react'
-import { NewMessageForm } from './NewMessageForm'
+import { SendMessageForm } from './SendMessageForm'
 import { useConversationsStore } from '@/stores/conversationsStore'
 import { getAvatarUrl } from '@/services/avatarUtils'
 
@@ -20,7 +20,8 @@ export function Conversation({
 	targetUser, loggedUser
 }: ConversationProps) {
 
-	const conversation = useConversationsStore(state => state.selectedConversation)
+	const selectedConversationIndex = useConversationsStore(state => state.selectedConversationIndex)
+	const conversation = useConversationsStore(state => selectedConversationIndex !== null ? state.conversations[selectedConversationIndex] : null)
 
 	// -- Auto-Scroll Logic --
 	const messageEndRef = useRef<HTMLDivElement>(null)
@@ -62,7 +63,7 @@ export function Conversation({
 			</ScrollArea>
 
 			{/* Message Input */}
-			<NewMessageForm />
+			<SendMessageForm loggedUser={loggedUser} />
 		</div>
 	</>
 }

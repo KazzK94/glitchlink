@@ -4,19 +4,29 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { SendIcon } from 'lucide-react'
 import { useState } from 'react'
+import { useConversationsStore } from '@/stores/conversationsStore'
+import { UserPublicInfo } from '@/types'
 
-export function NewMessageForm() {
+export function SendMessageForm({ loggedUser }: { loggedUser: UserPublicInfo }) {
 
 	const [messageInputText, setMessageInput] = useState("")
+	const [isSendingMessage, setIsSendingMessage] = useState(false)
+
+	const sendMessage = useConversationsStore((state) => state.sendMessage)
 
 	// Controlled input change
 	const handleChangeMessageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setMessageInput(e.target.value)
 	}
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		console.log({ messageSent: messageInputText })
+		if (!messageInputText || isSendingMessage) return
+
+		setIsSendingMessage(true)
+		await sendMessage(messageInputText, loggedUser)
+		setMessageInput("")
+		setIsSendingMessage(false)
 	}
 
 	return (
