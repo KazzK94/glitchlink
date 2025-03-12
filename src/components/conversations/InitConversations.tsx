@@ -1,24 +1,18 @@
 'use client'
 
 import { useConversationsStore } from '@/stores/conversationsStore'
+import { UserPublicInfo } from '@/types'
 import { useEffect } from 'react'
 
-interface InitConversationsWithTargetUsernameProps {
-	targetUsername: string
-	loggedUsername?: never
+interface InitConversationsProps {
+	loggedUser: UserPublicInfo
+	targetUser?: UserPublicInfo
 }
 
-interface InitConversationsWithLoggedUsernameProps {
-	loggedUsername: string
-	targetUsername?: never
-}
-
-type InitConversationsProps = InitConversationsWithTargetUsernameProps | InitConversationsWithLoggedUsernameProps
-
-export function InitConversations({ targetUsername, loggedUsername }: InitConversationsProps) {
+export function InitConversations({ loggedUser, targetUser: baseTargetUser }: InitConversationsProps) {
 	const fetchConversations = useConversationsStore((state) => state.fetchConversations)
 	const selectFirstConversation = useConversationsStore((state) => state.selectFirstConversation)
-	const selectConversationByUsername = useConversationsStore((state) => state.selectConversationByUsername)
+	const selectConversationByUser = useConversationsStore((state) => state.selectConversationByUser)
 	const targetUser = useConversationsStore((state) => state.targetUser)
 
 	useEffect(() => {
@@ -27,16 +21,16 @@ export function InitConversations({ targetUsername, loggedUsername }: InitConver
 			if(targetUser === null) {
 				await fetchConversations()
 			}
-			if (targetUsername) {
-				selectConversationByUsername(targetUsername)
-			} else if(loggedUsername) {
-				selectFirstConversation(loggedUsername)
+			if (baseTargetUser) {
+				selectConversationByUser(loggedUser, baseTargetUser)
+			} else if(loggedUser.username) {
+				selectFirstConversation(loggedUser)
 			} else {
 				console.error('Error initializing conversations')
 			}
 		}
 		populateConversations()
-	}, [fetchConversations, selectConversationByUsername, selectFirstConversation, targetUsername, loggedUsername, targetUser])
+	}, [fetchConversations, selectConversationByUser, selectFirstConversation, baseTargetUser, loggedUser, targetUser])
 
 	return null
 }

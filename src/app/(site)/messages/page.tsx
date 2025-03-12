@@ -11,7 +11,7 @@ export default async function ConversationsPage() {
 	return (
 		<div className='flex h-[calc(100vh_-_64px)]  bg-gray-900 text-white relative overflow-x-hidden'>
 			<InitConversations
-				loggedUsername={loggedUser.username}
+				loggedUser={loggedUser}
 			/>
 			<ConversationContainer
 				loggedUser={loggedUser}

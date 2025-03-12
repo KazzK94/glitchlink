@@ -43,7 +43,7 @@ export function Conversation({
 					<img
 						src={getAvatarUrl(targetUser.avatar)}
 						alt={`@${targetUser.username}'s Avatar`}
-						className='size-12 rounded-full border-2 overflow-hidden aspect-square' />
+						className='size-12 rounded-full border-2 overflow-hidden aspect-square object-cover' />
 					<div className="flex flex-col">
 						<h2 className="text-xl md:text-xl font-semibold">{targetUser.name}</h2>
 						<p className='text-sm italic opacity-80'>@{targetUser.username}</p>

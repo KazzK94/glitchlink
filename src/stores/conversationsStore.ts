@@ -1,4 +1,5 @@
 
+import { createTempConversation } from '@/services/conversationsUtils'
 import { ConversationWithUsersAndMessages, UserPublicInfo } from '@/types'
 import { create } from 'zustand'
 
@@ -7,8 +8,8 @@ type ConversationsStore = {
 	selectedConversation: ConversationWithUsersAndMessages | null
 	targetUser: UserPublicInfo | null
 	fetchConversations: () => Promise<void>
-	selectFirstConversation: (loggedUsername: string) => void
-	selectConversationByUsername: (username: string) => void
+	selectFirstConversation: (loggedUser: UserPublicInfo) => void
+	selectConversationByUser: (loggedUser: UserPublicInfo, targetUser: UserPublicInfo) => void
 }
 
 const useConversationsStore = create<ConversationsStore>((set, get) => ({
@@ -21,7 +22,7 @@ const useConversationsStore = create<ConversationsStore>((set, get) => ({
 			.then((res) => res.json())
 		set({ conversations })
 	},
-	selectFirstConversation: (loggedUsername) => {
+	selectFirstConversation: (loggedUser) => {
 		const { conversations } = get()
 		if (conversations.length === 0) {
 			return set({
@@ -30,23 +31,34 @@ const useConversationsStore = create<ConversationsStore>((set, get) => ({
 			})
 		}
 		const selectedConversation = conversations[0]
-		const newTargetUser = selectedConversation.userA.username === loggedUsername ? selectedConversation.userB : selectedConversation.userA
+		const newTargetUser = selectedConversation.userA.id === loggedUser.id ? selectedConversation.userB : selectedConversation.userA
 		set({
 			selectedConversation,
 			targetUser: newTargetUser
 		})
 
 	},
-	selectConversationByUsername: (targetUsername) => {
+	selectConversationByUser: async (loggedUser, baseTargetUser) => {
 		const { conversations } = get()
 
 		const selectedConversation = conversations.find((conversation) => {
-			return conversation.userA.username === targetUsername || conversation.userB.username === targetUsername
+			return conversation.userA.id === baseTargetUser.id || conversation.userB.id === baseTargetUser.id
 		}) || null
 
-		const targetUser = selectedConversation ?
-			selectedConversation.userA.username === targetUsername ? selectedConversation.userA : selectedConversation.userB
-			: null
+		// If conversation is not found, create a temporary one
+		if (!selectedConversation) {
+			console.log({loggedUserId: loggedUser.id, baseTargetUserId: baseTargetUser.id})
+			const tempConversation = createTempConversation(loggedUser, baseTargetUser)
+			return set({
+				selectedConversation: tempConversation,
+				targetUser: baseTargetUser,
+				conversations: [tempConversation, ...conversations]
+			})
+		}
+
+		const targetUser = selectedConversation.userA.id === baseTargetUser.id 
+			? selectedConversation.userA 
+			: selectedConversation.userB
 
 		set({
 			selectedConversation,
