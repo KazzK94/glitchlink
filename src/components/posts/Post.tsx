@@ -141,6 +141,7 @@ export function Post({ post, loggedUserId }: PostProps) {
 							<div className='hidden sm:block'>
 								<p className="text-sm text-muted opacity-60 italic">
 									<relative-time
+										title='Post creation date'
 										datetime={post.createdAt.toISOString()}
 										tense='past'
 									/>
