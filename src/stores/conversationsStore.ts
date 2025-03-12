@@ -7,11 +7,11 @@ type ConversationsStore = {
 	selectedConversation: ConversationWithUsersAndMessages | null
 	targetUser: UserPublicInfo | null
 	fetchConversations: () => Promise<void>
-	selectFirstConversation: () => void
+	selectFirstConversation: (loggedUsername: string) => void
 	selectConversationByUsername: (username: string) => void
 }
 
-const useConversationsStore = create<ConversationsStore>((set) => ({
+const useConversationsStore = create<ConversationsStore>((set, get) => ({
 	conversations: [],
 	selectedConversation: null,
 	targetUser: null,
@@ -21,22 +21,36 @@ const useConversationsStore = create<ConversationsStore>((set) => ({
 			.then((res) => res.json())
 		set({ conversations })
 	},
-	selectFirstConversation: () => {
-		set((state) => ({ selectedConversation: state.conversations.length > 0 ? state.conversations[0] : null }))
+	selectFirstConversation: (loggedUsername) => {
+		const { conversations } = get()
+		if (conversations.length === 0) {
+			return set({
+				selectedConversation: null,
+				targetUser: null
+			})
+		}
+		const selectedConversation = conversations[0]
+		const newTargetUser = selectedConversation.userA.username === loggedUsername ? selectedConversation.userB : selectedConversation.userA
+		set({
+			selectedConversation,
+			targetUser: newTargetUser
+		})
+
 	},
-	selectConversationByUsername: (username: string) => {
-		set((state) => {
-			const selectedConversation = state.conversations.find((conversation) => {
-				const otherUser = conversation.userA.username === username ? conversation.userB : conversation.userA
-				return otherUser.username === username
-			}) || null
-			const targetUser = selectedConversation ?
-				selectedConversation.userA.username === username ? selectedConversation.userB : selectedConversation.userA
-				: null
-			return {
-				selectedConversation,
-				targetUser
-			}
+	selectConversationByUsername: (targetUsername) => {
+		const { conversations } = get()
+
+		const selectedConversation = conversations.find((conversation) => {
+			return conversation.userA.username === targetUsername || conversation.userB.username === targetUsername
+		}) || null
+
+		const targetUser = selectedConversation ?
+			selectedConversation.userA.username === targetUsername ? selectedConversation.userA : selectedConversation.userB
+			: null
+
+		set({
+			selectedConversation,
+			targetUser
 		})
 	}
 }))

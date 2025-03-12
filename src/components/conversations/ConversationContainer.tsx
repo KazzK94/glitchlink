@@ -1,24 +1,17 @@
 'use client'
 
-// Hooks
-import { useConversations } from '@/hooks/useConversations'
-
-// Types
 import { UserPublicInfo } from '@/types'
 import { Conversation } from './Conversation'
+import { useConversationsStore } from '@/stores/conversationsStore'
 
 interface ConversationContainerProps {
 	loggedUser: UserPublicInfo,
-	targetUser?: UserPublicInfo,
 	className?: string
 }
 
-export function ConversationContainer({ loggedUser, targetUser: targetUserBase }: ConversationContainerProps) {
+export function ConversationContainer({ loggedUser }: ConversationContainerProps) {
 
-	const {
-		targetUser,
-		handleSendMessage
-	} = useConversations({ conversations: [], loggedUser, targetUser: targetUserBase })
+	const targetUser = useConversationsStore(state => state.targetUser)
 
 	return (
 		<>
@@ -28,7 +21,6 @@ export function ConversationContainer({ loggedUser, targetUser: targetUserBase }
 						<Conversation
 							targetUser={targetUser}
 							loggedUser={loggedUser}
-							handleSendMessage={handleSendMessage}
 						/>
 					) : (
 						<p className='grid content-center text-lg w-full text-center px-6'>

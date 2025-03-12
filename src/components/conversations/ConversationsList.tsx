@@ -9,32 +9,30 @@ import { CaretLeftIcon } from '@radix-ui/react-icons'
 import { useConversationsStore } from '@/stores/conversationsStore'
 
 interface ConversationsListProps {
-	selectedConversationIndex?: number
 	loggedUser: UserPublicInfo
 }
 
 export function ConversationsList({
-	selectedConversationIndex: defaultSelectedConversationIndex, loggedUser
+	loggedUser
 }: ConversationsListProps) {
 
 	const conversations = useConversationsStore(state => state.conversations)
 	const fetchConversations = useConversationsStore(state => state.fetchConversations)
+	const targetUser = useConversationsStore(state => state.targetUser)
 
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-	const [selectedConversationIndex, setSelectedConversationIndex] = useState(defaultSelectedConversationIndex || -1)
 
 	useEffect(() => {
 		fetchConversations()
 	}, [fetchConversations])
 
-	function handleConversationClick(index: number) {
-		setSelectedConversationIndex(index)
+	function handleConversationClick() {
 		setIsMobileMenuOpen(false)
 	}
 
 	return (
 		<div
-			className={`w-full md:w-1/3 h-[calc(100vh_-_64px)] border-r border-gray-700 bg-gray-800/80 backdrop-blur-md 
+			className={`w-full md:w-1/3 max-w-sm h-[calc(100vh_-_64px)] border-r border-gray-700 bg-gray-800/80 backdrop-blur-md 
 						absolute md:relative z-10 transition-[right] duration-300 ease-in-out 
 						${isMobileMenuOpen ? "right-0" : "-right-full md:right-0"}`}
 		>
@@ -42,15 +40,16 @@ export function ConversationsList({
 				<CaretLeftIcon className='size-12' />
 			</button>
 			<ScrollArea className='h-full'>
-				{conversations.map((conversation, index) => {
+				{conversations.map((conversation) => {
 					const lastMessage = conversation.messages.length > 0 ? conversation.messages[0].content : 'No messages yet.'
 					const otherUser = conversation.userA.id === loggedUser.id ? conversation.userB : conversation.userA
 					return (
 						<Link
 							key={conversation.id}
-							className={`flex items-center p-4 cursor-pointer ${selectedConversationIndex !== -1 && conversations[selectedConversationIndex].id === conversation.id ? "bg-gray-700" : "hover:bg-gray-700/40"}`}
+							className={`flex items-center p-4 cursor-pointer 
+								${otherUser.id === targetUser?.id ? "bg-gray-700" : "hover:bg-gray-700/40"}`}
 							href={`/messages/${otherUser.username}`}
-							onClick={() => handleConversationClick(index)}
+							onClick={() => handleConversationClick()}
 						>
 							<Avatar src={otherUser.avatar} className='size-12 flex-grow-0 flex-shrink-0' />
 							<div className="ml-4">

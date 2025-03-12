@@ -51,3 +51,12 @@ export function createTempMessage({ authorId, content }: { authorId: string, con
 export function isTempMessage({ message }: { message: { id: string } }): boolean {
 	return message.id.startsWith(TEMP_MESSAGE_PREFIX)
 }
+
+interface GetTargetUserFromConversationProps {
+	conversation: ConversationWithUsersAndMessages
+	loggedUser: UserPublicInfo
+}
+
+export function getTargetUserFromConversation({conversation, loggedUser}: GetTargetUserFromConversationProps): UserPublicInfo {
+	return conversation.userA.username === loggedUser.username ? conversation.userB : conversation.userA
+}

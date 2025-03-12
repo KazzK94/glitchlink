@@ -2,6 +2,7 @@
 import { ConversationContainer } from '@/components/conversations/ConversationContainer'
 import { getUserFromSession } from '@/services/auth'
 import { getUser } from '@/services/api/users'
+import { InitConversations } from '@/components/conversations/InitConversations'
 
 export default async function ConversationPage({ params }: { params: { username: string } }) {
 
@@ -22,8 +23,10 @@ export default async function ConversationPage({ params }: { params: { username:
 
 	return (
 		<div className='flex h-[calc(100vh_-_64px)]  bg-gray-900 text-white relative overflow-x-hidden'>
+			<InitConversations
+				targetUsername={targetUser.username}
+			/>
 			<ConversationContainer
-				targetUser={targetUser}
 				loggedUser={loggedUser}
 			/>
 		</div>

@@ -4,33 +4,33 @@ import Link from 'next/link'
 
 import { UserPublicInfo } from '@/types'
 
-import { Avatar } from '@/components/users/Avatar'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Message } from './Message'
 import { useEffect, useRef } from 'react'
 import { NewMessageForm } from './NewMessageForm'
 import { useConversationsStore } from '@/stores/conversationsStore'
+import { getAvatarUrl } from '@/services/avatarUtils'
 
 interface ConversationProps {
 	targetUser: UserPublicInfo
 	loggedUser: UserPublicInfo
-	handleSendMessage: (message: string) => void
 }
 
 export function Conversation({
-	targetUser, loggedUser, handleSendMessage
+	targetUser, loggedUser
 }: ConversationProps) {
 
 	const conversation = useConversationsStore(state => state.selectedConversation)
 
+	// -- Auto-Scroll Logic --
 	const messageEndRef = useRef<HTMLDivElement>(null)
-
 	const scrollToBottom = () => {
 		messageEndRef.current?.scrollIntoView({ behavior: "smooth" })
 	}
 	useEffect(() => {
 		scrollToBottom()
 	}, [conversation])
+	// -- End of Auto-Scroll Logic --
 
 	if (!conversation) return null
 
@@ -40,7 +40,10 @@ export function Conversation({
 			{/* Conversation Header */}
 			<div className="p-4 flex items-center justify-between border-b border-gray-700">
 				<Link href={`/u/${targetUser.username}`} className='min-w-32 flex items-center gap-4'>
-					<Avatar src={targetUser.avatar} className='size-12' />
+					<img
+						src={getAvatarUrl(targetUser.avatar)}
+						alt={`@${targetUser.username}'s Avatar`}
+						className='size-12 rounded-full border-2 overflow-hidden aspect-square' />
 					<div className="flex flex-col">
 						<h2 className="text-xl md:text-xl font-semibold">{targetUser.name}</h2>
 						<p className='text-sm italic opacity-80'>@{targetUser.username}</p>
@@ -59,9 +62,7 @@ export function Conversation({
 			</ScrollArea>
 
 			{/* Message Input */}
-			<NewMessageForm
-				onSendMessage={handleSendMessage}
-			/>
+			<NewMessageForm />
 		</div>
 	</>
 }

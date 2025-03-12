@@ -1,16 +1,13 @@
+'use client'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { SendIcon } from 'lucide-react'
 import { useState } from 'react'
 
-interface NewMessageFormProps {
-	onSendMessage: (message: string) => void
-}
+export function NewMessageForm() {
 
-export function NewMessageForm({ onSendMessage }: NewMessageFormProps) {
-
-	const [messageInput, setMessageInput] = useState("")
+	const [messageInputText, setMessageInput] = useState("")
 
 	// Controlled input change
 	const handleChangeMessageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +16,7 @@ export function NewMessageForm({ onSendMessage }: NewMessageFormProps) {
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
-		onSendMessage(messageInput)
+		console.log({ messageSent: messageInputText })
 	}
 
 	return (
@@ -28,7 +25,7 @@ export function NewMessageForm({ onSendMessage }: NewMessageFormProps) {
 				<Input
 					type="text"
 					placeholder="Type a message..."
-					value={messageInput}
+					value={messageInputText}
 					autoFocus
 					onChange={handleChangeMessageInput}
 					className="flex-1 text-lg md:text-sm py-5 md:py-4 bg-gray-800 text-white border-gray-600 placeholder:text-white/60"

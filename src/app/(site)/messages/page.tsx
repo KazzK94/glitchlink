@@ -1,5 +1,6 @@
 
 import { ConversationContainer } from '@/components/conversations/ConversationContainer'
+import { InitConversations } from '@/components/conversations/InitConversations'
 import { getUserFromSession } from '@/services/auth'
 
 export default async function ConversationsPage() {
@@ -9,6 +10,9 @@ export default async function ConversationsPage() {
 
 	return (
 		<div className='flex h-[calc(100vh_-_64px)]  bg-gray-900 text-white relative overflow-x-hidden'>
+			<InitConversations
+				loggedUsername={loggedUser.username}
+			/>
 			<ConversationContainer
 				loggedUser={loggedUser}
 			/>
