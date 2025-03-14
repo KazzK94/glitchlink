@@ -9,6 +9,7 @@ type ConversationsStore = {
 	conversations: ConversationWithUsersAndMessages[]
 	selectedConversationIndex: number | null
 	targetUser: UserPublicInfo | null
+	hasLoaded: boolean
 	pusherChannel: Channel | null
 	fetchConversations: () => Promise<void>
 	selectFirstConversation: (loggedUser: UserPublicInfo) => void
@@ -23,18 +24,21 @@ const useConversationsStore = create<ConversationsStore>((set, get) => ({
 	selectedConversationIndex: null,
 	targetUser: null,
 	pusherChannel: null,
+	hasLoaded: false,
 
 	fetchConversations: async () => {
 		const conversations = await fetch('/api/conversations')
 			.then((res) => res.json())
 		set({ conversations })
 	},
+
 	selectFirstConversation: (loggedUser) => {
 		const { conversations } = get()
 		if (conversations.length === 0) {
 			return set({
 				selectedConversationIndex: null,
-				targetUser: null
+				targetUser: null,
+				hasLoaded: true
 			})
 		}
 		const newTargetUser = conversations[0].userA.id === loggedUser.id
@@ -46,6 +50,7 @@ const useConversationsStore = create<ConversationsStore>((set, get) => ({
 		})
 
 	},
+
 	selectConversationByUser: async (loggedUser, baseTargetUser) => {
 		const { conversations } = get()
 
@@ -59,7 +64,8 @@ const useConversationsStore = create<ConversationsStore>((set, get) => ({
 			return set({
 				selectedConversationIndex: 0,
 				targetUser: baseTargetUser,
-				conversations: [tempConversation, ...conversations]
+				conversations: [tempConversation, ...conversations],
+				hasLoaded: true
 			})
 		}
 
@@ -74,6 +80,7 @@ const useConversationsStore = create<ConversationsStore>((set, get) => ({
 			targetUser
 		})
 	},
+
 	getSelectedConversation: () => {
 		const { conversations, selectedConversationIndex } = get()
 		if (selectedConversationIndex === null) {
@@ -81,6 +88,7 @@ const useConversationsStore = create<ConversationsStore>((set, get) => ({
 		}
 		return conversations[selectedConversationIndex]
 	},
+
 	sendMessage: async (messageContent: string, loggedUser: UserPublicInfo) => {
 		const { conversations, selectedConversationIndex } = get()
 		if (selectedConversationIndex === null) {
@@ -133,6 +141,8 @@ const useConversationsStore = create<ConversationsStore>((set, get) => ({
 					'Content-Type': 'application/json'
 				}
 			})
+				.then((res) => res.json())
+
 			// And do nothing else, since the message is already in the state so UI shows it (and it's stored)
 		}
 	},

@@ -12,6 +12,7 @@ interface ConversationContainerProps {
 export function ConversationContainer({ loggedUser }: ConversationContainerProps) {
 
 	const targetUser = useConversationsStore(state => state.targetUser)
+	const hasLoaded = useConversationsStore(state => state.hasLoaded)
 
 	return (
 		<>
@@ -24,8 +25,14 @@ export function ConversationContainer({ loggedUser }: ConversationContainerProps
 						/>
 					) : (
 						<p className='grid content-center text-lg w-full text-center px-6'>
-							No conversations started, please start one from the profile of a friend.
+							{
+								hasLoaded
+									? (
+										<>No conversations started, please start one from the profile of a friend.</>
+									) : <>Loading conversations...</>
+							}
 						</p>
+
 					)
 			}
 		</>

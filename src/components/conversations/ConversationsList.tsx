@@ -32,13 +32,16 @@ export function ConversationsList({
 
 	return (
 		<div
-			className={`w-full md:w-1/3 max-w-sm h-[calc(100svh_-_64px)] border-r border-gray-700 bg-gray-800/80 backdrop-blur-md 
+			className={`w-full md:w-1/3 md:max-w-sm h-[calc(100svh_-_64px)] border-r border-gray-700 bg-gray-800/80 backdrop-blur-md 
 						absolute md:relative z-10 transition-[right] duration-300 ease-in-out 
 						${isMobileMenuOpen ? "right-0" : "-right-full md:right-0"}`}
 		>
-			<button className='absolute md:hidden -left-12 top-4 bg-white/5 rounded-l-sm' onClick={() => setIsMobileMenuOpen(true)}>
-				<CaretLeftIcon className='size-12' />
-			</button>
+
+			{conversations.length > 0 && (
+				<button className='absolute md:hidden -left-12 top-4 bg-white/5 rounded-l-sm' onClick={() => setIsMobileMenuOpen(true)}>
+					<CaretLeftIcon className='size-12' />
+				</button>
+			)}
 			<ScrollArea className='h-full'>
 				{conversations.map((conversation) => {
 					const lastMessage = conversation.messages.length > 0 ? conversation.messages[0].content : 'No messages yet.'
