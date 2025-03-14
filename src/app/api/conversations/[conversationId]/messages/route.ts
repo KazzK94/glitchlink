@@ -6,6 +6,6 @@ export async function POST(request: NextRequest, { params }: { params: { convers
 	const { conversationId } = params
 	const body = await request.json()
 	const { message } = body
-	await sendMessage({ conversationId, messageContent: message })
-	return Response.json({ conversationId, body })
+	const updatedConversation = await sendMessage({ conversationId, messageContent: message })
+	return Response.json({ conversationId, message: updatedConversation.messages[0] })
 }
