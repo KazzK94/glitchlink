@@ -1,23 +1,28 @@
 
 import { createTempConversation, createTempMessage, isTempConversation } from '@/services/conversationsUtils'
+import { getUserChannel, subscribeToMessagesPusherChannel } from '@/services/pusherClient'
 import { ConversationWithUsersAndMessages, UserPublicInfo } from '@/types'
+import { Channel } from 'pusher-js'
 import { create } from 'zustand'
 
 type ConversationsStore = {
 	conversations: ConversationWithUsersAndMessages[]
 	selectedConversationIndex: number | null
 	targetUser: UserPublicInfo | null
+	pusherChannel: Channel | null
 	fetchConversations: () => Promise<void>
 	selectFirstConversation: (loggedUser: UserPublicInfo) => void
 	selectConversationByUser: (loggedUser: UserPublicInfo, targetUser: UserPublicInfo) => void
 	getSelectedConversation: () => ConversationWithUsersAndMessages | null
 	sendMessage: (messageContent: string, loggedUser: UserPublicInfo) => Promise<void>
+	subscribeToNewMessages: (loggedUserId: string) => void
 }
 
 const useConversationsStore = create<ConversationsStore>((set, get) => ({
 	conversations: [],
 	selectedConversationIndex: null,
 	targetUser: null,
+	pusherChannel: null,
 
 	fetchConversations: async () => {
 		const conversations = await fetch('/api/conversations')
@@ -130,6 +135,54 @@ const useConversationsStore = create<ConversationsStore>((set, get) => ({
 			})
 			// And do nothing else, since the message is already in the state so UI shows it (and it's stored)
 		}
+	},
+
+	subscribeToNewMessages: (loggedUserId: string) => {
+		let { pusherChannel } = get()
+		if (pusherChannel === null) {
+			pusherChannel = getUserChannel(loggedUserId)
+		}
+
+		subscribeToMessagesPusherChannel({
+			channel: pusherChannel,
+			loggedUserId,
+			onNewMessage: async (message) => {
+				const { conversations } = get()
+				const conversationIndex = conversations.findIndex((conversation) => conversation.id === message.conversationId)
+				if (conversationIndex === -1) {
+					// Conversation does not exist in the state, so create it
+
+					// GET the new conversation from DB via fetch
+					const { conversation } = await fetch(`/api/conversations/${message.conversationId}`)
+						.then((res) => res.json())
+
+					// If the newly created conversation is the logged user's, do nothing (it's alredy in the UI)
+					if (conversation.userA.id === loggedUserId) {
+						return
+					}
+
+					// If user is the receiver, add the new conversation to the state and adjust selectedConversationIndex
+					set((state) => ({
+						conversations: [conversation, ...conversations],
+						selectedConversationIndex: state.selectedConversationIndex !== null ? state.selectedConversationIndex + 1 : null
+					}))
+				} else {
+					// If I sent the message, my conversation is already updated
+					if (message.authorId === loggedUserId) {
+						return
+					}
+					// If conversation already exists, add the message to it
+					const clonedConversations = structuredClone(conversations)
+					clonedConversations[conversationIndex].messages = [
+						message,
+						...clonedConversations[conversationIndex].messages
+					]
+					set({
+						conversations: clonedConversations
+					})
+				}
+			}
+		})
 	}
 }))
 

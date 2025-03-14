@@ -1,7 +1,9 @@
+'use server'
 
-import { Message } from '@prisma/client'
 import { pusherServer } from '@/lib/pusher'
+
 import { UserPublicInfo } from '@/types'
+import { Message } from '@prisma/client'
 
 interface SendMessageToPusherProps {
 	message: Message
@@ -10,7 +12,6 @@ interface SendMessageToPusherProps {
 }
 
 export async function sendMessageToPusher({ message, author, targetId }: SendMessageToPusherProps) {
-	'use server'
 	try {
 		const result = await pusherServer.trigger(
 			[`user-${author.id}`, `user-${targetId}`],
@@ -25,4 +26,3 @@ export async function sendMessageToPusher({ message, author, targetId }: SendMes
 		throw error
 	}
 }
-

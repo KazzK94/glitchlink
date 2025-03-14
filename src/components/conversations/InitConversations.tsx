@@ -13,6 +13,7 @@ export function InitConversations({ loggedUser, targetUser: baseTargetUser }: In
 	const fetchConversations = useConversationsStore((state) => state.fetchConversations)
 	const selectFirstConversation = useConversationsStore((state) => state.selectFirstConversation)
 	const selectConversationByUser = useConversationsStore((state) => state.selectConversationByUser)
+	const subscribeToNewMessages = useConversationsStore((state) => state.subscribeToNewMessages)
 	const targetUser = useConversationsStore((state) => state.targetUser)
 
 	useEffect(() => {
@@ -30,7 +31,9 @@ export function InitConversations({ loggedUser, targetUser: baseTargetUser }: In
 			}
 		}
 		populateConversations()
-	}, [fetchConversations, selectConversationByUser, selectFirstConversation, baseTargetUser, loggedUser, targetUser])
+
+		subscribeToNewMessages(loggedUser.id)
+	}, [fetchConversations, selectConversationByUser, selectFirstConversation, baseTargetUser, loggedUser, targetUser, subscribeToNewMessages])
 
 	return null
 }

@@ -3,7 +3,7 @@
 import prisma from '@/lib/db'
 import { getUserFromSession } from '../auth'
 import { getUser } from './users'
-import { sendMessageToPusher } from '../pusher'
+import { sendMessageToPusher } from '../pusherServer'
 
 /**
  * Checks if a conversation between these two users already exists. 
@@ -87,9 +87,37 @@ export async function getConversations() {
 	const loggedUser = await getUserFromSession()
 	if (!loggedUser || !loggedUser.id) return null
 
-	// Find all conversations of the logged user, and the last 20 messages of each conversation
 	return prisma.conversation.findMany({
 		where: {
+			OR: [
+				{ userAId: loggedUser.id },
+				{ userBId: loggedUser.id }
+			]
+		},
+		include: {
+			messages: {
+				take: 20,
+				orderBy: { createdAt: 'desc' }
+			},
+			userA: { select: { id: true, username: true, name: true, avatar: true } },
+			userB: { select: { id: true, username: true, name: true, avatar: true } }
+		},
+		orderBy: { lastMessageAt: 'desc' }
+	})
+}
+
+
+/**
+ * Obtains a conversation of the logged user, with its last 20 messages.
+ * @returns A conversation if it exists and the loggedUser is in it, or null otherwise.
+ */
+export async function getConversationById(conversationId: string) {
+	const loggedUser = await getUserFromSession()
+	if (!loggedUser || !loggedUser.id) return null
+
+	return prisma.conversation.findFirst({
+		where: {
+			id: conversationId,
 			OR: [
 				{ userAId: loggedUser.id },
 				{ userBId: loggedUser.id }

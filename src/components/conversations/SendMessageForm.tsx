@@ -10,7 +10,6 @@ import { UserPublicInfo } from '@/types'
 export function SendMessageForm({ loggedUser }: { loggedUser: UserPublicInfo }) {
 
 	const [messageInputText, setMessageInput] = useState("")
-	const [isSendingMessage, setIsSendingMessage] = useState(false)
 
 	const sendMessage = useConversationsStore((state) => state.sendMessage)
 
@@ -21,12 +20,10 @@ export function SendMessageForm({ loggedUser }: { loggedUser: UserPublicInfo }) 
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		if (!messageInputText || isSendingMessage) return
+		if (!messageInputText) return
 
-		setIsSendingMessage(true)
-		await sendMessage(messageInputText, loggedUser)
 		setMessageInput("")
-		setIsSendingMessage(false)
+		await sendMessage(messageInputText, loggedUser)
 	}
 
 	return (
