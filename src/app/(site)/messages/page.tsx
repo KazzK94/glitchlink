@@ -9,7 +9,7 @@ export default async function ConversationsPage() {
 	if (!loggedUser) return null
 
 	return (
-		<div className='flex h-[calc(100vh_-_64px)]  bg-gray-900 text-white relative overflow-x-hidden'>
+		<div className='flex h-[calc(100svh_-_64px)]  bg-gray-900 text-white relative overflow-x-hidden'>
 			<InitConversations
 				loggedUser={loggedUser}
 			/>

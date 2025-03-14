@@ -32,7 +32,7 @@ export function ConversationsList({
 
 	return (
 		<div
-			className={`w-full md:w-1/3 max-w-sm h-[calc(100vh_-_64px)] border-r border-gray-700 bg-gray-800/80 backdrop-blur-md 
+			className={`w-full md:w-1/3 max-w-sm h-[calc(100svh_-_64px)] border-r border-gray-700 bg-gray-800/80 backdrop-blur-md 
 						absolute md:relative z-10 transition-[right] duration-300 ease-in-out 
 						${isMobileMenuOpen ? "right-0" : "-right-full md:right-0"}`}
 		>
