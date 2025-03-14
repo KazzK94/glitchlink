@@ -1,5 +1,5 @@
 
-import { createTempConversation, createTempMessage } from '@/services/conversationsUtils'
+import { createTempConversation, createTempMessage, isTempConversation } from '@/services/conversationsUtils'
 import { ConversationWithUsersAndMessages, UserPublicInfo } from '@/types'
 import { create } from 'zustand'
 
@@ -82,23 +82,54 @@ const useConversationsStore = create<ConversationsStore>((set, get) => ({
 			return
 		}
 
-		const newMessage = createTempMessage({ authorId: loggedUser.id, content: messageContent })
+		const newMessage = createTempMessage({
+			authorId: loggedUser.id,
+			content: messageContent,
+			conversationId: conversations[selectedConversationIndex].id
+		})
+
 		const clonedConversations = structuredClone(conversations)
 		clonedConversations[selectedConversationIndex].messages = [
 			newMessage,
 			...clonedConversations[selectedConversationIndex].messages
 		]
 
-		// TODO: Send message to the server
-		//  - [IN SERVER] Call sendMessage() from /services/api/conversations.ts
-		//      (we need an API endpoint to send messages)
-		//  - [HERE]: Call the API endpoint to send the message
-		const conversationId = conversations[selectedConversationIndex].id
-		console.log('Sending message:', newMessage, 'in conversation with ID:', conversationId)
-
 		set({
 			conversations: clonedConversations
 		})
+
+		const conversationId = conversations[selectedConversationIndex].id
+
+		if (isTempConversation({ conversationId })) {
+			// If message is starting a new conversation, create it in the server
+			const newConversation = await fetch('/api/conversations', {
+				method: 'POST',
+				body: JSON.stringify({
+					targetUserId: conversations[selectedConversationIndex].userB.id,
+					message: newMessage.content
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then((res) => res.json())
+			// Then replace the temp conversation with the real one
+			set({
+				conversations: [newConversation, ...clonedConversations.slice(1)]
+			})
+		} else {
+			// If conversation already exists, send the message to the server
+			await fetch(`/api/conversations/${conversationId}/messages`, {
+				method: 'POST',
+				body: JSON.stringify({
+					message: newMessage.content
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			// And do nothing else, since the message is already in the state so UI shows it (and it's stored)
+		}
 	}
 }))
 

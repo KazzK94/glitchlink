@@ -25,10 +25,10 @@ export function isTempConversation({ conversationId }: { conversationId: string 
 }
 
 /** Create a Temporary Message (for optimistic UI only) given the author id and message contents, and return it */
-export function createTempMessage({ authorId, content }: { authorId: string, content: string }): Message {
+export function createTempMessage({ authorId, content, conversationId }: { authorId: string, content: string, conversationId?: string }): Message {
 	return {
 		id: `${TEMP_MESSAGE_PREFIX}${Date.now()}`, // Temporary ID
-		conversationId: CONVERSATION_NO_ID,
+		conversationId: conversationId || CONVERSATION_NO_ID,
 		authorId,
 		content,
 		createdAt: new Date(),
